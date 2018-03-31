@@ -4,7 +4,6 @@ import org.uqbar.geodds.Point
 class Locacion {
 	@Accessors
 	String nombre
-	@Accessors
 	Point puntoGeografico
 
 	new(String _nombre, Point _coordenada) {
@@ -12,8 +11,7 @@ class Locacion {
 		puntoGeografico = _coordenada
 	}
 
-	def distancia(Point unPunto) {
+	def double distancia(Point unPunto) {
 		puntoGeografico.distance(unPunto)
 	}
-
 }
