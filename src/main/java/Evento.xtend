@@ -1,3 +1,4 @@
+
 import java.time.Duration
 import java.time.LocalDateTime
 import java.util.List
@@ -20,7 +21,8 @@ abstract class Evento {
 	def double distancia(Point unPunto) {
 		lugar.distancia(unPunto)
 	}
-	def  double capacidadMaxima()	
+
+	def double capacidadMaxima()
 
 }
 
@@ -30,20 +32,34 @@ class EventoAbierto extends Evento {
 	double espacioNecesarioPorPersona = 0.8
 	int edadMinima
 	List<Usuario> espectadores = newArrayList
+	double valorEntrada
 
-	override def double capacidadMaxima() {
-		lugar.superficie / espacioNecesarioPorPersona
+	override def  capacidadMaxima() {
+		Math.round(lugar.superficie / this.espacioNecesarioPorPersona) //mostraba 5.99 y no 6
 	}
-	
-	def double cantidadEntradasDisponibles() {
-		this.capacidadMaxima - espectadores.size
+
+	def cantidadEntradasDisponibles() {
+		Math.round(this.capacidadMaxima - espectadores.size)
 	}
-		
-	def usuarioCompraEntrada(Usuario unUsuario) {
-		if(unUsuario.superaEdadMin(this) && this.cantidadEntradasDisponibles > 0 && 
-			unUsuario.fechaActual.isBefore(this.fechaMaxima))
-			espectadores.add(unUsuario)		//Si no cumple Requisitos no se muestra ninguna mensaje(prguntar excepciones)
-	
+
+	def void usuarioCompraEntrada(Usuario unUsuario) {
+		if (unUsuario.cumpleCondiciones(this))
+			espectadores.add(unUsuario) // Si no cumple Requisitos no se muestra ninguna mensaje(prguntar excepciones)
 	}
+
+	def devolverDinero(Usuario unUsuario) {
+		unUsuario.saldoAFavor = valorEntrada * this.porcentajeADevolver(unUsuario)
+	}
+
+	def double diasFechaMaxima(Usuario unUsuario) {
+		Math.rint(Duration.between(unUsuario.fechaActual, this.fechaMaxima).getSeconds() / 86400d)//obtener dias
+	}
+
+	def double porcentajeADevolver(Usuario unUsuario) {
+		if (this.diasFechaMaxima(unUsuario) < 7d)//falta el caso en el que quedan 0 dias 
+			(this.diasFechaMaxima(unUsuario) + 1) * 0.1
+		else
+			0.8
+	}
+
 }
-
