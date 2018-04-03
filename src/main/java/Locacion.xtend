@@ -7,7 +7,6 @@ class Locacion {
 	Point puntoGeografico
 	double superficie
 
-
 	def double distancia(Point unPunto) {
 		puntoGeografico.distance(unPunto)
 	}

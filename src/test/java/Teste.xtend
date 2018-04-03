@@ -17,29 +17,28 @@ class Teste {
 
 	Point puntoPrueba = new Point(5, 8)
 	double distanciaEsperada = 496.51d
-	
+
 	Usuario maxi
-	
+
 	Usuario beatriz
-	
+
 	Usuario lucas
-	
+
 	Usuario maria
-	
+
 	Usuario gaby
-	
+
 	Object ultimoComprador
-	
 
 	@Before
 	def void init() {
-		estadio1 = new Locacion() =>[
+		estadio1 = new Locacion() => [
 			nombre = "obras"
-			puntoGeografico = new Point (9, 6)
+			puntoGeografico = new Point(9, 6)
 		]
 		hipodromo = new Locacion() => [
 			nombre = "hipodromo San Isidro"
-			puntoGeografico = new Point ( 15, 32)
+			puntoGeografico = new Point(15, 32)
 			superficie = 4.8d
 		]
 		fiesta = new EventoAbierto() => [
@@ -47,7 +46,7 @@ class Teste {
 			fechaInicio = inicio
 			fechaHasta = fin
 			lugar = estadio1
-			
+
 		]
 		lollapalooza = new EventoAbierto() => [
 			nombreEvento = "lollapalooza"
@@ -68,7 +67,7 @@ class Teste {
 			fechaActual = LocalDateTime.of(2018, 03, 16, 00, 22)
 			edad = 22
 		]
-		//Usuarios que compran entradas y cumplen requisitos
+		// Usuarios que compran entradas y cumplen requisitos
 		maxi = new Usuario() => [
 			nombre = "maxi"
 			fechaActual = LocalDateTime.of(2018, 02, 15, 15, 30)
@@ -91,7 +90,7 @@ class Teste {
 			nombre = "lucas"
 			fechaActual = LocalDateTime.of(2018, 01, 31, 19, 50)
 			edad = 26
-			comprarEntradas(lollapalooza)		
+			comprarEntradas(lollapalooza)
 		]
 		beatriz = new Usuario() => [
 			nombre = "beatriz"
@@ -115,28 +114,34 @@ class Teste {
 	def void siUnaLocacionTieneUnaSuperficieElEventoTieneUnaCapacidadMaxima() {
 		Assert.assertEquals(6, lollapalooza.capacidadMaxima(), 0.1d)
 	}
+
 	@Test
-	def void unaPersonaQuiereSacarUnaEntradaNoSuperaFechaMaxima(){
+	def void unaPersonaQuiereSacarUnaEntradaNoSuperaFechaMaxima() {
 		Assert.assertTrue(juan.fechaActual.isBefore(lollapalooza.fechaMaxima))
 	}
+
 	@Test
-	def void unaPersonaQuiereSacarUnaEntradaYSuperaFechaMaxima(){
+	def void unaPersonaQuiereSacarUnaEntradaYSuperaFechaMaxima() {
 		Assert.assertTrue(martin.fechaActual.isAfter(lollapalooza.fechaMaxima))
 	}
+
 	@Test
-	def void unaPersonaQuiereSacarUnaEntradaYNoSuperaEdadMinima(){
+	def void unaPersonaQuiereSacarUnaEntradaYNoSuperaEdadMinima() {
 		Assert.assertTrue(juan.edad < lollapalooza.edadMinima)
 	}
+
 	@Test
-	def void unaPersonaQuiereSacarUnaEntradaYSuperaEdadMinima(){
+	def void unaPersonaQuiereSacarUnaEntradaYSuperaEdadMinima() {
 		Assert.assertTrue(martin.edad > lollapalooza.edadMinima)
 	}
+
 	@Test
-	def void unaPersonaQuiereSacarUnaEntradaYQuedanEntradas(){
-		Assert.assertTrue(lollapalooza.cantidadEntradasDisponibles > 0) //Compraron 5 entradas y queda 1
+	def void unaPersonaQuiereSacarUnaEntradaYQuedanEntradas() {
+		Assert.assertTrue(lollapalooza.cantidadEntradasDisponibles > 0) // Compraron 5 entradas y queda 1
 	}
+
 	@Test
-	def void unaPersonaQuiereSacarUnaEntradaYNoQuedanEntradas(){		//Compraron 6 entradas y no quedan
+	def void unaPersonaQuiereSacarUnaEntradaYNoQuedanEntradas() { // Compraron 6 entradas y no quedan
 		ultimoComprador = new Usuario() => [
 			nombre = "pablo"
 			fechaActual = LocalDateTime.of(2018, 03, 15, 16, 45)
@@ -145,18 +150,39 @@ class Teste {
 		]
 		Assert.assertTrue(lollapalooza.cantidadEntradasDisponibles == 0)
 	}
+
 	@Test
-	def void siUnaPersonaDevuelveEnIntervaloDe7DiasRestantesSeDevuelveUnaParteDelValor(){
+	def void siUnaPersonaDevuelveEnIntervaloDe7DiasRestantesSeDevuelveUnaParteDelValor() {
 		martin.fechaActual = LocalDateTime.of(2018, 03, 09, 22, 00)
 		martin.devolverEntrada(lollapalooza)
-		println(lollapalooza.diasFechaMaxima(martin))
-		Assert.assertEquals(350d, martin.saldoAFavor, 0.1)  
+		Assert.assertEquals(350d, martin.saldoAFavor, 0.1)
 	}
+
 	@Test
-	def void siUnaPersonaDevuelveEntradaAntesDe7DiasSeDevuelve80Porciento(){
+	def void siUnaPersonaDevuelveEntradaAntesDe7DiasSeDevuelve80Porciento() {
 		martin.fechaActual = LocalDateTime.of(2018, 03, 06, 22, 00)
 		martin.devolverEntrada(lollapalooza)
-		Assert.assertEquals(400, martin.saldoAFavor, 0.1)  
+		Assert.assertEquals(400, martin.saldoAFavor, 0.1)
 	}
-	
+
+	@Test
+	def void seVendieronMasDel90PorcientoEntoncesEventoEsExitoso() {
+		ultimoComprador = new Usuario() => [
+			nombre = "pablo"
+			fechaActual = LocalDateTime.of(2018, 03, 15, 16, 45)
+			edad = 33
+			comprarEntradas(lollapalooza)
+		]
+		Assert.assertTrue(lollapalooza.esExitoso)
+	}
+
+	@Test
+	def void seVendieronMenosDel50PorcientoEntoncesEventoEsFracaso() { // Se devuelven 3 entradas, quedan 4 disponibles
+		beatriz.devolverEntrada(lollapalooza)
+		lucas.devolverEntrada(lollapalooza)
+		maria.devolverEntrada(lollapalooza)
+
+		Assert.assertTrue(lollapalooza.esFracaso)
+	}
+
 }
