@@ -15,7 +15,7 @@ abstract class Evento {
 	double capacidadMaxima
 	double porcentajeExito = 0.9
 	double porcentajeFracaso = 0.5
-
+	List<Usuario> invitados = newArrayList
 	def duracion() {
 		Duration.between(fechaInicio, fechaHasta).getSeconds() / 3600d
 	}
@@ -35,6 +35,11 @@ abstract class Evento {
 	def boolean esFracaso()
 
 	def double cantidadFracaso()
+
+	def double diasFechaMaxima(Usuario unUsuario) {
+		Math.rint(Duration.between(unUsuario.fechaActual, this.fechaMaxima).getSeconds() / 86400d) // obtener dias
+	}
+
 }
 
 @Accessors
@@ -42,7 +47,7 @@ class EventoAbierto extends Evento {
 
 	double espacioNecesarioPorPersona = 0.8
 	int edadMinima
-	List<Usuario> espectadores = newArrayList
+
 	double valorEntrada
 
 	override capacidadMaxima() {
@@ -50,20 +55,16 @@ class EventoAbierto extends Evento {
 	}
 
 	def cantidadEntradasDisponibles() {
-		Math.round(this.capacidadMaxima() - espectadores.size)
+		Math.round(this.capacidadMaxima() - invitados.size)
 	}
 
 	def void usuarioCompraEntrada(Usuario unUsuario) {
 		if (unUsuario.cumpleCondiciones(this))
-			espectadores.add(unUsuario) // Si no cumple Requisitos no se muestra ninguna mensaje(prguntar excepciones)
+			invitados.add(unUsuario) // Si no cumple Requisitos no se muestra ninguna mensaje(prguntar excepciones)
 	}
 
 	def devolverDinero(Usuario unUsuario) {
 		unUsuario.saldoAFavor = valorEntrada * this.porcentajeADevolver(unUsuario)
-	}
-
-	def double diasFechaMaxima(Usuario unUsuario) {
-		Math.rint(Duration.between(unUsuario.fechaActual, this.fechaMaxima).getSeconds() / 86400d) // obtener dias
 	}
 
 	def double porcentajeADevolver(Usuario unUsuario) {
@@ -73,7 +74,7 @@ class EventoAbierto extends Evento {
 			0.8
 	}
 
-	override boolean esExitoso() {			//Es un exito si quedan menos del 10% de entradas
+	override boolean esExitoso() { // Es un exito si quedan menos del 10% de entradas
 		this.cantidadEntradasDisponibles <= this.cantidadExito
 	}
 
@@ -89,4 +90,57 @@ class EventoAbierto extends Evento {
 		this.capacidadMaxima() * porcentajeFracaso
 	}
 
+}
+
+@Accessors
+class EventoCerrado extends Evento {
+	
+	List<Usuario> invitadosConfirmados = newArrayList
+	double cantidadDeAcompaniantesMax
+
+	override boolean esExitoso() {
+		false
+	}
+
+	override double cantidadExito() {
+		2
+	}
+
+	override boolean esFracaso() {
+		true
+	}
+
+	override double cantidadFracaso() {
+		4
+	}
+
+	def boolean estaInvitado(Usuario unUsuario) {
+		invitados.contains(unUsuario)
+	}
+
+	def void usuarioRecibeInvitacion(Usuario unUsuario) {
+		if (unUsuario.cumpleCondicionesEventoCerrado(this))
+			invitados.add(unUsuario) // Si no cumple Requisitos no se muestra ninguna mensaje(prguntar excepciones)
+	}
+
+	def cantidadDeInvitacionesDisp() {
+		Math.round(this.capacidadMaxima() - this.cantidadInvitadosTotal())
+	}
+
+	def cantidadInvitadosTotal() {
+		this.cantidadInvitadosPosibles() + this.cantidadInvitadosConfirmados()
+	}
+
+	def cantidadInvitadosPosibles() {
+		invitados.size
+	}
+
+	def cantidadInvitadosConfirmados() {
+		invitadosConfirmados.size
+	}
+
+	def void agregarConfirmado(Usuario unUsuario) {
+		invitadosConfirmados.add(unUsuario)
+		invitados.remove(unUsuario)
+	}
 }

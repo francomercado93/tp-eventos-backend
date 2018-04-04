@@ -8,6 +8,8 @@ class Teste {
 
 	EventoAbierto fiesta
 	EventoAbierto lollapalooza
+	EventoCerrado casamiento
+	EventoCerrado cumple
 	Locacion estadio1
 	Locacion hipodromo
 	LocalDateTime inicio = LocalDateTime.of(2018, 03, 27, 18, 00)
@@ -97,7 +99,18 @@ class Teste {
 			fechaActual = LocalDateTime.of(2018, 02, 15, 15, 30)
 			edad = 45
 			comprarEntradas(lollapalooza)
-		]
+			
+			]
+			
+		casamiento =new EventoCerrado() =>[
+			
+			cantidadDeAcompaniantesMax = 2
+			capacidadMaxima=150
+			fechaMaxima=LocalDateTime.of(2018, 05, 25, 23, 59)
+			porcentajeExito = 0.8
+			
+			
+		]	
 	}
 
 	@Test
@@ -184,5 +197,24 @@ class Teste {
 
 		Assert.assertTrue(lollapalooza.esFracaso)
 	}
-
+ 
+ @Test 
+ 
+ def void PersonaRecibeinvitacionYEsAgregadoAlEvento(){
+ 	
+ 	beatriz.InvitarUsuario(lucas, casamiento)
+ 	Assert.assertTrue(casamiento.estaInvitado(lucas))
+ 	
+ 	}
+ @Test	
+ def void SuperaFechaMaxima(){
+ 	
+ 	
+ 	
+ 	
+ }	
+ 
+ 
+ 
+ 
 }
