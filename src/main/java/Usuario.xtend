@@ -1,17 +1,17 @@
 import java.time.LocalDateTime
 import org.eclipse.xtend.lib.annotations.Accessors
-import java.util.List
+//import java.util.List
 
 @Accessors
-class Usuario {
+class Usuario {			//clase usuario y clase organizador con una interface?
 	String nombre
 	LocalDateTime fechaActual
 	int edad
 	// TipoUsuario tipo;
 	double saldoAFavor
-	List<Usuario> acompaniantes = newArrayList // Son necesarios?
-	List<EventoCerrado> invitaciones = newArrayList // Son necesarios?
-
+	//List<Usuario> acompaniantes = newArrayList // Son necesarios?
+	//List<EventoCerrado> invitaciones = newArrayList // Son necesarios?
+	double acompaniantes = 0
 	def comprarEntradas(EventoAbierto unEvento) {
 		unEvento.usuarioCompraEntrada(this)
 
@@ -19,24 +19,30 @@ class Usuario {
 
 	def devolverEntrada(EventoAbierto unEvento) {
 		unEvento.devolverDinero(this)
-		unEvento.asistentes.remove(this)
+		unEvento.removerUsuario(this)
 	}
 
-	def invitarUsuario(Usuario invitado, EventoCerrado Unevento) {
-		Unevento.usuarioRecibeInvitacion(invitado)
-		invitado.recibirInvitacion(Unevento)
-
-	}
 
 	def recibirInvitacion(EventoCerrado unEvento) {
-		invitaciones.add(unEvento)
-	}
-
-	def cantidadAcompaniantes() {
-		acompaniantes.size()
+		unEvento.usuarioRecibeInvitacion(this)		
+		//invitaciones.add(unEvento)
 	}
 
 	def confirmarInvitacion(EventoCerrado unEvento) {
-		unEvento.agregarConfirmado(this)
+		unEvento.confirmarUsuario(this)
 	}
+	
+	def rechazarInvitacion(EventoCerrado unEvento){
+		unEvento.usuarioRechazaInvitacion(this)
+	}
+	
+	def cantidadAcompaniantes() {
+		acompaniantes
+	}
+	//Organizador
+ 	def invitarUsuario(Usuario invitado, EventoCerrado unEvento) {
+		unEvento.usuarioRecibeInvitacion(invitado)
+		invitado.recibirInvitacion(unEvento)
+
+	}	
 }

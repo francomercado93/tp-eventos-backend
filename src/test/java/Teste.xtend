@@ -9,7 +9,7 @@ class Teste {
 	EventoAbierto fiesta
 	EventoAbierto lollapalooza
 	EventoCerrado casamiento
-	EventoCerrado cumple
+//	EventoCerrado cumple
 	Locacion estadio1
 	Locacion hipodromo
 	LocalDateTime inicio = LocalDateTime.of(2018, 03, 27, 18, 00)
@@ -19,21 +19,16 @@ class Teste {
 
 	Point puntoPrueba = new Point(5, 8)
 	double distanciaEsperada = 496.51d
-
 	Usuario maxi
-
 	Usuario beatriz
-
 	Usuario lucas
-
 	Usuario maria
-
 	Usuario gaby
-
-	Object ultimoComprador
+	Usuario ultimoComprador
 
 	@Before
 	def void init() {
+		//LOCACIONES
 		estadio1 = new Locacion() => [
 			nombre = "obras"
 			puntoGeografico = new Point(9, 6)
@@ -43,6 +38,8 @@ class Teste {
 			puntoGeografico = new Point(15, 32)
 			superficie = 4.8d
 		]
+		
+		//EVENTOS ABIERTOS
 		fiesta = new EventoAbierto() => [
 			nombreEvento = "fest"
 			fechaInicio = inicio
@@ -59,6 +56,18 @@ class Teste {
 			edadMinima = 18
 			valorEntrada = 500
 		]
+		
+		//EVENTOS CERRADOS
+		casamiento = new EventoCerrado() => [
+
+			cantidadDeAcompaniantesMax = 2
+			capacidadMaxima = 150
+			fechaMaxima = LocalDateTime.of(2018, 05, 25, 23, 59)
+			porcentajeExito = 0.8
+
+		]
+		
+		//PERSONAS
 		juan = new Usuario() => [
 			nombre = "juan"
 			fechaActual = LocalDateTime.of(2018, 03, 15, 22, 00)
@@ -99,18 +108,9 @@ class Teste {
 			fechaActual = LocalDateTime.of(2018, 02, 15, 15, 30)
 			edad = 45
 			comprarEntradas(lollapalooza)
-			
-			]
-			
-		casamiento =new EventoCerrado() =>[
-			
-			cantidadDeAcompaniantesMax = 2
-			capacidadMaxima=150
-			fechaMaxima=LocalDateTime.of(2018, 05, 25, 23, 59)
-			porcentajeExito = 0.8
-			
-			
-		]	
+
+		]
+
 	}
 
 	@Test
@@ -150,7 +150,7 @@ class Teste {
 
 	@Test
 	def void unaPersonaQuiereSacarUnaEntradaYQuedanEntradas() {
-		Assert.assertTrue(lollapalooza.cantidadEntradasDisponibles > 0) // Compraron 5 entradas y queda 1
+		Assert.assertTrue(lollapalooza.cantidadDisponibles > 0) // Compraron 5 entradas y queda 1
 	}
 
 	@Test
@@ -161,7 +161,7 @@ class Teste {
 			edad = 33
 			comprarEntradas(lollapalooza)
 		]
-		Assert.assertTrue(lollapalooza.cantidadEntradasDisponibles == 0)
+		Assert.assertTrue(lollapalooza.cantidadDisponibles == 0)
 	}
 
 	@Test
@@ -197,24 +197,18 @@ class Teste {
 
 		Assert.assertTrue(lollapalooza.esFracaso)
 	}
- 
- @Test 
- 
- def void PersonaRecibeinvitacionYEsAgregadoAlEvento(){
- 	
- 	beatriz.InvitarUsuario(lucas, casamiento)
- 	Assert.assertTrue(casamiento.estaInvitado(lucas))
- 	
- 	}
- @Test	
- def void SuperaFechaMaxima(){
- 	
- 	
- 	
- 	
- }	
- 
- 
- 
- 
+	//En estos casos organizador = usuario
+	@Test
+	def void PersonaRecibeinvitacionYEsAgregadoAlEvento() {
+
+		beatriz.invitarUsuario(lucas, casamiento)
+		Assert.assertTrue(casamiento.estaInvitado(lucas))
+
+	}
+
+	@Test
+	def void personaRecibeInvitacionYSuperaFechaMaxima() {
+		
+	}
+
 }

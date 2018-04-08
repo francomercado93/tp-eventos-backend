@@ -123,8 +123,9 @@ class EventoCerrado extends Evento {
 
 	List<Usuario> invitadosConfirmados = newArrayList
 	double cantidadDeAcompaniantesMax
-	double cantidadAcompaniantes
-
+	double cantidadAcompaniantes = 0 // Por ahora
+	double cantidadAcompaniantesConfirmados = 0 // Por ahora
+	Usuario organizador
 	override boolean esExitoso() {
 		false
 	}
@@ -152,7 +153,7 @@ class EventoCerrado extends Evento {
 		}
 	}
 
-	def void agregarAcompanientesInvitado(Usuario unUsuario) {					//REVISAR
+	def void agregarAcompanientesInvitado(Usuario unUsuario) { // REVISAR
 		cantidadAcompaniantes = cantidadAcompaniantes + unUsuario.cantidadAcompaniantes()
 	}
 
@@ -164,7 +165,7 @@ class EventoCerrado extends Evento {
 	def void removerAcompaniantesInvitado(Usuario unUsuario) {
 		cantidadAcompaniantes = cantidadAcompaniantes - unUsuario.cantidadAcompaniantes()
 	}
-	
+
 	override boolean cumpleCondiciones(Usuario unUsuario) {
 		(this.usuarioEstaATiempo(unUsuario) && this.cumpleCantidadAcompaniantes(unUsuario) &&
 			this.hayCapacidad(unUsuario))
@@ -173,18 +174,17 @@ class EventoCerrado extends Evento {
 	def boolean hayCapacidad(Usuario unUsuario) { // verifica que no se supere la cantidad maxima
 		this.cantidadDisponibles() >= unUsuario.cantidadAcompaniantes() + 1
 	}
-	
+
 	def boolean cumpleCantidadAcompaniantes(Usuario unUsuario) {
 		unUsuario.cantidadAcompaniantes() <= this.getCantidadDeAcompaniantesMax()
 	}
-
 
 	override cantidadDisponibles() {
 		Math.round(this.capacidadMaxima() - this.cantidadAsistentesPosibles())
 	}
 
 	def cantidadAsistentesPosibles() { // o Total
-		this.cantidadAsistentesPendientes() + this.cantidadAsistentesConfirmados() // falta acompañantes
+		this.cantidadAsistentesPendientes() + this.cantidadAsistentesConfirmados() + cantidadAcompaniantes
 	}
 
 	def cantidadAsistentesPendientes() { // cambio el nombre, la lista de asistentes representan
@@ -195,8 +195,18 @@ class EventoCerrado extends Evento {
 		invitadosConfirmados.size
 	}
 
-	def void agregarConfirmado(Usuario unUsuario) {
-		invitadosConfirmados.add(unUsuario)
-		asistentes.remove(unUsuario) // Se lo saca de la lista de pendientes
+	def void confirmarUsuario(Usuario unUsuario) {
+		this.agregarListaConfirmado(unUsuario)
+		this.agregarAcompaniantesConfirmados(unUsuario)
+		this.removerUsuario(unUsuario) // Se lo saca de la lista de pendientes
 	}
+
+	def agregarListaConfirmado(Usuario unUsuario) {
+		invitadosConfirmados.add(unUsuario)
+	}
+
+	def agregarAcompaniantesConfirmados(Usuario unUsuario) {
+		cantidadAcompaniantesConfirmados = cantidadAcompaniantesConfirmados + unUsuario.cantidadAcompaniantes
+	}
+
 }
