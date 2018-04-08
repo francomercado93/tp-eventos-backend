@@ -199,10 +199,17 @@ class Teste {
 	}
 	//En estos casos organizador = usuario
 	@Test
-	def void PersonaRecibeinvitacionYEsAgregadoAlEvento() {
+	def void PersonaRecibeInvitacionCumpleCondicionesYEsAgregadoAlEvento() {
 
 		beatriz.invitarUsuario(lucas, casamiento)
 		Assert.assertTrue(casamiento.estaInvitado(lucas))
+
+	}
+	@Test
+	def void PersonaRecibeInvitacionNoCumpleCondicionesYNoEsAgregadoAlEvento() {
+
+		
+		Assert.assertTrue(true)
 
 	}
 
@@ -210,5 +217,32 @@ class Teste {
 	def void personaRecibeInvitacionYSuperaFechaMaxima() {
 		
 	}
-
+	@Test
+	def void personaRecibeInvitacionYNoSuperaFechaMaxima() {
+		
+	}
+	@Test
+	def void personaRecibeInvitacionYSuperaCantidadAcompaniantesMaxima() {
+		
+	}
+	@Test
+	def void personaRecibeInvitacionYNOSuperaCantidadAcompaniantesMaxima() {
+		
+	}
+	@Test
+	def void personaRecibeInvitacionYHayCapacidad() {
+		
+	}
+	@Test
+	def void personaRecibeInvitacionYNoHayCapacidad() {
+		
+	}
+	@Test
+	def void personaConfirmaInvitacionYApareceEnLista() {
+		
+	}
+	@Test
+	def void personaRechazaInvitacionYNoApareceEnLista() {
+		
+	}
 }
