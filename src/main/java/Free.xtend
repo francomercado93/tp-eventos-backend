@@ -1,6 +1,4 @@
-/*class Free implements TipoUsuario {
+
+class Free extends TipoUsuario {
 	
-	override def unMetodo(){
-		
-	}
-}*/
+}

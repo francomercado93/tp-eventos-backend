@@ -4,47 +4,57 @@ import org.junit.Before
 import org.junit.Test
 import org.uqbar.geodds.Point
 
+
 class Teste {
 
 	EventoAbierto fiesta
 	EventoAbierto lollapalooza
 	EventoCerrado casamiento
-//	EventoCerrado cumple
-	Locacion estadio1
+	EventoCerrado cumple
+	Locacion salonFiesta
 	Locacion hipodromo
 	LocalDateTime inicio = LocalDateTime.of(2018, 03, 27, 18, 00)
 	LocalDateTime fin = LocalDateTime.of(2018, 03, 28, 01, 00)
-	Usuario juan
-	Usuario martin
-
 	Point puntoPrueba = new Point(5, 8)
 	double distanciaEsperada = 496.51d
+	Usuario juan
+	Usuario martin
 	Usuario maxi
 	Usuario beatriz
 	Usuario lucas
 	Usuario maria
 	Usuario gaby
 	Usuario ultimoComprador
+	Usuario free1
+	Usuario alejandro
+	Usuario marco
+	Usuario tomas
+	Usuario miriam
+	
+	
 
 	@Before
 	def void init() {
-		//LOCACIONES
-		estadio1 = new Locacion() => [
-			nombre = "obras"
+		// LOCACIONES
+		salonFiesta = new Locacion() => [
+			nombre = "Club3"
 			puntoGeografico = new Point(9, 6)
+			superficie = 10d
 		]
 		hipodromo = new Locacion() => [
 			nombre = "hipodromo San Isidro"
 			puntoGeografico = new Point(15, 32)
 			superficie = 4.8d
 		]
-		
-		//EVENTOS ABIERTOS
+
+		// EVENTOS ABIERTOS
 		fiesta = new EventoAbierto() => [
 			nombreEvento = "fest"
 			fechaInicio = inicio
 			fechaHasta = fin
-			lugar = estadio1
+			lugar = salonFiesta
+			edadMinima = 15
+			valorEntrada = 0
 
 		]
 		lollapalooza = new EventoAbierto() => [
@@ -55,19 +65,22 @@ class Teste {
 			fechaMaxima = LocalDateTime.of(2018, 03, 15, 23, 59)
 			edadMinima = 18
 			valorEntrada = 500
+			
 		]
-		
-		//EVENTOS CERRADOS
-		casamiento = new EventoCerrado() => [
 
-			cantidadDeAcompaniantesMax = 2
-			capacidadMaxima = 150
-			fechaMaxima = LocalDateTime.of(2018, 05, 25, 23, 59)
+		cumple = new EventoCerrado() => [
+			nombreEvento = "cumple Julian"
+			organizador = juan
+			fechaInicio = LocalDateTime.of(2018, 03, 19, 22, 30)
+			fechaHasta = LocalDateTime.of(2018, 03, 20, 06, 00)
+			lugar = salonFiesta
+			cantidadDeAcompaniantesMax = 3
+			capacidadMaxima = 20
+			fechaMaxima = LocalDateTime.of(2018, 03, 18, 21, 00)
 			porcentajeExito = 0.8
-
 		]
-		
-		//PERSONAS
+
+		// PERSONAS
 		juan = new Usuario() => [
 			nombre = "juan"
 			fechaActual = LocalDateTime.of(2018, 03, 15, 22, 00)
@@ -102,6 +115,7 @@ class Teste {
 			fechaActual = LocalDateTime.of(2018, 01, 31, 19, 50)
 			edad = 26
 			comprarEntradas(lollapalooza)
+			puntoDireccionUsuario = new Point(8.95, 6) 
 		]
 		beatriz = new Usuario() => [
 			nombre = "beatriz"
@@ -110,7 +124,44 @@ class Teste {
 			comprarEntradas(lollapalooza)
 
 		]
+		// Organizadores
+		free1 = new Usuario() => [
+			nombre = "Pablo"
+			fechaActual = LocalDateTime.of(2018, 05, 15, 19, 00)
+			tipo = new Free()
+		]
+		// EVENTOS CERRADOS
+		casamiento = new EventoCerrado() => [
+			nombreEvento = "Casamiento"
+			cantidadDeAcompaniantesMax = 2
+			capacidadMaxima = 150
+			fechaMaxima = LocalDateTime.of(2018, 05, 25, 23, 59)
+			porcentajeExito = 0.8
+			organizador = beatriz
+			lugar = salonFiesta
 
+		]
+	
+		alejandro = new Usuario() =>[
+			nombre = "Maria"
+			edad = 35
+			fechaActual = LocalDateTime.of(2018, 05, 01, 10, 00)
+		]
+		marco = new Usuario() =>[
+			nombre = "Marco"
+			edad = 22
+			fechaActual = LocalDateTime.of(2018, 05, 20, 17, 00)
+		]
+		tomas = new Usuario() =>[
+			nombre = "Tomas"
+			edad = 29
+			fechaActual = LocalDateTime.of(2018, 05, 10, 20, 52)
+		]
+		miriam = new Usuario() =>[
+			nombre = "Miriam"
+			edad = 25
+			fechaActual = LocalDateTime.of(2018, 05, 11, 10, 00)
+		]
 	}
 
 	@Test
@@ -197,7 +248,8 @@ class Teste {
 
 		Assert.assertTrue(lollapalooza.esFracaso)
 	}
-	//En estos casos organizador = usuario
+
+	// En estos casos organizador = usuario
 	@Test
 	def void PersonaRecibeInvitacionCumpleCondicionesYEsAgregadoAlEvento() {
 
@@ -205,44 +257,138 @@ class Teste {
 		Assert.assertTrue(casamiento.estaInvitado(lucas))
 
 	}
+
 	@Test
 	def void PersonaRecibeInvitacionNoCumpleCondicionesYNoEsAgregadoAlEvento() {
 
-		
 		Assert.assertTrue(true)
 
 	}
 
 	@Test
 	def void personaRecibeInvitacionYSuperaFechaMaxima() {
-		
 	}
+
 	@Test
 	def void personaRecibeInvitacionYNoSuperaFechaMaxima() {
-		
 	}
+
 	@Test
 	def void personaRecibeInvitacionYSuperaCantidadAcompaniantesMaxima() {
-		
 	}
+
 	@Test
 	def void personaRecibeInvitacionYNOSuperaCantidadAcompaniantesMaxima() {
-		
 	}
+
 	@Test
 	def void personaRecibeInvitacionYHayCapacidad() {
-		
 	}
+
 	@Test
 	def void personaRecibeInvitacionYNoHayCapacidad() {
-		
 	}
+
 	@Test
 	def void personaConfirmaInvitacionYApareceEnLista() {
-		
 	}
+
 	@Test
 	def void personaRechazaInvitacionYNoApareceEnLista() {
-		
 	}
+
+	/* @Test
+	 * def void siUnOrganizadorFreeCreaUnEventoPeroHayUnEventoEnSimultaneoNoPuedeOrganizar() {
+	 * 	free1.organizarEvento(casamiento)
+	 * 	free1.organizarEvento(cumple)
+	 * 	Assert.assertTrue(free1.hayUnEventoActualmente)
+	 * }
+	 * @Test
+	 * def void siUnOrganizadorFreeCreaUnEventoPeroNoHayUnEventoEnSimultaneoPuedeOrganizar() {
+	 * 	Assert.assertFalse(free1.hayUnEventoActualmente)
+	 }*/
+	@Test
+	def void unaUsuarioAceptaUnaInvitacionPendienteSiElOrganizadorEsSuAmigo() {
+		lucas.agregarAmigo(beatriz)
+		beatriz.invitarUsuario(lucas, casamiento)
+		// println(lucas.invitaciones.nombreEvento)
+		// println(lucas.invitaciones.organizador.nombre)
+		lucas.aceptarPendientes()
+		// casamiento.invitadosConfirmados.forEach[conf | println("Confirmado: " + conf.nombre)]
+		// println("Es amigo?" + lucas.organizadorEsAmigo(beatriz))
+		Assert.assertTrue(casamiento.estaConfirmado(lucas))
+	}
+	@Test
+	def void unaUsuarioNoAceptaUnaInvitacionPendienteSiElOrganizadorNoEsSuAmigo() {
+	
+		beatriz.invitarUsuario(lucas, casamiento)
+		// println(lucas.invitaciones.nombreEvento)
+		// println(lucas.invitaciones.organizador.nombre)
+		lucas.aceptarPendientes()
+		// casamiento.invitadosConfirmados.forEach[conf | println("Confirmado: " + conf.nombre)]
+		// println("Es amigo?" + lucas.organizadorEsAmigo(beatriz))
+		Assert.assertFalse(casamiento.estaConfirmado(lucas))
+	}
+	@Test
+	def void usuarioAceptaInvitacionPendienteSiAsistenMasdeCuatroAmigos() {
+		//lucas no es amigo del organizador
+		lucas.agregarAmigo(alejandro)
+		lucas.agregarAmigo(marco)
+		lucas.agregarAmigo(tomas)
+		lucas.agregarAmigo(miriam)
+		beatriz.invitarUsuario(alejandro, casamiento)
+		alejandro.confirmarInvitacion(casamiento)
+		beatriz.invitarUsuario(marco, casamiento)
+		marco.confirmarInvitacion(casamiento)
+		beatriz.invitarUsuario(tomas, casamiento)
+		tomas.confirmarInvitacion(casamiento)
+		beatriz.invitarUsuario(miriam, casamiento)
+		miriam.confirmarInvitacion(casamiento)
+		beatriz.invitarUsuario(lucas, casamiento)
+		// println(lucas.invitaciones.nombreEvento)
+		// println(lucas.invitaciones.organizador.nombre)
+		lucas.aceptarPendientes()
+		// casamiento.invitadosConfirmados.forEach[conf | println("Confirmado: " + conf.nombre)]
+		// println("Es amigo?" + lucas.organizadorEsAmigo(beatriz))
+		Assert.assertTrue(casamiento.estaConfirmado(lucas))
+	}
+		@Test
+	def void usuarioNoAceptaInvitacionPendienteSiNoAsistenMasdeCuatroAmigos() {
+		//lucas no es amigo del organizador
+		lucas.agregarAmigo(alejandro)
+	
+		lucas.agregarAmigo(tomas)
+		lucas.agregarAmigo(miriam)
+		beatriz.invitarUsuario(alejandro, casamiento)
+		alejandro.confirmarInvitacion(casamiento)
+		
+		
+		beatriz.invitarUsuario(tomas, casamiento)
+		tomas.confirmarInvitacion(casamiento)
+		beatriz.invitarUsuario(miriam, casamiento)
+		miriam.confirmarInvitacion(casamiento)
+		beatriz.invitarUsuario(lucas, casamiento)
+		// println(lucas.invitaciones.nombreEvento)
+		// println(lucas.invitaciones.organizador.nombre)
+		lucas.aceptarPendientes()
+		// casamiento.invitadosConfirmados.forEach[conf | println("Confirmado: " + conf.nombre)]
+		// println("Es amigo?" + lucas.organizadorEsAmigo(beatriz))
+		Assert.assertFalse(casamiento.estaConfirmado(lucas))
+	}
+	@Test
+	def void usuarioAceptaInvitacionPendienteSiSeEncuentraEnSuRadioDeCercania() {
+		beatriz.invitarUsuario(lucas, casamiento)
+		lucas.radioCercania = 6
+		lucas.aceptarPendientes()
+		Assert.assertTrue(casamiento.estaConfirmado(lucas))
+	}
+	@Test
+	def void usuarioNoAceptaInvitacionPendienteSiNoSeEncuentraEnSuRadioDeCercania() {
+		beatriz.invitarUsuario(lucas, casamiento)
+		lucas.radioCercania = 5
+		lucas.aceptarPendientes()
+		Assert.assertFalse(casamiento.estaConfirmado(lucas))
+	}
+	
+	
 }

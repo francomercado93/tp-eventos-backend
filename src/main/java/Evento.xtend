@@ -7,6 +7,7 @@ import org.uqbar.geodds.Point
 @Accessors
 abstract class Evento {
 
+	Usuario organizador
 	String nombreEvento
 	LocalDateTime fechaInicio
 	LocalDateTime fechaHasta
@@ -68,8 +69,7 @@ abstract class Evento {
 class EventoAbierto extends Evento {
 
 	double espacioNecesarioPorPersona = 0.8
-	int edadMinima
-
+	int edadMinima // organizador crea evento setear edadMinima y valor entrada
 	double valorEntrada
 
 	override capacidadMaxima() {
@@ -125,7 +125,7 @@ class EventoCerrado extends Evento {
 	double cantidadDeAcompaniantesMax
 	double cantidadAcompaniantes = 0 // Por ahora
 	double cantidadAcompaniantesConfirmados = 0 // Por ahora
-	Usuario organizador
+
 	override boolean esExitoso() {
 		false
 	}
@@ -144,6 +144,9 @@ class EventoCerrado extends Evento {
 
 	def boolean estaInvitado(Usuario unUsuario) {
 		asistentes.contains(unUsuario)
+	}
+	def boolean estaConfirmado(Usuario unUsuario){
+		invitadosConfirmados.contains(unUsuario)
 	}
 
 	def void usuarioRecibeInvitacion(Usuario unUsuario) {

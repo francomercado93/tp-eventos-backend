@@ -1,4 +1,5 @@
-/*interface class TipoUsuario {
+
+abstract class TipoUsuario {
 	
-	def void unMetodo(){}	
-}*/
+	
+}
