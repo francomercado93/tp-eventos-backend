@@ -413,7 +413,20 @@ class Teste {
 		lucas.rechazarPendientes()		//cuando se rechaza la invitacion, se lo saca de la
 		Assert.assertFalse(casamiento.estaInvitado(lucas))	//lista de pendientes del evento
 	}
-
+	@Test
+	def void siCanceloElEventoSeDevuelveElDineroATodos(){
+		lollapalooza.cancelarEvento()			//Compraron entradas: maxi, gaby, maria, lucas, beatriz
+		Assert.assertEquals(500, maxi.saldoAFavor, 0.1)
+		Assert.assertEquals(500, gaby.saldoAFavor, 0.1)
+		Assert.assertEquals(500, maria.saldoAFavor, 0.1)
+		Assert.assertEquals(500, lucas.saldoAFavor, 0.1)
+		Assert.assertEquals(500, beatriz.saldoAFavor, 0.1)
+	}
+	@Test
+	def void siReprogramoLaFechaElEventoTieneLaMismaDuracion(){
+		lollapalooza.reprogramarEvento(LocalDateTime.of(2018, 03, 28, 19, 00))
+		Assert.assertEquals(7, lollapalooza.duracion, 0.1)
+	}
 	/* @Test
 	def void siUnOrganizadorFreeCreaUnEventoPeroHayUnEventoEnSimultaneoNoPuedeOrganizar() {
 		free1.organizarEvento(casamiento)

@@ -63,6 +63,29 @@ abstract class Evento {
 	def boolean usuarioEstaATiempo(Usuario unUsuario) {
 		unUsuario.fechaActual.isBefore(this.fechaMaxima)
 	}
+		
+	def void cancelarEvento()
+	
+	def void postergarEvento(LocalDateTime nuevaFechaInicio){
+		this.reprogramarEvento(nuevaFechaInicio)
+		
+	}
+	
+	def void reprogramarEvento(LocalDateTime nuevaFechaInicio){
+		fechaHasta = nuevaFechaInicio.plusSeconds(Duration.between(fechaInicio, fechaHasta).getSeconds)
+		fechaMaxima = nuevaFechaInicio.plusSeconds(Duration.between(fechaInicio, fechaMaxima).getSeconds)
+		fechaInicio = nuevaFechaInicio
+	}
+	def void notificarInvitados() {
+		this.notificarPendientes
+	}
+	
+	def void notificarPendientes() {
+		asistentes.forEach[usuario | this.notificarUsuario(usuario)]
+	}
+	def void notificarUsuario(Usuario usuario) {
+		usuario.eventoCancelado
+	}
 }
 
 @Accessors
@@ -115,6 +138,14 @@ class EventoAbierto extends Evento {
 	override double cantidadFracaso() {
 		this.capacidadMaxima() * porcentajeFracaso
 	}
+	def devolverValorEntradasAsistentes() {
+		asistentes.forEach[usuario | usuario.saldoAFavor = this.valorEntrada]
+	}
+	
+	override cancelarEvento() {
+		this.devolverValorEntradasAsistentes
+	}
+	
 
 }
 
@@ -210,6 +241,18 @@ class EventoCerrado extends Evento {
 
 	def agregarAcompaniantesConfirmados(Usuario unUsuario) {
 		cantidadAcompaniantesConfirmados = cantidadAcompaniantesConfirmados + unUsuario.cantidadAcompaniantes
+	}
+	
+	override notificarInvitados() {
+		super.notificarPendientes
+		this.notificarConfirmados
+	}
+	
+	def notificarConfirmados() {
+		invitadosConfirmados.forEach[usuario | this.notificarUsuario(usuario)]
+	}
+	override cancelarEvento() {
+		this.notificarInvitados()
 	}
 
 }

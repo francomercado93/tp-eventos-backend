@@ -84,6 +84,12 @@ class Usuario {
 	def invitarUsuario(Usuario invitado, EventoCerrado unEvento) {
 		invitado.recibirInvitacion(unEvento)
 	}
+	def cancelarEvento(Evento unEvento){
+		tipo.cancelarEvento(unEvento)
+	}
+	def postergarEvento(Evento unEvento, LocalDateTime nuevaFechaInicio){
+		tipo.postergarEvento(unEvento, nuevaFechaInicio)
+	}
 
 	def organizarEventoAbierto(EventoAbierto abierto) {
 		abierto.organizador = this
@@ -93,7 +99,7 @@ class Usuario {
 		cerrado.organizador = this
 		tipo.organizarEventoCerrado(cerrado)
 	}
-	
+	//usuario
 	def rechazarPendientes() {
 		if(esAntisocial)
 			this.antisocialRechazarPendientes
@@ -130,4 +136,10 @@ class Usuario {
 	def boolean asistenAlMenosDosAmigos(EventoCerrado invitacion) {
 		this.cantidadAmigosConfirmadosEvento(invitacion) <= 2
 	}
+	
+	def eventoCancelado() {
+		println("El evento fue cancelado")
+	}
+	
+	
 }
