@@ -1,3 +1,5 @@
+package ar.edu.eventos
+
 import java.time.Duration
 import java.time.LocalDateTime
 import java.util.List
@@ -13,10 +15,13 @@ abstract class Evento {
 	LocalDateTime fechaHasta
 	Locacion lugar
 	LocalDateTime fechaMaxima
+	LocalDateTime fechaCreacion
 	double capacidadMaxima
 	double porcentajeExito = 0.9
 	double porcentajeFracaso = 0.5
 	List<Usuario> asistentes = newArrayList
+	boolean estaCancelado = false
+	boolean estaPostergado = false
 
 	def duracion() {
 		Duration.between(fechaInicio, fechaHasta).getSeconds() / 3600d
@@ -64,11 +69,14 @@ abstract class Evento {
 		unUsuario.fechaActual.isBefore(this.fechaMaxima)
 	}
 		
-	def void cancelarEvento()
+	def void cancelarEvento(){
+		estaCancelado = true
+	}
 	
 	def void postergarEvento(LocalDateTime nuevaFechaInicio){
+		estaPostergado = true
 		this.reprogramarEvento(nuevaFechaInicio)
-		
+		this.notificarInvitados
 	}
 	
 	def void reprogramarEvento(LocalDateTime nuevaFechaInicio){
@@ -76,8 +84,8 @@ abstract class Evento {
 		fechaMaxima = nuevaFechaInicio.plusSeconds(Duration.between(fechaInicio, fechaMaxima).getSeconds)
 		fechaInicio = nuevaFechaInicio
 	}
-	def void notificarInvitados() {
-		this.notificarPendientes
+	def void notificarInvitados() {			//En evento abierto se notifica a los que compraron 
+		this.notificarPendientes			//entradas(asistentes)
 	}
 	
 	def void notificarPendientes() {
@@ -94,6 +102,7 @@ class EventoAbierto extends Evento {
 	double espacioNecesarioPorPersona = 0.8
 	int edadMinima // organizador crea evento setear edadMinima y valor entrada
 	double valorEntrada
+	
 
 	override capacidadMaxima() {
 		Math.round(lugar.superficie / this.espacioNecesarioPorPersona) // mostraba 5.99 y no 6
@@ -117,7 +126,9 @@ class EventoAbierto extends Evento {
 	}
 
 	def double porcentajeADevolver(Usuario unUsuario) {
-		if (this.diasFechaMaxima(unUsuario) < 7d) // falta el caso en el que quedan 0 dias 
+		if(this.estaCancelado || this.estaPostergado)
+			1
+		else if (this.diasFechaMaxima(unUsuario) < 7d && this.diasFechaMaxima(unUsuario) > 0) // falta el caso en el que quedan 0 dias 
 			(this.diasFechaMaxima(unUsuario) + 1) * 0.1
 		else
 			0.8
@@ -139,10 +150,11 @@ class EventoAbierto extends Evento {
 		this.capacidadMaxima() * porcentajeFracaso
 	}
 	def devolverValorEntradasAsistentes() {
-		asistentes.forEach[usuario | usuario.saldoAFavor = this.valorEntrada]
+		asistentes.forEach[usuario | this.devolverDinero(usuario)]
 	}
 	
 	override cancelarEvento() {
+		super.cancelarEvento
 		this.devolverValorEntradasAsistentes
 	}
 	
@@ -252,6 +264,7 @@ class EventoCerrado extends Evento {
 		invitadosConfirmados.forEach[usuario | this.notificarUsuario(usuario)]
 	}
 	override cancelarEvento() {
+		super.cancelarEvento
 		this.notificarInvitados()
 	}
 

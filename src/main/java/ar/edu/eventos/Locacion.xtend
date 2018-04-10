@@ -1,3 +1,5 @@
+package ar.edu.eventos
+
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.geodds.Point
 

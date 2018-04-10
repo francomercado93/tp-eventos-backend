@@ -1,3 +1,10 @@
+package ar.edu.eventos
+
+import ar.edu.eventos.EventoAbierto
+import ar.edu.eventos.EventoCerrado
+import ar.edu.eventos.Free
+import ar.edu.eventos.Locacion
+import ar.edu.eventos.Usuario
 import java.time.LocalDateTime
 import org.junit.Assert
 import org.junit.Before
@@ -76,12 +83,12 @@ class Teste {
 		cumple = new EventoCerrado() => [
 			nombreEvento = "cumple Julian"
 			organizador = juan
-			fechaInicio = LocalDateTime.of(2018, 03, 19, 22, 30)
-			fechaHasta = LocalDateTime.of(2018, 03, 20, 06, 00)
+			fechaInicio = LocalDateTime.of(2018, 05, 30, 18, 30)
+			fechaHasta = LocalDateTime.of(2018, 05, 30, 23, 00)
 			lugar = salonFiesta
 			cantidadDeAcompaniantesMax = 3
 			capacidadMaxima = 20
-			fechaMaxima = LocalDateTime.of(2018, 03, 18, 21, 00)
+			fechaMaxima = LocalDateTime.of(2018, 05, 18, 21, 00)
 			porcentajeExito = 0.8
 		]
 
@@ -145,6 +152,8 @@ class Teste {
 			cantidadDeAcompaniantesMax = 2
 			capacidadMaxima = 150
 			fechaMaxima = LocalDateTime.of(2018, 05, 25, 23, 59)
+			fechaInicio = LocalDateTime.of(2018, 05, 28, 21, 30)
+			fechaHasta = LocalDateTime.of(2018, 05, 29, 06, 00)
 			porcentajeExito = 0.8
 			lugar = salonFiesta
 
@@ -310,7 +319,7 @@ class Teste {
 	@Test
 	def void unaUsuarioAceptaUnaInvitacionPendienteSiElOrganizadorEsSuAmigo() {
 		lucas.agregarAmigo(beatriz)
-		beatriz.organizarEventoCerrado(casamiento)
+		beatriz.crearEvento(casamiento)
 		beatriz.invitarUsuario(lucas, casamiento)
 		lucas.aceptarPendientes()
 		Assert.assertTrue(casamiento.estaConfirmado(lucas))
@@ -318,7 +327,7 @@ class Teste {
 
 	@Test
 	def void unaUsuarioNoAceptaUnaInvitacionPendienteSiElOrganizadorNoEsSuAmigo() {
-		beatriz.organizarEventoCerrado(casamiento)
+		beatriz.crearEvento(casamiento)
 		beatriz.invitarUsuario(lucas, casamiento)
 		lucas.aceptarPendientes()
 		Assert.assertFalse(casamiento.estaConfirmado(lucas))
@@ -331,7 +340,7 @@ class Teste {
 		lucas.agregarAmigo(marco)
 		lucas.agregarAmigo(tomas)
 		lucas.agregarAmigo(miriam)
-		beatriz.organizarEventoCerrado(casamiento)
+		beatriz.crearEvento(casamiento)
 		beatriz.invitarUsuario(alejandro, casamiento)
 		alejandro.confirmarInvitacion(casamiento)
 		beatriz.invitarUsuario(marco, casamiento)
@@ -351,7 +360,7 @@ class Teste {
 		lucas.agregarAmigo(alejandro)
 		lucas.agregarAmigo(tomas)
 		lucas.agregarAmigo(miriam)
-		beatriz.organizarEventoCerrado(casamiento)
+		beatriz.crearEvento(casamiento)
 		beatriz.invitarUsuario(alejandro, casamiento)
 		alejandro.confirmarInvitacion(casamiento)
 		beatriz.invitarUsuario(tomas, casamiento)
@@ -365,7 +374,7 @@ class Teste {
 
 	@Test
 	def void usuarioAceptaInvitacionPendienteSiSeEncuentraEnSuRadioDeCercania() {
-		beatriz.organizarEventoCerrado(casamiento)
+		beatriz.crearEvento(casamiento)
 		beatriz.invitarUsuario(lucas, casamiento)
 		lucas.radioCercania = 6
 		lucas.aceptarPendientes()
@@ -375,7 +384,7 @@ class Teste {
 	@Test
 	def void usuarioNoAceptaInvitacionPendienteSiNoSeEncuentraEnSuRadioDeCercania() {
 		lucas.radioCercania = 5
-		beatriz.organizarEventoCerrado(casamiento)
+		beatriz.crearEvento(casamiento)
 		beatriz.invitarUsuario(lucas, casamiento)
 		lucas.aceptarPendientes()
 		Assert.assertFalse(casamiento.estaConfirmado(lucas))
@@ -384,7 +393,7 @@ class Teste {
 	def void usuarioAntisocialRechazaInvitacionPendienteSiSeEncuentraFueraDeSuRadioDeCercania() {
 		lucas.radioCercania = 5
 		lucas.esAntisocial = true
-		beatriz.organizarEventoCerrado(casamiento)
+		beatriz.crearEvento(casamiento)
 		beatriz.invitarUsuario(lucas, casamiento)
 		lucas.rechazarPendientes()		//cuando se rechaza la invitacion, se lo saca de la
 		Assert.assertFalse(casamiento.estaInvitado(lucas))	//lista de pendientes del evento
@@ -394,7 +403,7 @@ class Teste {
 		lucas.radioCercania = 90
 		lucas.esAntisocial = true
 		lucas.agregarAmigo(miriam)		//asiste un amigo
-		beatriz.organizarEventoCerrado(casamiento)
+		beatriz.crearEvento(casamiento)
 		beatriz.invitarUsuario(lucas, casamiento)
 		beatriz.invitarUsuario(miriam, casamiento)
 		miriam.confirmarInvitacion(casamiento)
@@ -407,7 +416,7 @@ class Teste {
 		lucas.esAntisocial = false
 		lucas.agregarAmigo(miriam)		//lucas tiene amigos
 		lucas.agregarAmigo(juan)		//juan no es invitado
-		beatriz.organizarEventoCerrado(casamiento)
+		beatriz.crearEvento(casamiento)
 		beatriz.invitarUsuario(miriam, casamiento) //miriam no confirma que asiste
 		beatriz.invitarUsuario(lucas, casamiento)
 		lucas.rechazarPendientes()		//cuando se rechaza la invitacion, se lo saca de la
@@ -423,25 +432,44 @@ class Teste {
 		Assert.assertEquals(500, beatriz.saldoAFavor, 0.1)
 	}
 	@Test
-	def void siReprogramoLaFechaElEventoTieneLaMismaDuracion(){
+	def void siSeReprogramaLaFechaElEventoTieneLaMismaDuracion(){
 		lollapalooza.reprogramarEvento(LocalDateTime.of(2018, 03, 28, 19, 00))
 		Assert.assertEquals(7, lollapalooza.duracion, 0.1)
 	}
-	/* @Test
+	@Test
+	def void siSeReprogramaEventoUsuarioDevuelveEntradaPorEl100DeSuValor(){
+		lollapalooza.postergarEvento(LocalDateTime.of(2018, 03, 28, 19, 00))
+		maxi.devolverEntradaSiEventoEstaPostergado(lollapalooza)
+		Assert.assertFalse(lollapalooza.asistentes.contains(maxi))
+		Assert.assertEquals(500, maxi.saldoAFavor, 0.1)
+	}
+		
+	@Test
+	def void siUnOrganizadorFreeCreaUnEventoYNoHayUnEventoEnSimultaneoPuedeOrganizar() {
+		free1.crearEvento(casamiento)
+		free1.fechaActual = LocalDateTime.of(2018, 05, 29, 16, 00)		//free quiere crear un 
+		Assert.assertTrue(free1.puedoCrearElEvento(cumple))			//evento cuando termina otro
+		free1.crearEvento(cumple)
+		Assert.assertTrue(free1.eventosOrganizados.contains(casamiento))
+	}
+	
+	@Test
 	def void siUnOrganizadorFreeCreaUnEventoPeroHayUnEventoEnSimultaneoNoPuedeOrganizar() {
-		free1.organizarEvento(casamiento)
-		free1.organizarEvento(cumple)
-		Assert.assertTrue(free1.hayUnEventoActualmente)
+		free1.crearEvento(casamiento)
+		free1.fechaActual = LocalDateTime.of(2018, 05, 28, 22, 00)		//free quiere crear un 
+		Assert.assertFalse(free1.puedoCrearElEvento(cumple))			//evento mientras sucede otro
 	}
 
-	@Test
+	/* @Test
 	def void siUnOrganizadorFreeCreaUnEventoPeroNoHayUnEventoEnSimultaneoPuedeOrganizar() {
 		Assert.assertFalse(free1.hayUnEventoActualmente)
-	}
+	}*/
+	/*
 	@Test
 	def void usuarioFreeQuiereOrganizarCerradounEventoYHayUnEventoEnEseMomento() {
 
-		Assert.assertFalse(false beatriz.puedeOrganizarEvento()*/ 
+		Assert.assertFalse(false beatriz.puedeOrganizarEvento()
+	}
+	*/
 	
-
 }

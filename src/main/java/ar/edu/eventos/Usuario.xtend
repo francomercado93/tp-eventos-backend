@@ -1,4 +1,6 @@
 //import java.awt.List
+package ar.edu.eventos
+
 import java.time.LocalDateTime
 import java.util.ArrayList
 import java.util.Collection
@@ -18,16 +20,49 @@ class Usuario {
 	Collection<Usuario> amigos = new ArrayList<Usuario>
 	double radioCercania
 	boolean esAntisocial
+	Collection<Evento> eventosOrganizados = new ArrayList<Evento>
+	 
+	
+	// Organizador
+	def invitarUsuario(Usuario invitado, EventoCerrado unEvento) {
+		invitado.recibirInvitacion(unEvento)
+	}
+	
+	def cancelarEvento(Evento unEvento){
+		tipo.cancelarEvento(unEvento)
+	}
+	
+	def postergarEvento(Evento unEvento, LocalDateTime nuevaFechaInicio){
+		tipo.postergarEvento(unEvento, nuevaFechaInicio)
+	}
+	def crearEvento(Evento unEvento){
+		if(this.puedoCrearElEvento(unEvento)){
+			unEvento.fechaCreacion = fechaActual
+			unEvento.organizador = this 
+			eventosOrganizados.add(unEvento)
+		}
+	}
+	def boolean puedoCrearElEvento(Evento unEvento){
+		tipo.puedoOrganizarEvento(unEvento, this)
+	}
+	
+
+	//Usuario Evento Abierto
 	def comprarEntradas(EventoAbierto unEvento) {
 		unEvento.usuarioCompraEntrada(this)
-
 	}
 
 	def devolverEntrada(EventoAbierto unEvento) {
 		unEvento.devolverDinero(this)
 		unEvento.removerUsuario(this)
 	}
-
+	
+	def devolverEntradaSiEventoEstaPostergado(EventoAbierto unEvento){
+		if(unEvento.estaPostergado)
+			this.devolverEntrada(unEvento)
+	}
+	
+	//Usuario evento cerrado
 	def recibirInvitacion(EventoCerrado unEvento) {
 		unEvento.usuarioRecibeInvitacion(this)
 		invitaciones.add(unEvento)
@@ -79,27 +114,7 @@ class Usuario {
 	def agregarAmigo(Usuario unAmigo) {
 		amigos.add(unAmigo)
 	}
-
-	// Organizador
-	def invitarUsuario(Usuario invitado, EventoCerrado unEvento) {
-		invitado.recibirInvitacion(unEvento)
-	}
-	def cancelarEvento(Evento unEvento){
-		tipo.cancelarEvento(unEvento)
-	}
-	def postergarEvento(Evento unEvento, LocalDateTime nuevaFechaInicio){
-		tipo.postergarEvento(unEvento, nuevaFechaInicio)
-	}
-
-	def organizarEventoAbierto(EventoAbierto abierto) {
-		abierto.organizador = this
-		tipo.organizarEventoAbierto(abierto)
-	}
-	def organizarEventoCerrado(EventoCerrado cerrado){
-		cerrado.organizador = this
-		tipo.organizarEventoCerrado(cerrado)
-	}
-	//usuario
+	
 	def rechazarPendientes() {
 		if(esAntisocial)
 			this.antisocialRechazarPendientes
@@ -114,9 +129,11 @@ class Usuario {
 	def pendientesParaRechazarQueCumplenCondicionNoAntisocial() {
 		invitaciones.filter[invitacion| this.cumpleCondicionesNoAntisocial(invitacion)]
 	}
+	
 	def boolean cumpleCondicionesNoAntisocial(EventoCerrado invitacion){
 		!this.eventoEstaCerca(invitacion) || this.noAsistenAmigos(invitacion)
 	}
+	
 	def boolean noAsistenAmigos(EventoCerrado invitacion) {
 		this.cantidadAmigosConfirmadosEvento(invitacion) == 0
 	}
@@ -138,8 +155,9 @@ class Usuario {
 	}
 	
 	def eventoCancelado() {
-		println("El evento fue cancelado")
+		println("El evento fue cancelado/postergado")
 	}
+	
 	
 	
 }
