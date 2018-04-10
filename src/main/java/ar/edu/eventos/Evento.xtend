@@ -94,6 +94,13 @@ abstract class Evento {
 	def void notificarUsuario(Usuario usuario) {
 		usuario.eventoCancelado
 	}
+	
+	def void settearVariables(Usuario unUsuario){
+		fechaCreacion = unUsuario.fechaActual
+		organizador = unUsuario 
+		capacidadMaxima = unUsuario.tipo.capacidadMaxima
+	}
+	
 }
 
 @Accessors

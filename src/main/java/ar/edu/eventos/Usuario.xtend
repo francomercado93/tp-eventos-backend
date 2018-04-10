@@ -36,14 +36,16 @@ class Usuario {
 		tipo.postergarEvento(unEvento, nuevaFechaInicio)
 	}
 	def crearEvento(Evento unEvento){
-		if(this.puedoCrearElEvento(unEvento)){
-			unEvento.fechaCreacion = fechaActual
-			unEvento.organizador = this 
-			eventosOrganizados.add(unEvento)
+		if(this.puedoCrearEvento()){
+			unEvento.settearVariables(this)
+			this.agregarEventoLista(unEvento)
 		}
 	}
-	def boolean puedoCrearElEvento(Evento unEvento){
-		tipo.puedoOrganizarEvento(unEvento, this)
+	def boolean puedoCrearEvento(){
+		tipo.puedoOrganizarEvento(this)
+	}
+	def void agregarEventoLista(Evento unEvento){
+		eventosOrganizados.add(unEvento)
 	}
 	
 

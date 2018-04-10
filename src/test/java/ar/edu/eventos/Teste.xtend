@@ -135,9 +135,7 @@ class Teste {
 			fechaActual = LocalDateTime.of(2018, 02, 15, 15, 30)
 			edad = 45
 			comprarEntradas(lollapalooza)
-			tipo = new Free() => [
-				cantidadInvitados = 12
-			]
+			tipo = new Free() 
 
 		]
 		// Organizadores
@@ -448,7 +446,7 @@ class Teste {
 	def void siUnOrganizadorFreeCreaUnEventoYNoHayUnEventoEnSimultaneoPuedeOrganizar() {
 		free1.crearEvento(casamiento)
 		free1.fechaActual = LocalDateTime.of(2018, 05, 29, 16, 00)		//free quiere crear un 
-		Assert.assertTrue(free1.puedoCrearElEvento(cumple))			//evento cuando termina otro
+		Assert.assertTrue(free1.puedoCrearEvento())			//evento cuando termina otro
 		free1.crearEvento(cumple)
 		Assert.assertTrue(free1.eventosOrganizados.contains(casamiento))
 	}
@@ -457,19 +455,7 @@ class Teste {
 	def void siUnOrganizadorFreeCreaUnEventoPeroHayUnEventoEnSimultaneoNoPuedeOrganizar() {
 		free1.crearEvento(casamiento)
 		free1.fechaActual = LocalDateTime.of(2018, 05, 28, 22, 00)		//free quiere crear un 
-		Assert.assertFalse(free1.puedoCrearElEvento(cumple))			//evento mientras sucede otro
+		Assert.assertFalse(free1.puedoCrearEvento())			//evento mientras sucede otro
 	}
-
-	/* @Test
-	def void siUnOrganizadorFreeCreaUnEventoPeroNoHayUnEventoEnSimultaneoPuedeOrganizar() {
-		Assert.assertFalse(free1.hayUnEventoActualmente)
-	}*/
-	/*
-	@Test
-	def void usuarioFreeQuiereOrganizarCerradounEventoYHayUnEventoEnEseMomento() {
-
-		Assert.assertFalse(false beatriz.puedeOrganizarEvento()
-	}
-	*/
 	
 }

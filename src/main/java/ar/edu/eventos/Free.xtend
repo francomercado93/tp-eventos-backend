@@ -5,9 +5,12 @@ import org.eclipse.xtend.lib.annotations.Accessors
 @Accessors
 class Free extends TipoUsuario {
 	
-	override puedoOrganizarEvento(Evento nuevoEvento, Usuario unUsuario){
+	override puedoOrganizarEvento(Usuario unUsuario){
 		(this.cantidadEventosOrganizadosMes(unUsuario) <= 3) && (this.cantidadEventosSimultaneos(unUsuario) == 0)
 			
+	}
+	override capacidadMaxima(){
+		50
 	}
 	
 	/*override organizarEventoCerrado(EventoCerrado cerrado){
@@ -27,14 +30,6 @@ class Free extends TipoUsuario {
 		println("Usuario free no puede cancelar eventos")
 	}*/
 }
-/* 
-class Amateur extends TipoUsuario{
-	/*override cancelarEventoCerrado(EventoCerrado cerrado){
-		
-	}
-	override cancelarEventoAbierto(EventoAbierto abierto){
-		this.devolverValorEntradasAsistentes(abierto)
-	}
-	*/
+
 	
 	
