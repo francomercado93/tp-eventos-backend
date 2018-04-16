@@ -95,7 +95,7 @@ class Usuario {
 	}
 	
 	//Usuario Evento Abierto
-	def comprarEntradas(EventoAbierto unEvento) {
+	def comprarEntrada(EventoAbierto unEvento) {
 		unEvento.usuarioCompraEntrada(this)
 	}
 

@@ -1,10 +1,6 @@
 package ar.edu.eventos
 
-import ar.edu.eventos.EventoAbierto
-import ar.edu.eventos.EventoCerrado
-import ar.edu.eventos.Free
-import ar.edu.eventos.Locacion
-import ar.edu.eventos.Usuario
+import ar.edu.eventos.exceptions.BusinessException
 import java.time.LocalDateTime
 import org.junit.Assert
 import org.junit.Before
@@ -17,6 +13,7 @@ class TestEventos {
 	EventoAbierto lollapalooza
 	EventoCerrado casamiento
 	EventoCerrado cumple
+	EventoCerrado minifiesta1
 	Locacion salonFiesta
 	Locacion hipodromo
 	Locacion tecnopolis
@@ -39,6 +36,7 @@ class TestEventos {
 	Usuario marco
 	Usuario tomas
 	Usuario miriam
+	
 
 	@Before
 	def void init() {
@@ -85,48 +83,57 @@ class TestEventos {
 			organizador = juan
 			inicioEvento = LocalDateTime.of(2018, 05, 30, 18, 30)
 			finEvento = LocalDateTime.of(2018, 05, 30, 23, 00)
+			fechaMaximaConfirmacion = LocalDateTime.of(2018, 05, 29, 21, 00)
 			lugar = salonFiesta
 			
 			capacidadMaxima = 20
-			fechaMaximaConfirmacion = LocalDateTime.of(2018, 05, 18, 21, 00)
 			porcentajeExito = 0.8
 		]
-
+		minifiesta1 = new EventoCerrado() => [
+			nombreEvento = "minifiesta1"
+			inicioEvento = LocalDateTime.of(2018, 05, 31, 14, 00)
+			finEvento = LocalDateTime.of(2018, 05, 31, 15, 00)
+			fechaMaximaConfirmacion = LocalDateTime.of(2018, 05, 31, 11, 30)
+			lugar = salonFiesta
+			capacidadMaxima = 20
+			porcentajeExito = 0.8
+		]
 		// PERSONAS
 		juan = new Usuario() => [
 			nombreUsuario = "juan"
 			fechaActual = LocalDateTime.of(2018, 03, 15, 22, 00)
-			edad = 17
+			edad = 18
 		]
 		martin = new Usuario() => [
 			nombreUsuario = "martin"
 			fechaActual = LocalDateTime.of(2018, 03, 16, 00, 22)
-			edad = 22
+			edad = 17
 		]
+		
 		// Usuarios que compran entradas y cumplen requisitos
 		maxi = new Usuario() => [
 			nombreUsuario = "maxi"
 			fechaActual = LocalDateTime.of(2018, 02, 15, 15, 30)
 			edad = 40
-			comprarEntradas(lollapalooza)
+			comprarEntrada(lollapalooza)
 		]
 		gaby = new Usuario() => [
 			nombreUsuario = "gaby"
 			fechaActual = LocalDateTime.of(2017, 09, 02, 20, 15)
 			edad = 20
-			comprarEntradas(lollapalooza)
+			comprarEntrada(lollapalooza)
 		]
 		maria = new Usuario() => [
 			nombreUsuario = "maria"
 			fechaActual = LocalDateTime.of(2018, 02, 27, 05, 00)
 			edad = 35
-			comprarEntradas(lollapalooza)
+			comprarEntrada(lollapalooza)
 		]
 		lucas = new Usuario() => [
 			nombreUsuario = "lucas"
 			fechaActual = LocalDateTime.of(2018, 01, 31, 19, 50)
 			edad = 26
-			comprarEntradas(lollapalooza)
+			comprarEntrada(lollapalooza)
 			puntoDireccionUsuario = new Point(8.95, 6)
 
 		]
@@ -134,7 +141,7 @@ class TestEventos {
 			nombreUsuario = "beatriz"
 			fechaActual = LocalDateTime.of(2018, 02, 15, 15, 30)
 			edad = 45
-			comprarEntradas(lollapalooza)
+			comprarEntrada(lollapalooza)
 			tipoUsuario = new Free() 
 
 		]
@@ -180,43 +187,33 @@ class TestEventos {
 	}
 
 	@Test
-	def void ProbarDuracion() {
+	def void probarDuracion() {
 		Assert.assertEquals(7, lollapalooza.duracion, 0.1)
 	}
 
 	@Test
-	def void ProbarDistancia() {
+	def void probarDistancia() {
 		Assert.assertEquals(distanciaEsperada, lollapalooza.distancia(puntoPrueba), 0.1d)
 	}
 
+
 	@Test
-	def void siUnaLocacionTieneUnaSuperficieElEventoTieneUnaCapacidadMaxima() {
-		Assert.assertEquals(6, lollapalooza.capacidadMaxima(), 0.1d)
+	def void personaSacaEntrada() {
+		juan.comprarEntrada(lollapalooza)
+		Assert.assertTrue(lollapalooza.estaInvitado(juan))
 	}
 
 	@Test
-	def void unaPersonaQuiereSacarUnaEntradaNoSuperafechaMaximaConfirmacion() {
-		Assert.assertTrue(juan.fechaActual.isBefore(lollapalooza.fechaMaximaConfirmacion))
+	def void personaNoPuedeSacarEntradaSuperoFechaLimite() {
+		//martin.comprarEntrada(lollapalooza)
+		Assert.assertFalse(lollapalooza.usuarioEstaATiempo(martin))
+		Assert.assertFalse(lollapalooza.estaInvitado(martin))
 	}
-
 	@Test
-	def void unaPersonaQuiereSacarUnaEntradaYSuperafechaMaximaConfirmacion() {
-		Assert.assertTrue(martin.fechaActual.isAfter(lollapalooza.fechaMaximaConfirmacion))
-	}
-
-	@Test
-	def void unaPersonaQuiereSacarUnaEntradaYNoSuperaEdadMinima() {
-		Assert.assertTrue(juan.edad < lollapalooza.edadMinima)
-	}
-
-	@Test
-	def void unaPersonaQuiereSacarUnaEntradaYSuperaEdadMinima() {
-		Assert.assertTrue(martin.edad > lollapalooza.edadMinima)
-	}
-
-	@Test
-	def void unaPersonaQuiereSacarUnaEntradaYQuedanEntradas() {
-		Assert.assertTrue(lollapalooza.cantidadDisponibles > 0) // Compraron 5 entradas y queda 1
+	def void personaNoPuedeSacarEntradaNoTieneEdad() {
+		//martin.comprarEntrada(lollapalooza)
+		Assert.assertFalse(martin.edad >= lollapalooza.edadMinima)
+		Assert.assertFalse(lollapalooza.estaInvitado(martin))
 	}
 
 	@Test
@@ -225,13 +222,13 @@ class TestEventos {
 			nombreUsuario = "pablo"
 			fechaActual = LocalDateTime.of(2018, 03, 15, 16, 45)
 			edad = 33
-			comprarEntradas(lollapalooza)
+			comprarEntrada(lollapalooza)
 		]
 		Assert.assertTrue(lollapalooza.cantidadDisponibles == 0)
 	}
 
 	@Test
-	def void siUnaPersonaDevuelveEnIntervaloDe7DiasRestantesSeDevuelveUnaParteDelValor() {
+	def void siUnaPersonaDevuelveEnIntervaloDe7DiasRestantesSeDevuelveUnPorcentaje() {
 		martin.fechaActual = LocalDateTime.of(2018, 03, 09, 22, 00)
 		martin.devolverEntrada(lollapalooza)
 		Assert.assertEquals(350d, martin.saldoAFavor, 0.1)
@@ -250,7 +247,7 @@ class TestEventos {
 			nombreUsuario = "pablo"
 			fechaActual = LocalDateTime.of(2018, 03, 15, 16, 45)
 			edad = 33
-			comprarEntradas(lollapalooza)
+			comprarEntrada(lollapalooza)
 		]
 		Assert.assertTrue(lollapalooza.esExitoso)
 	}
@@ -260,60 +257,62 @@ class TestEventos {
 		beatriz.devolverEntrada(lollapalooza)
 		lucas.devolverEntrada(lollapalooza)
 		maria.devolverEntrada(lollapalooza)
-
 		Assert.assertTrue(lollapalooza.esFracaso)
 	}
-
-	// En estos casos organizador = usuario
+	
 	@Test
-	def void PersonaRecibeInvitacionCumpleCondicionesYEsAgregadoAlEvento() {
-
+	def void personaRecibeInvitacionEsAgregadoAlEvento() {
 		beatriz.invitarUsuario(lucas, casamiento, 3)
 		Assert.assertTrue(casamiento.estaInvitado(lucas))
-
 	}
-
-	@Test
-	def void PersonaRecibeInvitacionNoCumpleCondicionesYNoEsAgregadoAlEvento() {
-
-		Assert.assertTrue(true)
-
-	}
-
-	@Test
-	def void personaRecibeInvitacionYSuperafechaMaximaConfirmacion() {
-	}
-
-	@Test
-	def void personaRecibeInvitacionYNoSuperafechaMaximaConfirmacion() {
-	}
-
-	@Test
-	def void personaRecibeInvitacionYSuperaCantidadAcompaniantesMaxima() {
-	}
-
-	@Test
-	def void personaRecibeInvitacionYNOSuperaCantidadAcompaniantesMaxima() {
-	}
-
-	@Test
-	def void personaRecibeInvitacionYHayCapacidad() {
-	}
-
-	@Test
-	def void personaRecibeInvitacionYNoHayCapacidad() {
-	}
-
-	@Test
-	def void personaConfirmaInvitacionYApareceEnLista() {
-	}
-
-	@Test
-	def void personaRechazaInvitacionYNoApareceEnLista() {
-	}
-
 	
 
+	@Test
+	def void organizadorFreeCreaEventoSiNoHayEventoEnSimultaneoyNoSuperaLaCantidadMaximaPorMes() {
+		free1.crearEvento(casamiento)
+		free1.fechaActual = LocalDateTime.of(2018, 05, 29, 16, 00)		//free quiere crear un 
+		Assert.assertTrue(free1.puedoCrearEvento())			//evento cuando termina otro
+		free1.crearEvento(cumple)
+		Assert.assertTrue(free1.eventosOrganizados.contains(cumple))
+	}
+	
+	@Test
+	def void organizadorFreeNoCreaEventoSiHayEventoEnSimultaneo() {
+		free1.crearEvento(casamiento)
+		free1.fechaActual = LocalDateTime.of(2018, 05, 28, 22, 00)		//free quiere crear un 
+		Assert.assertFalse(free1.puedoCrearEvento())			//evento mientras sucede otro
+	}
+	@Test
+	def void organizadorFreeNoCreaEventoSiSuperaLaCantidadMaximaPorMes() {
+		free1.crearEvento(casamiento)
+		free1.fechaActual = LocalDateTime.of(2018, 05, 29, 11, 00)		
+		Assert.assertTrue(free1.puedoCrearEvento())		
+		free1.crearEvento(cumple)
+		free1.fechaActual = LocalDateTime.of(2018, 05, 31, 12, 00)
+		Assert.assertTrue(free1.puedoCrearEvento())
+		free1.crearEvento(minifiesta1)
+		free1.fechaActual = LocalDateTime.of(2018, 05, 31, 16, 00)
+		Assert.assertFalse(free1.puedoCrearEvento())
+	}
+	
+	@Test(expected = typeof(BusinessException))
+	def void organizadorFreeNoPuedeInvitarMasDe50Personas() {
+		free1.crearEvento(casamiento)
+		free1.invitarUsuario(alejandro, casamiento, 10)
+		alejandro.confirmarInvitacion(casamiento, 10)
+		free1.invitarUsuario(marco, casamiento, 10)
+		marco.confirmarInvitacion(casamiento, 10)
+		free1.invitarUsuario(tomas, casamiento, 10)
+		tomas.confirmarInvitacion(casamiento, 10)
+		free1.invitarUsuario(miriam, casamiento, 10)
+		miriam.confirmarInvitacion(casamiento, 10)
+		free1.invitarUsuario(lucas, casamiento, 10)
+		lucas.confirmarInvitacion(casamiento, 10)
+		free1.invitarUsuario(maria, casamiento, 10)
+		
+	}
+	
+	
 	@Test
 	def void unUsuarioAceptaUnaInvitacionPendienteSiElOrganizadorEsSuAmigo() {
 		lucas.agregarAmigo(beatriz)
@@ -442,20 +441,5 @@ class TestEventos {
 		Assert.assertEquals(500, maxi.saldoAFavor, 0.1)
 	}
 		
-	@Test
-	def void siUnOrganizadorFreeCreaUnEventoYNoHayUnEventoEnSimultaneoPuedeOrganizar() {
-		free1.crearEvento(casamiento)
-		free1.fechaActual = LocalDateTime.of(2018, 05, 29, 16, 00)		//free quiere crear un 
-		Assert.assertTrue(free1.puedoCrearEvento())			//evento cuando termina otro
-		free1.crearEvento(cumple)
-		Assert.assertTrue(free1.eventosOrganizados.contains(casamiento))
-	}
-	
-	@Test
-	def void siUnOrganizadorFreeCreaUnEventoPeroHayUnEventoEnSimultaneoNoPuedeOrganizar() {
-		free1.crearEvento(casamiento)
-		free1.fechaActual = LocalDateTime.of(2018, 05, 28, 22, 00)		//free quiere crear un 
-		Assert.assertFalse(free1.puedoCrearEvento())			//evento mientras sucede otro
-	}
 	
 }

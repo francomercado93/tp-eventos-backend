@@ -11,7 +11,7 @@ class Free implements TipoUsuario {
 	Integer cantidadMaximaPersonasEvento = 50
 
 	override puedoOrganizarEvento(Usuario unUsuario) {
-		(unUsuario.cantidadEventosOrganizadosMes() <= maximaCantidadEventosPorMes) &&
+		(unUsuario.cantidadEventosOrganizadosMes() < maximaCantidadEventosPorMes) &&
 			(unUsuario.cantidadEventosSimultaneos() == maximaCantidadeventosSimultaneos)
 
 	}
@@ -32,7 +32,5 @@ class Free implements TipoUsuario {
   /*override organizarEventoAbierto(EventoAbierto abierto){
   	println("Usuario free no puede organizar evento abierto")
   }
-  override cancelarEvento(Evento unEvento){
-  	println("Usuario free no puede cancelar eventos")
- }*/
+  */
 }

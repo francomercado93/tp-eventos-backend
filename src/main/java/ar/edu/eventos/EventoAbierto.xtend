@@ -1,6 +1,7 @@
 package ar.edu.eventos
 
 import org.eclipse.xtend.lib.annotations.Accessors
+import ar.edu.eventos.exceptions.BusinessException
 
 @Accessors
 class EventoAbierto extends Evento {
@@ -16,10 +17,12 @@ class EventoAbierto extends Evento {
 
 	def void usuarioCompraEntrada(Usuario unUsuario) {
 		if (this.cumpleCondiciones(unUsuario))
-			this.agregarUsuarioListaAsistentes(unUsuario) // Si no cumple Requisitos no se muestra ninguna mensaje(prguntar excepciones)
+			this.agregarUsuarioListaAsistentes(unUsuario)
+		else
+			throw new BusinessException("Error: no se puede comprar entrada") 
 	}
 
-	override boolean cumpleCondiciones(Usuario unUsuario) { // muevo metodos de usuario que le corresponden al evento
+	override boolean cumpleCondiciones(Usuario unUsuario) { 
 		(this.superaEdadMin(unUsuario) && this.cantidadDisponibles > 0 && this.usuarioEstaATiempo(unUsuario))
 	}
 

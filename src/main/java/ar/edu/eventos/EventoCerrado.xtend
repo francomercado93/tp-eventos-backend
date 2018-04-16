@@ -26,15 +26,12 @@ class EventoCerrado extends Evento {
 		4
 	}
 
-	def boolean estaInvitado(Usuario unUsuario) {
-		asistentes.contains(unUsuario)
-	}
 	def boolean estaConfirmado(Usuario unUsuario){
 		invitadosConfirmados.contains(unUsuario)
 	}
 	
 	def boolean chequearCapacidad(){
-		this.capacidadMaxima() > this.cantidadAsistentesPosibles
+		this.capacidadMaxima() >= this.cantidadAsistentesPosibles
 	}
 
 

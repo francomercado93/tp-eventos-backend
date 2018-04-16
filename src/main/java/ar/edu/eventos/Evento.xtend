@@ -99,7 +99,9 @@ abstract class Evento {
 		fechaCreacion = unUsuario.fechaActual
 		organizador = unUsuario 
 	}
-	
+	def boolean estaInvitado(Usuario unUsuario) {
+		asistentes.contains(unUsuario)
+	}
 }
 
 
