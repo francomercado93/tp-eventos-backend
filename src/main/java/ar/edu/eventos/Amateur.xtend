@@ -1,12 +1,27 @@
 package ar.edu.eventos
 
-class Amateur extends TipoUsuario {
+import java.time.LocalDateTime
+import ar.edu.eventos.exceptions.BusinessException
+
+class Amateur implements TipoUsuario {
+	Integer cantidadMaximaInvitaciones = 50
+	Integer maximaCantidadeventosSimultaneos = 5
 	
 	override puedoOrganizarEvento(Usuario unUsuario){
-		(this.cantidadEventosSimultaneos(unUsuario) <= 5)
+		(unUsuario.cantidadEventosSimultaneos() <= maximaCantidadeventosSimultaneos)
 			
 	}
-	override capacidadMaxima() {
-		50
+	override cancelarEvento(Evento unEvento){
+		unEvento.cancelarEvento()
+	}
+
+	override postergarEvento(Evento unEvento, LocalDateTime nuevaFechaInicio){
+		unEvento.postergarEvento(nuevaFechaInicio)
+	}
+	override invitarUsuario(Usuario invitado,Usuario organizador, EventoCerrado unEvento, Integer cantidadAcompaniantes){
+		if(unEvento.cantidadAsistentesPendientes < cantidadMaximaInvitaciones)		//cada asistente tiene UNA invitacion
+			organizador.realizarInvitacion(invitado, unEvento, cantidadAcompaniantes)
+		else
+			throw new BusinessException("Supero cantidad maxima de invitaciones")
 	}
 }

@@ -11,10 +11,10 @@ abstract class Evento {
 
 	Usuario organizador
 	String nombreEvento
-	LocalDateTime fechaInicio
-	LocalDateTime fechaHasta
+	LocalDateTime inicioEvento
+	LocalDateTime finEvento
 	Locacion lugar
-	LocalDateTime fechaMaxima
+	LocalDateTime fechaMaximaConfirmacion
 	LocalDateTime fechaCreacion
 	double capacidadMaxima
 	double porcentajeExito = 0.9
@@ -24,7 +24,7 @@ abstract class Evento {
 	boolean estaPostergado = false
 
 	def duracion() {
-		Duration.between(fechaInicio, fechaHasta).getSeconds() / 3600d
+		Duration.between(inicioEvento, finEvento).getSeconds() / 3600d
 	}
 
 	def double distancia(Point unPunto) {
@@ -43,8 +43,8 @@ abstract class Evento {
 
 	def double cantidadFracaso()
 
-	def double diasFechaMaxima(Usuario unUsuario) {
-		Math.rint(Duration.between(unUsuario.fechaActual, this.fechaMaxima).getSeconds() / 86400d) // obtener dias
+	def double diasfechaMaximaConfirmacion(Usuario unUsuario) {
+		Math.rint(Duration.between(unUsuario.fechaActual, this.fechaMaximaConfirmacion).getSeconds() / 86400d) // obtener dias
 	}
 
 	def cantidadDisponibles() { // Eventos abiertos => entradas, cerrados => invitaciones
@@ -55,7 +55,7 @@ abstract class Evento {
 		asistentes.size
 	}
 
-	def void agregarUsuarioLista(Usuario unUsuario) {
+	def void agregarUsuarioListaAsistentes(Usuario unUsuario) {
 		asistentes.add(unUsuario)
 	}
 
@@ -66,23 +66,23 @@ abstract class Evento {
 	def boolean cumpleCondiciones(Usuario unUsuario)
 
 	def boolean usuarioEstaATiempo(Usuario unUsuario) {
-		unUsuario.fechaActual.isBefore(this.fechaMaxima)
+		unUsuario.fechaActual.isBefore(this.fechaMaximaConfirmacion)
 	}
 		
 	def void cancelarEvento(){
 		estaCancelado = true
 	}
 	
-	def void postergarEvento(LocalDateTime nuevaFechaInicio){
+	def void postergarEvento(LocalDateTime nuevaInicioEvento){
 		estaPostergado = true
-		this.reprogramarEvento(nuevaFechaInicio)
+		this.reprogramarEvento(nuevaInicioEvento)
 		this.notificarInvitados
 	}
 	
-	def void reprogramarEvento(LocalDateTime nuevaFechaInicio){
-		fechaHasta = nuevaFechaInicio.plusSeconds(Duration.between(fechaInicio, fechaHasta).getSeconds)
-		fechaMaxima = nuevaFechaInicio.plusSeconds(Duration.between(fechaInicio, fechaMaxima).getSeconds)
-		fechaInicio = nuevaFechaInicio
+	def void reprogramarEvento(LocalDateTime nuevaInicioEvento){
+		finEvento = nuevaInicioEvento.plusSeconds(Duration.between(inicioEvento, finEvento).getSeconds)
+		fechaMaximaConfirmacion = nuevaInicioEvento.plusSeconds(Duration.between(inicioEvento, fechaMaximaConfirmacion).getSeconds)
+		inicioEvento = nuevaInicioEvento
 	}
 	def void notificarInvitados() {			//En evento abierto se notifica a los que compraron 
 		this.notificarPendientes			//entradas(asistentes)
@@ -98,181 +98,9 @@ abstract class Evento {
 	def void settearVariables(Usuario unUsuario){
 		fechaCreacion = unUsuario.fechaActual
 		organizador = unUsuario 
-		capacidadMaxima = unUsuario.tipo.capacidadMaxima
 	}
 	
 }
 
-@Accessors
-class EventoAbierto extends Evento {
 
-	double espacioNecesarioPorPersona = 0.8
-	int edadMinima // organizador crea evento setear edadMinima y valor entrada
-	double valorEntrada
-	
 
-	override capacidadMaxima() {
-		Math.round(lugar.superficie / this.espacioNecesarioPorPersona) // mostraba 5.99 y no 6
-	}
-
-	def void usuarioCompraEntrada(Usuario unUsuario) {
-		if (this.cumpleCondiciones(unUsuario))
-			this.agregarUsuarioLista(unUsuario) // Si no cumple Requisitos no se muestra ninguna mensaje(prguntar excepciones)
-	}
-
-	override boolean cumpleCondiciones(Usuario unUsuario) { // muevo metodos de usuario que le corresponden al evento
-		(this.superaEdadMin(unUsuario) && this.cantidadDisponibles > 0 && this.usuarioEstaATiempo(unUsuario))
-	}
-
-	def boolean superaEdadMin(Usuario unUsuario) {
-		unUsuario.edad >= this.edadMinima
-	}
-
-	def devolverDinero(Usuario unUsuario) {
-		unUsuario.saldoAFavor = valorEntrada * this.porcentajeADevolver(unUsuario)
-	}
-
-	def double porcentajeADevolver(Usuario unUsuario) {
-		if(this.estaCancelado || this.estaPostergado)
-			1
-		else if (this.diasFechaMaxima(unUsuario) < 7d && this.diasFechaMaxima(unUsuario) > 0) // falta el caso en el que quedan 0 dias 
-			(this.diasFechaMaxima(unUsuario) + 1) * 0.1
-		else
-			0.8
-	}
-
-	override boolean esExitoso() { // Es un exito si quedan menos del 10% de entradas
-		this.cantidadDisponibles <= this.cantidadExito
-	}
-
-	override double cantidadExito() {
-		this.capacidadMaxima() * porcentajeExito
-	}
-
-	override esFracaso() {
-		this.cantidadDisponibles > this.cantidadFracaso // es un fracaso si quedan mas del 50% de las entradas
-	}
-
-	override double cantidadFracaso() {
-		this.capacidadMaxima() * porcentajeFracaso
-	}
-	def devolverValorEntradasAsistentes() {
-		asistentes.forEach[usuario | this.devolverDinero(usuario)]
-	}
-	
-	override cancelarEvento() {
-		super.cancelarEvento
-		this.devolverValorEntradasAsistentes
-	}
-	
-
-}
-
-@Accessors
-class EventoCerrado extends Evento {
-
-	List<Usuario> invitadosConfirmados = newArrayList
-	double cantidadDeAcompaniantesMax
-	double cantidadAcompaniantes = 0 // Por ahora
-	double cantidadAcompaniantesConfirmados = 0 // Por ahora
-
-	override boolean esExitoso() {
-		false
-	}
-
-	override double cantidadExito() {
-		2
-	}
-
-	override boolean esFracaso() {
-		true
-	}
-
-	override double cantidadFracaso() {
-		4
-	}
-
-	def boolean estaInvitado(Usuario unUsuario) {
-		asistentes.contains(unUsuario)
-	}
-	def boolean estaConfirmado(Usuario unUsuario){
-		invitadosConfirmados.contains(unUsuario)
-	}
-
-	def void usuarioRecibeInvitacion(Usuario unUsuario) {
-		if (this.cumpleCondiciones(unUsuario)) {
-			this.agregarUsuarioLista(unUsuario) // Si no cumple Requisitos no se muestra ninguna mensaje(prguntar excepciones)
-			this.agregarAcompanientesInvitado(unUsuario)
-		}
-	}
-
-	def void agregarAcompanientesInvitado(Usuario unUsuario) { // REVISAR
-		cantidadAcompaniantes = cantidadAcompaniantes + unUsuario.cantidadAcompaniantes()
-	}
-
-	def void usuarioRechazaInvitacion(Usuario unUsuario) {
-		this.removerUsuario(unUsuario)
-		this.removerAcompaniantesInvitado(unUsuario)
-	}
-
-	def void removerAcompaniantesInvitado(Usuario unUsuario) {
-		cantidadAcompaniantes = cantidadAcompaniantes - unUsuario.cantidadAcompaniantes()
-	}
-
-	override boolean cumpleCondiciones(Usuario unUsuario) {
-		(this.usuarioEstaATiempo(unUsuario) && this.cumpleCantidadAcompaniantes(unUsuario) &&
-			this.hayCapacidad(unUsuario))
-	}
-
-	def boolean hayCapacidad(Usuario unUsuario) { // verifica que no se supere la cantidad maxima
-		this.cantidadDisponibles() >= unUsuario.cantidadAcompaniantes() + 1
-	}
-
-	def boolean cumpleCantidadAcompaniantes(Usuario unUsuario) {
-		unUsuario.cantidadAcompaniantes() <= this.getCantidadDeAcompaniantesMax()
-	}
-
-	override cantidadDisponibles() {
-		Math.round(this.capacidadMaxima() - this.cantidadAsistentesPosibles())
-	}
-
-	def cantidadAsistentesPosibles() { // o Total
-		this.cantidadAsistentesPendientes() + this.cantidadAsistentesConfirmados() + cantidadAcompaniantes
-	}
-
-	def cantidadAsistentesPendientes() { // cambio el nombre, la lista de asistentes representan
-		super.cantidadAsistentes() // a los pendientes
-	}
-
-	def cantidadAsistentesConfirmados() {
-		invitadosConfirmados.size
-	}
-
-	def void confirmarUsuario(Usuario unUsuario) {
-		this.agregarListaConfirmado(unUsuario)
-		this.agregarAcompaniantesConfirmados(unUsuario)
-		this.removerUsuario(unUsuario) // Se lo saca de la lista de pendientes
-	}
-
-	def agregarListaConfirmado(Usuario unUsuario) {
-		invitadosConfirmados.add(unUsuario)
-	}
-
-	def agregarAcompaniantesConfirmados(Usuario unUsuario) {
-		cantidadAcompaniantesConfirmados = cantidadAcompaniantesConfirmados + unUsuario.cantidadAcompaniantes
-	}
-	
-	override notificarInvitados() {
-		super.notificarPendientes
-		this.notificarConfirmados
-	}
-	
-	def notificarConfirmados() {
-		invitadosConfirmados.forEach[usuario | this.notificarUsuario(usuario)]
-	}
-	override cancelarEvento() {
-		super.cancelarEvento
-		this.notificarInvitados()
-	}
-
-}
