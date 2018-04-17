@@ -26,6 +26,9 @@ class Usuario {
 	Integer cantidadAcompaniantesInvitado = 0
 	
 	// Organizador
+	def cambiarTipo(TipoUsuario unTipoUsuario){
+		tipoUsuario = unTipoUsuario
+	}
 	
 	def invitarUsuario(Usuario invitado, EventoCerrado unEvento, Integer cantidadAcompaniantes) {		
 		tipoUsuario.invitarUsuario(invitado, this, unEvento, cantidadAcompaniantes)	//Se chequea las condiciones de cada tipoUsuario
@@ -119,7 +122,6 @@ class Usuario {
 	}
 
 	def boolean cumpleCondicionPendientes(EventoCerrado unEvento) {
-		
 		(this.organizadorEsAmigo(unEvento.organizador)) || this.asistenMasDeCuatroAmigos(unEvento) ||
 			this.eventoEstaCerca(unEvento)
 	}
@@ -183,12 +185,15 @@ class Usuario {
 		this.cantidadAmigosConfirmadosEvento(invitacion) <= 2
 	}
 	
-	def eventoCancelado() {
-		println("El evento fue cancelado/postergado")
+	def notificacionEventoCancelado() {
+		println("El evento fue cancelado.")
 	}
 	
-	
-	
-	
-	
+	def notificacionEventoPostergado(Evento unEvento) {
+		println("El evento"+unEvento.nombreEvento+"fue postergado.")
+		println("Las nuevas fechas son:")
+		println("Fecha maxima confirmacion: "+unEvento.fechaMaximaConfirmacion)
+		println("Fecha Inicio: "+ unEvento.inicioEvento)
+		println("Fecha fin: "+unEvento.finEvento)
+	}
 }

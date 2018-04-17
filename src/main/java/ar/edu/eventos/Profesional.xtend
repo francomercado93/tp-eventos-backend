@@ -6,7 +6,7 @@ class Profesional implements TipoUsuario{
 	Integer maximaCantidadEventosPorMes = 20
 	
 	override puedoOrganizarEvento(Usuario unUsuario){
-		unUsuario.cantidadEventosOrganizadosMes() <= maximaCantidadEventosPorMes
+		unUsuario.cantidadEventosOrganizadosMes() < maximaCantidadEventosPorMes
 	}
 	override cancelarEvento(Evento unEvento){
 		unEvento.cancelarEvento()

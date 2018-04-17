@@ -16,7 +16,7 @@ abstract class Evento {
 	Locacion lugar
 	LocalDateTime fechaMaximaConfirmacion
 	LocalDateTime fechaCreacion
-	double capacidadMaxima
+
 	double porcentajeExito = 0.9
 	double porcentajeFracaso = 0.5
 	List<Usuario> asistentes = newArrayList
@@ -31,9 +31,7 @@ abstract class Evento {
 		lugar.distancia(unPunto)
 	}
 
-	def double capacidadMaxima() {
-		capacidadMaxima
-	}
+	def double capacidadMaxima()
 
 	def boolean esExitoso()
 
@@ -59,8 +57,8 @@ abstract class Evento {
 		asistentes.add(unUsuario)
 	}
 
-	def removerUsuario(Usuario unUsuario) {
-		asistentes.remove(unUsuario)
+	def removerUsuario(Usuario unUsuario) { // Cuando se devuelve la entrada,
+		asistentes.remove(unUsuario) // queda disponible para que un usuario pueda comprarla
 	}
 
 	def boolean cumpleCondiciones(Usuario unUsuario)
@@ -68,41 +66,47 @@ abstract class Evento {
 	def boolean usuarioEstaATiempo(Usuario unUsuario) {
 		unUsuario.fechaActual.isBefore(this.fechaMaximaConfirmacion)
 	}
-		
-	def void cancelarEvento(){
+
+	def void cancelarEvento() {
 		estaCancelado = true
+		this.notificarAsistentes
 	}
-	
-	def void postergarEvento(LocalDateTime nuevaInicioEvento){
+
+	def void postergarEvento(LocalDateTime nuevaInicioEvento) {
 		estaPostergado = true
 		this.reprogramarEvento(nuevaInicioEvento)
-		this.notificarInvitados
+		this.notificarAsistentes
 	}
 	
-	def void reprogramarEvento(LocalDateTime nuevaInicioEvento){
+
+	def void reprogramarEvento(LocalDateTime nuevaInicioEvento) {
 		finEvento = nuevaInicioEvento.plusSeconds(Duration.between(inicioEvento, finEvento).getSeconds)
-		fechaMaximaConfirmacion = nuevaInicioEvento.plusSeconds(Duration.between(inicioEvento, fechaMaximaConfirmacion).getSeconds)
+		fechaMaximaConfirmacion = nuevaInicioEvento.plusSeconds(
+			Duration.between(inicioEvento, fechaMaximaConfirmacion).getSeconds)
 		inicioEvento = nuevaInicioEvento
 	}
-	def void notificarInvitados() {			//En evento abierto se notifica a los que compraron 
-		this.notificarPendientes			//entradas(asistentes)
+
+	def void notificarAsistentes() { // En evento abierto se notifica a los que compraron 
+		this.notificarPendientes // entradas(asistentes)
 	}
 	
 	def void notificarPendientes() {
-		asistentes.forEach[usuario | this.notificarUsuario(usuario)]
+		asistentes.forEach[usuario|this.notificarUsuario(usuario)]
 	}
+
 	def void notificarUsuario(Usuario usuario) {
-		usuario.eventoCancelado
+		if(this.estaCancelado)
+			usuario.notificacionEventoCancelado
+		else
+			usuario.notificacionEventoPostergado(this)
 	}
-	
-	def void settearVariables(Usuario unUsuario){
+
+	def void settearVariables(Usuario unUsuario) {
 		fechaCreacion = unUsuario.fechaActual
-		organizador = unUsuario 
+		organizador = unUsuario
 	}
+
 	def boolean estaInvitado(Usuario unUsuario) {
 		asistentes.contains(unUsuario)
 	}
 }
-
-
-

@@ -9,7 +9,6 @@ class EventoAbierto extends Evento {
 	double espacioNecesarioPorPersona = 0.8
 	int edadMinima // organizador crea evento setear edadMinima y valor entrada
 	double valorEntrada
-	
 
 	override capacidadMaxima() {
 		Math.round(lugar.superficie / this.espacioNecesarioPorPersona) // mostraba 5.99 y no 6
@@ -19,10 +18,10 @@ class EventoAbierto extends Evento {
 		if (this.cumpleCondiciones(unUsuario))
 			this.agregarUsuarioListaAsistentes(unUsuario)
 		else
-			throw new BusinessException("Error: no se puede comprar entrada") 
+			throw new BusinessException("Error: no se puede comprar entrada")
 	}
 
-	override boolean cumpleCondiciones(Usuario unUsuario) { 
+	override boolean cumpleCondiciones(Usuario unUsuario) {
 		(this.superaEdadMin(unUsuario) && this.cantidadDisponibles > 0 && this.usuarioEstaATiempo(unUsuario))
 	}
 
@@ -30,21 +29,9 @@ class EventoAbierto extends Evento {
 		unUsuario.edad >= this.edadMinima
 	}
 
-	def devolverDinero(Usuario unUsuario) {
-		unUsuario.saldoAFavor = valorEntrada * this.porcentajeADevolver(unUsuario)
-	}
 
-	def double porcentajeADevolver(Usuario unUsuario) {
-		if(this.estaCancelado || this.estaPostergado)
-			1
-		else if (this.diasfechaMaximaConfirmacion(unUsuario) < 7d && this.diasfechaMaximaConfirmacion(unUsuario) > 0) // falta el caso en el que quedan 0 dias 
-			(this.diasfechaMaximaConfirmacion(unUsuario) + 1) * 0.1
-		else
-			0.8
-	}
-
-	override boolean esExitoso() { // Es un exito si quedan menos del 10% de entradas
-		this.cantidadDisponibles <= this.cantidadExito
+	override boolean esExitoso() { 
+		super.cantidadAsistentes >= this.cantidadExito		
 	}
 
 	override double cantidadExito() {
@@ -58,14 +45,27 @@ class EventoAbierto extends Evento {
 	override double cantidadFracaso() {
 		this.capacidadMaxima() * porcentajeFracaso
 	}
-	def devolverValorEntradasAsistentes() {
-		asistentes.forEach[usuario | this.devolverDinero(usuario)]
-	}
-	
+
 	override cancelarEvento() {
 		super.cancelarEvento
 		this.devolverValorEntradasAsistentes
 	}
 	
+	def devolverValorEntradasAsistentes() {
+		asistentes.forEach[usuario|this.devolverDinero(usuario)]
+	}
+
+	def devolverDinero(Usuario unUsuario) {
+		unUsuario.saldoAFavor = valorEntrada * this.porcentajeADevolver(unUsuario)
+	}
+
+	def double porcentajeADevolver(Usuario unUsuario) {
+		if (this.estaCancelado || this.estaPostergado)
+			1
+		else if (this.diasfechaMaximaConfirmacion(unUsuario) < 7d && this.diasfechaMaximaConfirmacion(unUsuario) > 0) // falta el caso en el que quedan 0 dias 
+			(this.diasfechaMaximaConfirmacion(unUsuario) + 1) * 0.1
+		else
+			0.8
+	}
 
 }
