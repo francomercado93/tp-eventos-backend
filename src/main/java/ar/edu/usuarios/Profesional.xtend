@@ -1,5 +1,7 @@
-package ar.edu.eventos
+package ar.edu.usuarios
 
+import ar.edu.eventos.Evento
+import ar.edu.eventos.EventoCerrado
 import java.time.LocalDateTime
 
 class Profesional implements TipoUsuario{

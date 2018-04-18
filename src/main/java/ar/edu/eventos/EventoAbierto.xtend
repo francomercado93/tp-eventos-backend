@@ -1,7 +1,8 @@
 package ar.edu.eventos
 
-import org.eclipse.xtend.lib.annotations.Accessors
 import ar.edu.eventos.exceptions.BusinessException
+import ar.edu.usuarios.Usuario
+import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors
 class EventoAbierto extends Evento {

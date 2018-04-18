@@ -1,6 +1,10 @@
 package ar.edu.eventos
 
 import ar.edu.eventos.exceptions.BusinessException
+import ar.edu.usuarios.Amateur
+import ar.edu.usuarios.Free
+import ar.edu.usuarios.Profesional
+import ar.edu.usuarios.Usuario
 import java.time.LocalDateTime
 import org.junit.Assert
 import org.junit.Before
@@ -14,6 +18,12 @@ class TestEventos {
 	EventoCerrado casamiento
 	EventoCerrado cumple
 	EventoCerrado minifiesta1
+	EventoCerrado even1
+	EventoCerrado even2
+	EventoCerrado even3
+	EventoCerrado even4
+	EventoCerrado even5
+	EventoCerrado even6
 	Locacion salonFiesta
 	Locacion hipodromo
 	Locacion tecnopolis
@@ -36,7 +46,9 @@ class TestEventos {
 	Usuario marco
 	Usuario tomas
 	Usuario miriam
-
+	Usuario gaston
+	Usuario carla
+	
 	@Before
 	def void init() {
 		// LOCACIONES
@@ -182,6 +194,72 @@ class TestEventos {
 			nombreUsuario = "Miriam"
 			edad = 25
 			fechaActual = LocalDateTime.of(2018, 05, 11, 10, 00)
+		]
+		even1 = new EventoCerrado() => [
+			nombreEvento = "even1"
+			inicioEvento = LocalDateTime.of(2018, 05, 31, 14, 00)
+			finEvento = LocalDateTime.of(2018, 05, 31, 15, 00)
+			fechaMaximaConfirmacion = LocalDateTime.of(2018, 05, 31, 11, 30)
+			lugar = salonFiesta
+			capacidadMaxima = 20
+			porcentajeExito = 0.8
+		]
+		even2 = new EventoCerrado() => [
+			nombreEvento = "even2"
+			inicioEvento = LocalDateTime.of(2018, 05, 31, 14, 00)
+			finEvento = LocalDateTime.of(2018, 05, 31, 15, 00)
+			fechaMaximaConfirmacion = LocalDateTime.of(2018, 05, 31, 11, 30)
+			lugar = hipodromo
+			capacidadMaxima = 20
+			porcentajeExito = 0.8
+		]
+		even3 = new EventoCerrado() => [
+			nombreEvento = "even3"
+			inicioEvento = LocalDateTime.of(2018, 05, 31, 14, 00)
+			finEvento = LocalDateTime.of(2018, 05, 31, 15, 00)
+			fechaMaximaConfirmacion = LocalDateTime.of(2018, 05, 31, 11, 30)
+			lugar = tecnopolis
+			capacidadMaxima = 20
+			porcentajeExito = 0.8
+		]
+		even4 = new EventoCerrado() => [
+			nombreEvento = "even4"
+			inicioEvento = LocalDateTime.of(2018, 05, 31, 14, 00)
+			finEvento = LocalDateTime.of(2018, 05, 31, 15, 00)
+			fechaMaximaConfirmacion = LocalDateTime.of(2018, 05, 31, 11, 30)
+			lugar = salonFiesta
+			capacidadMaxima = 20
+			porcentajeExito = 0.8
+		]
+		even5 = new EventoCerrado() => [
+			nombreEvento = "even5"
+			inicioEvento = LocalDateTime.of(2018, 05, 31, 14, 00)
+			finEvento = LocalDateTime.of(2018, 05, 31, 15, 00)
+			fechaMaximaConfirmacion = LocalDateTime.of(2018, 05, 31, 11, 30)
+			lugar = salonFiesta
+			capacidadMaxima = 20
+			porcentajeExito = 0.8
+		]
+		even6 = new EventoCerrado() => [
+			nombreEvento = "even6"
+			inicioEvento = LocalDateTime.of(2018, 05, 31, 14, 00)
+			finEvento = LocalDateTime.of(2018, 05, 31, 15, 00)
+			fechaMaximaConfirmacion = LocalDateTime.of(2018, 05, 31, 11, 30)
+			lugar = salonFiesta
+			capacidadMaxima = 20
+			porcentajeExito = 0.8
+		]
+		gaston = new Usuario() =>[
+			nombreUsuario = "Gaston"
+			edad = 23
+			fechaActual = LocalDateTime.of(2018, 05, 24, 11, 06)
+			tipoUsuario = new Amateur()
+		]
+		carla = new Usuario() =>[
+			nombreUsuario = "Carla"
+			edad = 24
+			fechaActual = LocalDateTime.of(2018, 05, 24, 11, 07)
+			tipoUsuario = new Profesional()
 		]
 	}
 
@@ -455,5 +533,88 @@ class TestEventos {
 		Assert.assertFalse(lollapalooza.asistentes.contains(maxi))
 		Assert.assertEquals(500, maxi.saldoAFavor, 0.1)
 	}
-
+	@Test
+	def void usuarioAmateurQueiereOrganizar5eventosALaVezYPuedePorQueEsAmateur(){
+		gaston.crearEvento(even1)
+		gaston.crearEvento(even2)
+		gaston.crearEvento(even3)
+		gaston.crearEvento(even4)
+		gaston.crearEvento(even5)
+		Assert.assertTrue(gaston.puedoCrearEvento())		
+	}
+	@Test
+	def void usuarioAmateurQueiereOrganizar6eventosALaVezYNoPuede(){
+		gaston.crearEvento(even1)
+		gaston.crearEvento(even2)
+		gaston.crearEvento(even3)
+		gaston.crearEvento(even4)
+		gaston.crearEvento(even5)
+		gaston.crearEvento(even6)
+		Assert.assertFalse(gaston.puedoCrearEvento)		
+	}
+	@Test
+	def void eventoCerradoConfirmanMasDel80PoCientoEsExitiso(){
+		gaston.crearEvento(cumple)
+		gaston.invitarUsuario(lucas,cumple,3)
+		gaston.invitarUsuario(carla,cumple,2)
+		gaston.invitarUsuario(maxi,cumple,3)
+		gaston.invitarUsuario(marco,cumple,3)
+		gaston.invitarUsuario(beatriz,cumple,3)
+		carla.confirmarInvitacion(cumple,2)
+		lucas.confirmarInvitacion(cumple,3)
+		maxi.confirmarInvitacion(cumple,3)
+		marco.confirmarInvitacion(cumple,3)
+		Assert.assertTrue(cumple.esExitoso())	
+	}
+	@Test
+	def void eventoCerradoEsCanceladoNoEsExitoso(){
+		gaston.crearEvento(cumple)
+		gaston.invitarUsuario(lucas,cumple,3)
+		gaston.invitarUsuario(carla,cumple,2)
+		gaston.invitarUsuario(maxi,cumple,3)
+		gaston.invitarUsuario(marco,cumple,3)
+		gaston.invitarUsuario(beatriz,cumple,3)
+		lucas.confirmarInvitacion(cumple,3)
+		maxi.confirmarInvitacion(cumple,3)
+		marco.confirmarInvitacion(cumple,3)
+		gaston.cancelarEvento(cumple)
+		Assert.assertFalse(cumple.esExitoso())	
+	}
+	@Test
+	def void eventoCerradoConfirmanMenosDel80PorCientoYMasDEl50PorCientoNoEsFracasoNiExitoso(){
+		gaston.crearEvento(cumple)
+		gaston.invitarUsuario(alejandro,cumple,3)
+		gaston.invitarUsuario(marco,cumple,2)
+		gaston.invitarUsuario(tomas,cumple,3)
+		gaston.invitarUsuario(miriam,cumple,3)
+		gaston.invitarUsuario(juan,cumple,3)
+		alejandro.confirmarInvitacion(cumple,3)
+		juan.confirmarInvitacion(cumple,3)
+		marco.confirmarInvitacion(cumple,1)
+		Assert.assertFalse(cumple.esExitoso())	
+		Assert.assertFalse(cumple.esFracaso())
+	}
+	@Test
+	def void eventoCerradoConfirmanMenosDel50PorCientoEsFracaso(){
+		gaston.crearEvento(cumple)
+		gaston.invitarUsuario(lucas,cumple,3)
+		gaston.invitarUsuario(carla,cumple,2)
+		gaston.invitarUsuario(maxi,cumple,3)
+		gaston.invitarUsuario(marco,cumple,3)
+		gaston.invitarUsuario(beatriz,cumple,3)
+		carla.confirmarInvitacion(cumple,2)
+		lucas.confirmarInvitacion(cumple,3)
+		Assert.assertTrue(cumple.esFracaso())	
+	}
+	
+	@Test
+	def void carlaEsUsuarioProfesionalQueiereOrganizar6eventosALaVezYPuedePorQueEsProfesional(){
+		carla.crearEvento(even1)
+		carla.crearEvento(even2)
+		carla.crearEvento(even3)
+		carla.crearEvento(even4)
+		carla.crearEvento(even5)
+		carla.crearEvento(even6)
+		Assert.assertTrue(carla.puedoCrearEvento)		
+	}
 }

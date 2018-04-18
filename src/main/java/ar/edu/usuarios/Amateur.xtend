@@ -1,7 +1,9 @@
-package ar.edu.eventos
+package ar.edu.usuarios
 
-import java.time.LocalDateTime
+import ar.edu.eventos.Evento
+import ar.edu.eventos.EventoCerrado
 import ar.edu.eventos.exceptions.BusinessException
+import java.time.LocalDateTime
 
 class Amateur implements TipoUsuario {
 	Integer cantidadMaximaInvitaciones = 50
@@ -19,7 +21,7 @@ class Amateur implements TipoUsuario {
 		unEvento.postergarEvento(nuevaFechaInicio)
 	}
 	override invitarUsuario(Usuario invitado,Usuario organizador, EventoCerrado unEvento, Integer cantidadAcompaniantes){
-		if(unEvento.cantidadAsistentesPendientes < cantidadMaximaInvitaciones)		//cada asistente tiene UNA invitacion
+		if(unEvento.cantidadInvitacionesPendientes < cantidadMaximaInvitaciones)		
 			organizador.realizarInvitacion(invitado, unEvento, cantidadAcompaniantes)
 		else
 			throw new BusinessException("Supero cantidad maxima de invitaciones")

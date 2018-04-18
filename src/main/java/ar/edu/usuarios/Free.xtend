@@ -1,5 +1,7 @@
-package ar.edu.eventos
+package ar.edu.usuarios
 
+import ar.edu.eventos.Evento
+import ar.edu.eventos.EventoCerrado
 import ar.edu.eventos.exceptions.BusinessException
 import java.time.LocalDateTime
 import org.eclipse.xtend.lib.annotations.Accessors

@@ -1,5 +1,6 @@
 package ar.edu.eventos
 
+import ar.edu.usuarios.Usuario
 import java.time.Duration
 import java.time.LocalDateTime
 import java.util.List
@@ -86,13 +87,11 @@ abstract class Evento {
 		inicioEvento = nuevaInicioEvento
 	}
 
-	def void notificarAsistentes() { // En evento abierto se notifica a los que compraron 
-		this.notificarPendientes // entradas(asistentes)
-	}
-	
-	def void notificarPendientes() {
+	def void notificarAsistentes() {  
 		asistentes.forEach[usuario|this.notificarUsuario(usuario)]
 	}
+	
+	
 
 	def void notificarUsuario(Usuario usuario) {
 		if(this.estaCancelado)

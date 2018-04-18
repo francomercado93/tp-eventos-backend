@@ -1,6 +1,7 @@
 package ar.edu.eventos
 
 import ar.edu.eventos.exceptions.BusinessException
+import ar.edu.usuarios.Usuario
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
 
@@ -16,19 +17,39 @@ class EventoCerrado extends Evento {
 	}
 
 	override boolean esExitoso() {
-		false
+		(estaCancelado == false) && ( this.cantidadInvitacionesConfirmadas >= this.cantidadExito)
 	}
 
 	override double cantidadExito() {
-		2
+		this.cantidadTotalInvitaciones  * 0.8
+	}
+	
+	def cantidadTotalInvitaciones(){
+		this.cantidadInvitacionesPendientes + this.cantidadInvitacionesConfirmadas
+	}
+	
+	def cantidadInvitacionesPendientes() { // la lista de asistentes representan a los pendientes
+		super.cantidadAsistentes()
+	}
+	
+	def cantidadAsistentesPosibles() { // o Total
+		this.cantidadInvitacionesPendientes() + this.cantidadAsistentesConfirmados()
+	}
+
+
+	def cantidadAsistentesConfirmados() {
+		invitadosConfirmados.size + cantidadAcompaniantesConfirmados
+	}
+	def cantidadInvitacionesConfirmadas(){
+		invitadosConfirmados.size
 	}
 
 	override boolean esFracaso() {
-		true
+		(this.cantidadInvitacionesConfirmadas <= this.cantidadFracaso)
 	}
 
 	override double cantidadFracaso() {
-		4
+		this.cantidadTotalInvitaciones  * 0.5
 	}
 
 	def boolean estaConfirmado(Usuario unUsuario) {
@@ -63,17 +84,6 @@ class EventoCerrado extends Evento {
 		Math.round(this.capacidadMaxima() - this.cantidadAsistentesPosibles())
 	}
 
-	def cantidadAsistentesPosibles() { // o Total
-		this.cantidadAsistentesPendientes() + this.cantidadAsistentesConfirmados()
-	}
-
-	def cantidadAsistentesPendientes() { // la lista de asistentes representan a los pendientes
-		super.cantidadAsistentes()
-	}
-
-	def cantidadAsistentesConfirmados() {
-		invitadosConfirmados.size + cantidadAcompaniantesConfirmados
-	}
 
 	def agregarListaConfirmado(Usuario unUsuario) {
 		invitadosConfirmados.add(unUsuario) // Se lo agrega a una lista que no puede estar en otra
@@ -85,10 +95,6 @@ class EventoCerrado extends Evento {
 		cantidadAcompaniantesConfirmados = cantidadAcompaniantesConfirmados + unUsuario.cantidadAcompaniantesInvitado
 	}
 
-	override notificarAsistentes() {
-		super.notificarPendientes
-		this.notificarConfirmados
-	}
 
 	def notificarConfirmados() {
 		invitadosConfirmados.forEach[usuario|this.notificarUsuario(usuario)]
@@ -96,7 +102,7 @@ class EventoCerrado extends Evento {
 
 	override cancelarEvento() {
 		super.cancelarEvento
-		this.notificarAsistentes()
+		this.notificarConfirmados()
 	}
 
 }
