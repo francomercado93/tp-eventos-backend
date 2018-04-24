@@ -32,7 +32,7 @@ class EventoAbierto extends Evento {
 
 
 	override boolean esExitoso() { 
-		super.cantidadAsistentes >= this.cantidadExito		
+		super.cantidadAsistentesPosibles >= this.cantidadExito		
 	}
 
 	override double cantidadExito() {

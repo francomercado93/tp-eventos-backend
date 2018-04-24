@@ -6,6 +6,7 @@ import java.time.LocalDateTime
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.geodds.Point
+import ar.edu.eventos.exceptions.BusinessException
 
 @Accessors
 abstract class Evento {
@@ -32,6 +33,52 @@ abstract class Evento {
 		lugar.distancia(unPunto)
 	}
 
+	
+	def boolean validarFecha(LocalDateTime fecha1, LocalDateTime fecha2) {
+		fecha1.isBefore(fecha2)
+	}
+
+	def validarCampos() {
+		this.validarNombre()
+		this.validarFechaInicio()
+		this.validarFechaMaxima()
+		this.validarFinEvento()
+		this.validarLocacion
+		this.validarFecha(fechaMaximaConfirmacion, inicioEvento)
+		this.validarFecha(inicioEvento, finEvento)
+	}
+
+	def validarNombre() {
+		if (nombreEvento === null) {
+			throw new BusinessException("Falta nombre")
+		}
+	}
+
+	def validarFechaInicio() {
+		if (inicioEvento === null) {
+			throw new BusinessException("Falta fecha de inicio")
+		}
+	}
+
+	def validarFechaMaxima() {
+		if (fechaMaximaConfirmacion === null) {
+			throw new BusinessException("Falta maxima de confirmacion")
+		}
+	}
+
+	def validarFinEvento() {
+		if (finEvento === null) {
+			throw new BusinessException("Falta fin de evento")
+		}
+	}
+
+	def validarLocacion() {
+		if (lugar === null) {
+			throw new BusinessException("Falta maxima de confirmacion")
+		}
+
+	}
+
 	def double capacidadMaxima()
 
 	def boolean esExitoso()
@@ -43,14 +90,14 @@ abstract class Evento {
 	def double cantidadFracaso()
 
 	def diasfechaMaximaConfirmacion(Usuario unUsuario) {
-		(Duration.between(unUsuario.fechaActual, this.fechaMaximaConfirmacion)).getSeconds() / 86400 
+		(Duration.between(unUsuario.fechaActual, this.fechaMaximaConfirmacion)).getSeconds() / 86400
 	}
 
 	def cantidadDisponibles() { // Eventos abiertos => entradas, cerrados => invitaciones
-		Math.round(this.capacidadMaxima() - this.cantidadAsistentes)
+		Math.round(this.capacidadMaxima() - this.cantidadAsistentesPosibles)
 	}
 
-	def cantidadAsistentes() {
+	def cantidadAsistentesPosibles() {
 		asistentes.size
 	}
 
@@ -78,7 +125,6 @@ abstract class Evento {
 		this.reprogramarEvento(nuevaInicioEvento)
 		this.notificarAsistentes
 	}
-	
 
 	def void reprogramarEvento(LocalDateTime nuevaInicioEvento) {
 		finEvento = nuevaInicioEvento.plusSeconds(Duration.between(inicioEvento, finEvento).getSeconds)
@@ -87,14 +133,12 @@ abstract class Evento {
 		inicioEvento = nuevaInicioEvento
 	}
 
-	def void notificarAsistentes() {  
+	def void notificarAsistentes() {
 		asistentes.forEach[usuario|this.notificarUsuario(usuario)]
 	}
-	
-	
 
 	def void notificarUsuario(Usuario usuario) {
-		if(this.estaCancelado)
+		if (this.estaCancelado)
 			usuario.notificacionEventoCancelado
 		else
 			usuario.notificacionEventoPostergado(this)

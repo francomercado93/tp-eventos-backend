@@ -10,6 +10,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.uqbar.geodds.Point
+import repo.Repositorio
 
 class TestEventos {
 
@@ -674,6 +675,15 @@ class TestEventos {
 		lucas.confirmarInvitacion(cumple,3)
 		Assert.assertTrue(cumple.esFracaso())	
 	}
+	
+	@Test
+	def void haceralgo(){
+		var repo = new Repositorio<Usuario>()
+		repo.create(gaston)
+		repo.create(lucas)
+		
+	}
+	
 	
 	//ENTREGA 2
 	//Servicioes

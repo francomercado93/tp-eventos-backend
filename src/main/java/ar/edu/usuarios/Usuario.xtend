@@ -46,6 +46,7 @@ class Usuario {
 	
 	def crearEvento(Evento unEvento){		//En test creo el evento primero(para inicializar
 		if(this.puedoCrearEvento()){		//variables y luego se lo paso como parametro a
+			
 			unEvento.settearVariables(this)	//usuario organizador que es el que cuando lo "crea"
 			this.agregarEventoLista(unEvento)	//se setean la fecha de creacio y organizador
 		}

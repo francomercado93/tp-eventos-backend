@@ -30,7 +30,7 @@ class Amateur implements TipoUsuario {
 		unEvento.postergarEvento(nuevaFechaInicio)
 	}
 	override puedeInvitarUsuario(EventoCerrado unEvento, Integer cantidadAcompaniantesMaxima){
-		unEvento.cantidadInvitacionesPendientes < this.cantidadMaximaInvitaciones		
+		unEvento.asistentes.size() < this.cantidadMaximaInvitaciones		
 		
 	}
 }

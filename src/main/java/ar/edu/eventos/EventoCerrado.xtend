@@ -25,19 +25,16 @@ class EventoCerrado extends Evento {
 	}
 	
 	def cantidadTotalInvitaciones(){
-		this.cantidadInvitacionesPendientes + this.cantidadInvitacionesConfirmadas
+		asistentes.size() + this.cantidadInvitacionesConfirmadas
 	}
 	
-	def cantidadInvitacionesPendientes() { 
-		super.cantidadAsistentes() 
-	}
 	
 	def cantidadAcompaniantesPendientes(){	//Obtiene la cantidad maxima de acompaniantes de las invitaciones para este evento
 		asistentes.fold(0, [ acum, usuario | acum + usuario.eventoInvitacion(this).cantidadAcompaniantesMaxima ])
 	}
 	
-	def cantidadAsistentesPosibles() { // o Total
-		this.cantidadInvitacionesPendientes() +  this.cantidadAcompaniantesPendientes + this.cantidadAsistentesConfirmados()
+	override cantidadAsistentesPosibles() { // o Total
+		asistentes.size() +  this.cantidadAcompaniantesPendientes + this.cantidadAsistentesConfirmados()
 	}
 
 
