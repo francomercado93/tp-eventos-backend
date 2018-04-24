@@ -31,8 +31,7 @@ class TestEventos {
 	LocalDateTime finLolla = LocalDateTime.of(2018, 03, 28, 01, 00)
 	LocalDateTime inicioSound = LocalDateTime.of(2018, 04, 14, 18, 00)
 	LocalDateTime finSound = LocalDateTime.of(2018, 04, 14, 23, 30)
-	Point puntoPrueba = new Point(5, 8)
-	double distanciaEsperada = 2849.7
+	Point puntoPrueba = new Point(-34.577908, -58.526486)
 	Usuario juan
 	Usuario martin
 	Usuario maxi
@@ -59,12 +58,12 @@ class TestEventos {
 		]
 		tecnopolis = new Locacion() => [
 			nombre = "Tecnopolis"
-			puntoGeografico = new Point(2, 5)
+			puntoGeografico = new Point(-34.559276, -58.505377)
 			superficie = 6d
 		]
 		hipodromo = new Locacion() => [
 			nombre = "hipodromo San Isidro"
-			puntoGeografico = new Point(15, 32)
+			puntoGeografico = new Point(-34.480860, -58.518295)
 			superficie = 4.8d
 		]
 
@@ -270,7 +269,7 @@ class TestEventos {
 
 	@Test
 	def void probarDistancia() {
-		Assert.assertEquals(distanciaEsperada, lollapalooza.distancia(puntoPrueba), 0.1d)
+		Assert.assertEquals(10.81, lollapalooza.distancia(puntoPrueba), 0.1d)
 	}
 
 	// Eventos abiertos
@@ -604,6 +603,23 @@ class TestEventos {
 		Assert.assertTrue(true)
 		
 	}
+	
+	@Test
+	def void usuarioProfesionalQuiereOrganizar6eventosALaVezYPuede(){
+		carla.crearEvento(even1)
+		carla.crearEvento(even2)
+		carla.crearEvento(even3)
+		carla.crearEvento(even4)
+		carla.crearEvento(even5)
+		carla.crearEvento(even6)
+		Assert.assertTrue(carla.puedoCrearEvento)		
+	}
+	@Test
+	def void usuarioProfesionalQuiereOrganizarMasDe20eventosALaVezYNoPuede(){
+		//organizar mas de 20 eventos al mismo tiempo
+		Assert.assertTrue(true)		
+	}
+
 	@Test
 	def void eventoCerradoConfirmanMasDel80PoCientoEsExitiso(){
 		gaston.crearEvento(cumple)
@@ -659,14 +675,7 @@ class TestEventos {
 		Assert.assertTrue(cumple.esFracaso())	
 	}
 	
-	@Test
-	def void carlaEsUsuarioProfesionalQueiereOrganizar6eventosALaVezYPuedePorQueEsProfesional(){
-		carla.crearEvento(even1)
-		carla.crearEvento(even2)
-		carla.crearEvento(even3)
-		carla.crearEvento(even4)
-		carla.crearEvento(even5)
-		carla.crearEvento(even6)
-		Assert.assertTrue(carla.puedoCrearEvento)		
-	}
+	//ENTREGA 2
+	//Servicioes
+	
 }
