@@ -8,7 +8,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 class EventoAbierto extends Evento {
 
 	double espacioNecesarioPorPersona = 0.8
-	int edadMinima // organizador crea evento setear edadMinima y valor entrada
+	int edadMinima 
 	double valorEntrada
 
 	override capacidadMaxima() {
@@ -63,10 +63,9 @@ class EventoAbierto extends Evento {
 	def double porcentajeADevolver(Usuario unUsuario) {
 		if (this.estaCancelado || this.estaPostergado)
 			1
-		else if (this.diasfechaMaximaConfirmacion(unUsuario) < 7d && this.diasfechaMaximaConfirmacion(unUsuario) > 0) // falta el caso en el que quedan 0 dias 
+		else if (this.diasfechaMaximaConfirmacion(unUsuario) < 7d)
 			(this.diasfechaMaximaConfirmacion(unUsuario) + 1) * 0.1
 		else
 			0.8
 	}
-
 }

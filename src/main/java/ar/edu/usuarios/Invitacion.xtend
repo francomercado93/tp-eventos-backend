@@ -8,11 +8,15 @@ import org.eclipse.xtend.lib.annotations.Accessors
 class Invitacion {
 	EventoCerrado evento
 	Usuario invitado
-	Integer cantidadAcompaniantesMaxima
-	new (Usuario invitado, Integer cantidadAcompaniantesMaxima, EventoCerrado evento){
+	Integer cantidadAcompaniantesMaxima = 0
+	Integer cantidadAcompaniantesConfirmados = 0
+	//boolean estaConfirmado = false
+	//boolean estaRechazado = false
+	
+	new (Usuario invitado, EventoCerrado unEvento, Integer unaCantidadAcompaniantesMaxima){
 		this.invitado = invitado
-		this.cantidadAcompaniantesMaxima = cantidadAcompaniantesMaxima
-		this.evento = evento
+		this.cantidadAcompaniantesMaxima = unaCantidadAcompaniantesMaxima
+		this.evento = unEvento
 	}
 	def void usuarioRecibeInvitacion(){
 		invitado.agregarInvitacionLista(this)
@@ -20,13 +24,18 @@ class Invitacion {
 	}
 	
 	def void confirmar(Integer cantidadAcompaniantesInvitado){
-		if(cantidadAcompaniantesInvitado <= cantidadAcompaniantesMaxima)
+			cantidadAcompaniantesConfirmados = cantidadAcompaniantesInvitado	//guardo la cantidad en una variable de invitacion
+		if(cantidadAcompaniantesConfirmados <= cantidadAcompaniantesMaxima){
+			//estaConfirmado = true
 			evento.confirmarUsuario(invitado)
+		}
 		else
 			throw new BusinessException("La cantidad de acompaniantes supera la maxima permitida en la invitacion")
 	}
 	
 	def void rechazar(){
+		//estaRechazado = true
 		evento.usuarioRechazaInvitacion(invitado)
+		
 	}
 }

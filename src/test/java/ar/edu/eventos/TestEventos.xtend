@@ -129,19 +129,19 @@ class TestEventos {
 			comprarEntrada(lollapalooza)
 		]
 		gaby = new Usuario() => [
-			nombreUsuario = "gaby"
+			nombreUsuario = "Gaby"
 			fechaActual = LocalDateTime.of(2017, 09, 02, 20, 15)
 			edad = 20
 			comprarEntrada(lollapalooza)
 		]
 		maria = new Usuario() => [
-			nombreUsuario = "maria"
+			nombreUsuario = "Maria"
 			fechaActual = LocalDateTime.of(2018, 02, 27, 05, 00)
 			edad = 35
 			comprarEntrada(lollapalooza)
 		]
 		lucas = new Usuario() => [
-			nombreUsuario = "lucas"
+			nombreUsuario = "Lucas"
 			fechaActual = LocalDateTime.of(2018, 01, 31, 19, 50)
 			edad = 26
 			comprarEntrada(lollapalooza)
@@ -149,7 +149,7 @@ class TestEventos {
 
 		]
 		beatriz = new Usuario() => [
-			nombreUsuario = "beatriz"
+			nombreUsuario = "Beatriz"
 			fechaActual = LocalDateTime.of(2018, 02, 15, 15, 30)
 			edad = 45
 			comprarEntrada(lollapalooza)
@@ -176,7 +176,7 @@ class TestEventos {
 		]
 
 		alejandro = new Usuario() => [
-			nombreUsuario = "Maria"
+			nombreUsuario = "Alejandro"
 			edad = 35
 			fechaActual = LocalDateTime.of(2018, 05, 01, 10, 00)
 		]
@@ -281,20 +281,18 @@ class TestEventos {
 	}
 
 	@Test(expected=typeof(BusinessException))
-	def void personaNoPuedeSacarEntradaSuperoFechaLimite() {
+	def void personaNoPuedeSacarEntradaSuperoFechaLimite() {//Quedan entradas y tiene edad minima
+		martin.edad = 19
 		martin.comprarEntrada(lollapalooza)
-	// Assert.assertFalse(lollapalooza.usuarioEstaATiempo(martin))
-	// Assert.assertFalse(lollapalooza.estaInvitado(martin))
 	}
 
 	@Test(expected=typeof(BusinessException))
-	def void personaNoPuedeSacarEntradaNoTieneEdad() {
+	def void personaNoPuedeSacarEntradaNoTieneEdadMinima() {
+		martin.fechaActual = LocalDateTime.of(2018, 03, 15, 16, 45)//Esta a tiempo y quedan entradas disponibles
 		martin.comprarEntrada(lollapalooza)
-	// Assert.assertFalse(martin.edad >= lollapalooza.edadMinima)
-	// Assert.assertFalse(lollapalooza.estaInvitado(martin))
 	}
 
-	@Test
+	@Test(expected=typeof(BusinessException))
 	def void unaPersonaQuiereSacarUnaEntradaYNoQuedanEntradas() { // Compraron 6 entradas y no quedan
 		ultimoComprador = new Usuario() => [
 			nombreUsuario = "pablo"
@@ -302,21 +300,38 @@ class TestEventos {
 			edad = 33
 			comprarEntrada(lollapalooza)
 		]
-		Assert.assertEquals(0, lollapalooza.cantidadDisponibles, 0.1)
+		martin.comprarEntrada(lollapalooza)
 	}
 
+	@Test(expected=typeof(BusinessException))
+	def void siUnaPersonaQuiereDevolverEntradaPeroNoTieneSistemaNoLoDeja() {
+		juan.devolverEntrada(lollapalooza)
+	}
+	
+	@Test(expected=typeof(BusinessException))
+	def void siUnaPersonaQuiereDevolverEntradaElMismoDiaDElEvento() {
+		juan.comprarEntrada(lollapalooza)
+		juan.fechaActual = LocalDateTime.of(2018, 03, 15, 09, 30) //Devuelve en la fecha de confirmacion
+		println(lollapalooza.diasfechaMaximaConfirmacion(juan))
+		juan.devolverEntrada(lollapalooza)
+	}
+	
 	@Test
-	def void siUnaPersonaDevuelveEnIntervaloDe7DiasRestantesSeDevuelveUnPorcentaje() {
-		martin.fechaActual = LocalDateTime.of(2018, 03, 09, 22, 00)
-		martin.devolverEntrada(lollapalooza)
-		Assert.assertEquals(350d, martin.saldoAFavor, 0.1)
+	def void siUnaPersonaDevuelveEnIntervaloDe7DiasRestantesSeDevuelveUnPorcentaje() {//compra entrada y se arrepiente
+		juan.fechaActual = LocalDateTime.of(2018, 03, 09, 22, 00)
+		juan.comprarEntrada(lollapalooza)
+		juan.devolverEntrada(lollapalooza)
+		Assert.assertEquals(350d, juan.saldoAFavor, 0.1)
+		Assert.assertEquals(1, lollapalooza.cantidadDisponibles, 0.1)
 	}
 
 	@Test
 	def void siUnaPersonaDevuelveEntradaAntesDe7DiasSeDevuelve80Porciento() {
-		martin.fechaActual = LocalDateTime.of(2018, 03, 06, 22, 00)
-		martin.devolverEntrada(lollapalooza)
-		Assert.assertEquals(400, martin.saldoAFavor, 0.1)
+		juan.fechaActual = LocalDateTime.of(2018, 03, 06, 22, 00)
+		juan.comprarEntrada(lollapalooza)
+		juan.devolverEntrada(lollapalooza)
+		Assert.assertEquals(400, juan.saldoAFavor, 0.1)
+		Assert.assertEquals(1, lollapalooza.cantidadDisponibles, 0.1)
 	}
 
 	@Test
@@ -336,24 +351,74 @@ class TestEventos {
 	}
 
 	@Test
-	def void seVendieronMenosDel50PorcientoEntoncesEventoEsFracaso() { // Se devuelven 3 entradas, quedan 4 disponibles
+	def void seVendieronMenosDel50PorcientoEntoncesEventoEsFracaso() { // Se devuelven 3 entradas, quedan 4 disponibles de las 6
 		beatriz.devolverEntrada(lollapalooza)
 		lucas.devolverEntrada(lollapalooza)
 		maria.devolverEntrada(lollapalooza)
+		Assert.assertEquals(6, lollapalooza.capacidadMaxima, 0.1)
+		Assert.assertEquals(4, lollapalooza.cantidadDisponibles, 0.1)
 		Assert.assertTrue(lollapalooza.esFracaso)
 	}
 	@Test
-	def void seVendieronMasDel50PorcientoYMenosDel90EntoncesEventoNoEsFracaso() {
+	def void seVendieronMasDel50PorcientoYMenosDel90EntoncesEventoNoEsFracasoYNoEsExitoso() {
 		beatriz.devolverEntrada(lollapalooza)
+		Assert.assertEquals(6, lollapalooza.capacidadMaxima, 0.1)
+		Assert.assertEquals(2, lollapalooza.cantidadDisponibles, 0.1)
 		Assert.assertFalse(lollapalooza.esFracaso)
+		Assert.assertFalse(lollapalooza.esExitoso)
 	}
-
+	//EVENTOS CERRADOS
+	//INVITACIONES
+	
 	@Test
 	def void personaRecibeInvitacionEsAgregadoAlEvento() {
 		beatriz.invitarUsuario(lucas, casamiento, 3)
 		Assert.assertTrue(casamiento.estaInvitado(lucas))
 	}
-
+	
+	@Test(expected=typeof(BusinessException))
+	def void personaNoPuedeConfirmarInvitacionSiSuperaLaCantidadMaximaAcompaniantes() {
+		beatriz.invitarUsuario(lucas, casamiento, 3)
+		lucas.confirmarInvitacion(casamiento, 4)
+	}
+	
+	@Test(expected=typeof(BusinessException))
+	def void personaNoPuedeConfirmarInvitacionSiSuperaFechaMaximaDeConfirmacion() {
+		beatriz.invitarUsuario(lucas, casamiento, 3)
+		lucas.fechaActual = LocalDateTime.of(2018, 05, 26, 23, 59)	//fecha maxima de confirmacion es 2018, 05, 25, 23, 59)
+		lucas.confirmarInvitacion(casamiento, 2)
+	}
+	
+	@Test(expected=typeof(BusinessException))
+	def void organizadorNoPuedeRealizarInvitacionConCantidadAcompaniantesQueExcedeCapacidadMaxima() {
+		free1.crearEvento(casamiento)
+		free1.invitarUsuario(alejandro, casamiento, 10)
+		alejandro.confirmarInvitacion(casamiento, 10)
+		free1.invitarUsuario(marco, casamiento, 10)
+		marco.confirmarInvitacion(casamiento, 10)
+		free1.invitarUsuario(tomas, casamiento, 10)
+		tomas.confirmarInvitacion(casamiento, 10)
+		free1.invitarUsuario(miriam, casamiento, 10)
+		println(casamiento.cantidadAsistentesPosibles)
+		free1.invitarUsuario(lucas, casamiento, 6)//No se puede tiene 44 invitados mas 6+1 de la nueva invitacion, la invitacion puede ser de 5+1 o menos
+		}
+		
+		@Test(expected=typeof(BusinessException))
+	def void organizadorNoPuedeInvitarMasDe50Personas() {
+		free1.crearEvento(casamiento)
+		free1.invitarUsuario(alejandro, casamiento, 10)
+		alejandro.confirmarInvitacion(casamiento, 10)
+		free1.invitarUsuario(marco, casamiento, 10)
+		marco.confirmarInvitacion(casamiento, 10)
+		free1.invitarUsuario(tomas, casamiento, 10)
+		tomas.confirmarInvitacion(casamiento, 10)
+		free1.invitarUsuario(miriam, casamiento, 10)
+		free1.invitarUsuario(lucas, casamiento, 5)
+		lucas.confirmarInvitacion(casamiento, 5)
+		println(casamiento.cantidadAsistentesPosibles)
+		free1.invitarUsuario(maria, casamiento, 0)	//No puede invitar a una persona mas
+		}
+	//TIPOS DE USUARIO
 	@Test
 	def void organizadorFreeCreaEventoSiNoHayEventoEnSimultaneoyNoSuperaLaCantidadMaximaPorMes() {
 		free1.crearEvento(casamiento)
@@ -363,11 +428,11 @@ class TestEventos {
 		Assert.assertTrue(free1.eventosOrganizados.contains(cumple))
 	}
 
-	@Test
+	@Test(expected=typeof(BusinessException))
 	def void organizadorFreeNoCreaEventoSiHayEventoEnSimultaneo() {
 		free1.crearEvento(casamiento)
 		free1.fechaActual = LocalDateTime.of(2018, 05, 28, 22, 00) // free quiere crear un 
-		Assert.assertFalse(free1.puedoCrearEvento()) // evento mientras sucede otro
+		free1.crearEvento(cumple) // evento mientras sucede otro
 	}
 
 	@Test
@@ -382,24 +447,7 @@ class TestEventos {
 		free1.fechaActual = LocalDateTime.of(2018, 05, 31, 16, 00)
 		Assert.assertFalse(free1.puedoCrearEvento())
 	}
-
-	@Test(expected=typeof(BusinessException))
-	def void organizadorFreeNoPuedeInvitarMasDe50Personas() {
-		free1.crearEvento(casamiento)
-		free1.invitarUsuario(alejandro, casamiento, 10)
-		alejandro.confirmarInvitacion(casamiento, 10)
-		free1.invitarUsuario(marco, casamiento, 10)
-		marco.confirmarInvitacion(casamiento, 10)
-		free1.invitarUsuario(tomas, casamiento, 10)
-		tomas.confirmarInvitacion(casamiento, 10)
-		free1.invitarUsuario(miriam, casamiento, 10)
-		miriam.confirmarInvitacion(casamiento, 10)
-		free1.invitarUsuario(lucas, casamiento, 10)
-		lucas.confirmarInvitacion(casamiento, 10)
-		free1.invitarUsuario(maria, casamiento, 10)
-
-	}
-
+	//ACEPTACION Y RECHAZOS MASIVOS
 	@Test
 	def void unUsuarioAceptaUnaInvitacionPendienteSiElOrganizadorEsSuAmigo() {
 		lucas.agregarAmigo(beatriz)
@@ -527,10 +575,10 @@ class TestEventos {
 	}
 
 	@Test
-	def void siSeReprogramaEventoUsuarioDevuelveEntradaPorEl100DeSuValor() {
+	def void siSeReprogramaEventoUsuarioPuedeDevolverEntradaPorEl100DeSuValor() {
 		lollapalooza.postergarEvento(LocalDateTime.of(2018, 03, 28, 19, 00))
-		maxi.devolverEntradaSiEventoEstaPostergado(lollapalooza)
-		Assert.assertFalse(lollapalooza.asistentes.contains(maxi))
+		maxi.devolverEntrada(lollapalooza)
+		Assert.assertFalse(lollapalooza.estaInvitado(maxi))
 		Assert.assertEquals(500, maxi.saldoAFavor, 0.1)
 	}
 	@Test
@@ -539,10 +587,9 @@ class TestEventos {
 		gaston.crearEvento(even2)
 		gaston.crearEvento(even3)
 		gaston.crearEvento(even4)
-		gaston.crearEvento(even5)
 		Assert.assertTrue(gaston.puedoCrearEvento())		
 	}
-	@Test
+	@Test(expected=typeof(BusinessException))
 	def void usuarioAmateurQueiereOrganizar6eventosALaVezYNoPuede(){
 		gaston.crearEvento(even1)
 		gaston.crearEvento(even2)
@@ -550,7 +597,12 @@ class TestEventos {
 		gaston.crearEvento(even4)
 		gaston.crearEvento(even5)
 		gaston.crearEvento(even6)
-		Assert.assertFalse(gaston.puedoCrearEvento)		
+	}
+	@Test
+	def void usuarioAmateurNoPuedeRealizarMasDe50Invitaciones(){
+		//realizar 50 invitaciones
+		Assert.assertTrue(true)
+		
 	}
 	@Test
 	def void eventoCerradoConfirmanMasDel80PoCientoEsExitiso(){

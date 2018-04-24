@@ -42,8 +42,8 @@ abstract class Evento {
 
 	def double cantidadFracaso()
 
-	def double diasfechaMaximaConfirmacion(Usuario unUsuario) {
-		Math.rint(Duration.between(unUsuario.fechaActual, this.fechaMaximaConfirmacion).getSeconds() / 86400d) // obtener dias
+	def diasfechaMaximaConfirmacion(Usuario unUsuario) {
+		(Duration.between(unUsuario.fechaActual, this.fechaMaximaConfirmacion)).getSeconds() / 86400 
 	}
 
 	def cantidadDisponibles() { // Eventos abiertos => entradas, cerrados => invitaciones

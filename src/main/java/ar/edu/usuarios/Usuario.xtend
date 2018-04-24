@@ -21,28 +21,27 @@ class Usuario {
 	LocalDateTime fechaActual
 	TipoUsuario tipoUsuario;
 	double saldoAFavor = 0
-	double acompaniantes = 0
 	Point puntoDireccionUsuario
 	Collection<Evento> eventosOrganizados = new ArrayList<Evento>
 	Set<Invitacion> invitaciones = newHashSet
-	Integer cantidadAcompaniantesInvitado = 0
 	
 	// Organizador
 	def cambiarTipo(TipoUsuario unTipoUsuario){
 		tipoUsuario = unTipoUsuario
 	}
-	
-	def invitarUsuario(Usuario invitado, EventoCerrado unEvento, Integer cantidadAcompaniantes) {		
-		tipoUsuario.invitarUsuario(invitado, this, unEvento, cantidadAcompaniantes)	//Se chequea las condiciones de cada tipoUsuario
-	}
-	def realizarInvitacion(Usuario invitado, EventoCerrado unEvento, Integer cantidadAcompaniantes) {
-		if(unEvento.chequearCapacidad()){
-			var unaInvitacion = new Invitacion(invitado, cantidadAcompaniantes, unEvento)				
-			invitado.recibirInvitacion(unaInvitacion)
-		}
+	//Solo puede realizar invitaciones si la cantidad acompaniantes de la nueva invitacion + la cantidad de posibles asistentes no supera 
+	//capacidad maxima, de esta forma el usuario puede confirmar siempre y cuando este a tiempo
+	def invitarUsuario(Usuario invitado, EventoCerrado unEvento, Integer cantidadAcompaniantesMaxima) {		
+		if(unEvento.chequearCapacidad(cantidadAcompaniantesMaxima) && tipoUsuario.puedeInvitarUsuario(unEvento, cantidadAcompaniantesMaxima))	//Se chequea las condiciones de cada tipoUsuario
+			this.realizarInvitacion(invitado, unEvento, cantidadAcompaniantesMaxima)
 		else
-			throw new BusinessException("No se puede realizar invitacion, el evento llego a su maxima capacidad.")
+			throw new BusinessException("No se puede realizar invitacion, el evento llego a su maxima capacidad o alcanzo 
+				la cantidad maxima de invitaciones/invitados")
+	}
 	
+	def realizarInvitacion(Usuario invitado, EventoCerrado unEvento, Integer cantidadAcompaniantesMaxima) {
+		var unaInvitacion = new Invitacion(invitado, unEvento, cantidadAcompaniantesMaxima)				
+		unaInvitacion.usuarioRecibeInvitacion()
 	}
 	
 	def crearEvento(Evento unEvento){		//En test creo el evento primero(para inicializar
@@ -50,10 +49,14 @@ class Usuario {
 			unEvento.settearVariables(this)	//usuario organizador que es el que cuando lo "crea"
 			this.agregarEventoLista(unEvento)	//se setean la fecha de creacio y organizador
 		}
+		else
+			throw new BusinessException("Error no se puede crear evento")
 	}
+	
 	def boolean puedoCrearEvento(){
 		tipoUsuario.puedoOrganizarEvento(this)
 	}
+	
 	def void agregarEventoLista(Evento unEvento){
 		eventosOrganizados.add(unEvento)
 	}
@@ -75,18 +78,17 @@ class Usuario {
 			|| evento.finEvento.month == this.fechaActual.month].size
 	}
 //Usuario evento cerrado
-	def recibirInvitacion(Invitacion unaInvitacion) {
-		unaInvitacion.usuarioRecibeInvitacion()
-	}
+
 	def agregarInvitacionLista(Invitacion unaInvitacion){
 		invitaciones.add(unaInvitacion)
+		println(this.nombreUsuario + " tiene una nueva invitacion para el evento " + unaInvitacion.evento.nombreEvento)
 	}
+	
 	//Se recibe unEvento que funciona como una clave y luego se obtiene la invitacion
-	def confirmarInvitacion(EventoCerrado unEvento, Integer cantidadAcompaniantes) {	//la cantidad de acompaniantes
+	def confirmarInvitacion(EventoCerrado unEvento, Integer cantidadAcompaniantesConfirmados) {	//la cantidad de acompaniantes
 		var unaInvitacion = this.eventoInvitacion(unEvento)			//se la define cuando esta por confirmar
-		cantidadAcompaniantesInvitado = cantidadAcompaniantes
 		if(unaInvitacion !== null)
-			unaInvitacion.confirmar(cantidadAcompaniantes)
+			unaInvitacion.confirmar(cantidadAcompaniantesConfirmados)
 	}
 	
 	def rechazarInvitacion(EventoCerrado unEvento) {
@@ -96,7 +98,7 @@ class Usuario {
 	}
 	
 	def eventoInvitacion(EventoCerrado unEvento ){
-		invitaciones.filter(invitacion | invitacion.evento == unEvento).get(0)	//obtengo la invitacion con el evento
+		invitaciones.findFirst(invitacion | invitacion.evento == unEvento)//obtengo la invitacion con el evento
 	}
 	
 	//Usuario Evento Abierto
@@ -105,14 +107,14 @@ class Usuario {
 	}
 
 	def devolverEntrada(EventoAbierto unEvento) {
-		unEvento.devolverDinero(this)
-		unEvento.removerUsuario(this)
+		if(unEvento.estaInvitado(this) && unEvento.diasfechaMaximaConfirmacion(this) > 0){
+			unEvento.devolverDinero(this)
+			unEvento.removerUsuario(this)
+		}
+		else
+			throw new BusinessException("Error: usuario no puede devolver entrada")
 	}
 	
-	def devolverEntradaSiEventoEstaPostergado(EventoAbierto unEvento){
-		if(unEvento.estaPostergado)
-			this.devolverEntrada(unEvento)
-	}
 	
 	def aceptarPendientes() {
 		this.filtrarInvitacionesCumplenCondicionesPendientes.forEach [ invitacion |
@@ -192,8 +194,8 @@ class Usuario {
 	}
 	
 	def notificacionEventoPostergado(Evento unEvento) {
-		println("El evento"+unEvento.nombreEvento+"fue postergado.")
-		println("Las nuevas fechas son:")
+		println("El evento "+unEvento.nombreEvento+" fue postergado.")
+		println("Las nuevas fechas son")
 		println("Fecha maxima confirmacion: "+unEvento.fechaMaximaConfirmacion)
 		println("Fecha Inicio: "+ unEvento.inicioEvento)
 		println("Fecha fin: "+unEvento.finEvento)

@@ -9,9 +9,9 @@ import org.eclipse.xtend.lib.annotations.Accessors
 class EventoCerrado extends Evento {
 
 	Set<Usuario> invitadosConfirmados = newHashSet
-	double cantidadAcompaniantesConfirmados = 0
-	double capacidadMaxima
-
+	Integer capacidadMaxima
+	
+	
 	override capacidadMaxima() {
 		capacidadMaxima
 	}
@@ -28,18 +28,27 @@ class EventoCerrado extends Evento {
 		this.cantidadInvitacionesPendientes + this.cantidadInvitacionesConfirmadas
 	}
 	
-	def cantidadInvitacionesPendientes() { // la lista de asistentes representan a los pendientes
-		super.cantidadAsistentes()
+	def cantidadInvitacionesPendientes() { 
+		super.cantidadAsistentes() 
+	}
+	
+	def cantidadAcompaniantesPendientes(){	//Obtiene la cantidad maxima de acompaniantes de las invitaciones para este evento
+		asistentes.fold(0, [ acum, usuario | acum + usuario.eventoInvitacion(this).cantidadAcompaniantesMaxima ])
 	}
 	
 	def cantidadAsistentesPosibles() { // o Total
-		this.cantidadInvitacionesPendientes() + this.cantidadAsistentesConfirmados()
+		this.cantidadInvitacionesPendientes() +  this.cantidadAcompaniantesPendientes + this.cantidadAsistentesConfirmados()
 	}
 
 
 	def cantidadAsistentesConfirmados() {
-		invitadosConfirmados.size + cantidadAcompaniantesConfirmados
+		invitadosConfirmados.size + this.cantidadAcompaniantesConfirmados
 	}
+	
+	def cantidadAcompaniantesConfirmados(){
+		invitadosConfirmados.fold(0, [ acum, usuario | acum + usuario.eventoInvitacion(this).cantidadAcompaniantesConfirmados ])
+	}
+	
 	def cantidadInvitacionesConfirmadas(){
 		invitadosConfirmados.size
 	}
@@ -56,30 +65,25 @@ class EventoCerrado extends Evento {
 		invitadosConfirmados.contains(unUsuario)
 	}
 
-	def boolean chequearCapacidad() {
-		this.capacidadMaxima() >= this.cantidadAsistentesPosibles
+	def boolean chequearCapacidad(Integer cantidadAcompaniantesMaximaNuevaInvitacion) {
+		this.capacidadMaxima() >= this.cantidadAsistentesPosibles + cantidadAcompaniantesMaximaNuevaInvitacion + 1
 	}
 
 	def void usuarioRechazaInvitacion(Usuario unUsuario) {
 		this.removerUsuario(unUsuario)
 	}
 
-	def void confirmarUsuario(Usuario unUsuario) {
-		if (this.cumpleCondiciones(unUsuario)) {
-			this.agregarListaConfirmado(unUsuario)
+	def void confirmarUsuario(Usuario invitado) {
+		if (this.cumpleCondiciones(invitado)) {
+			this.agregarListaConfirmado(invitado)
 		} else
-			throw new BusinessException("Usuario paso la fecha maxima de confirmacion y/o no hay capacidad.") // Puede suceder que no haya capacidad porque
-	}
+			throw new BusinessException("Usuario paso la fecha maxima de confirmacion ") 
+	}										
 
-	// el organizador invita a mucha gente pero el invitado
-	override boolean cumpleCondiciones(Usuario unUsuario) { // confirma la cantidad de asistentes despues
-		super.usuarioEstaATiempo(unUsuario) && this.hayCapacidad(unUsuario)
+	override cumpleCondiciones(Usuario invitado){
+		super.usuarioEstaATiempo(invitado)
 	}
-
-	def boolean hayCapacidad(Usuario unUsuario) { // verifica que no se supere la cantidad maxima
-		this.cantidadDisponibles() >= unUsuario.cantidadAcompaniantesInvitado + 1
-	}
-
+	
 	override cantidadDisponibles() {
 		Math.round(this.capacidadMaxima() - this.cantidadAsistentesPosibles())
 	}
@@ -87,14 +91,8 @@ class EventoCerrado extends Evento {
 
 	def agregarListaConfirmado(Usuario unUsuario) {
 		invitadosConfirmados.add(unUsuario) // Se lo agrega a una lista que no puede estar en otra
-		this.agregarAcompaniantesConfirmados(unUsuario)
-		this.removerUsuario(unUsuario) // Se lo saca de la lista de pendientes
+		super.removerUsuario(unUsuario) // Se lo saca de la lista de pendientes
 	}
-
-	def agregarAcompaniantesConfirmados(Usuario unUsuario) {
-		cantidadAcompaniantesConfirmados = cantidadAcompaniantesConfirmados + unUsuario.cantidadAcompaniantesInvitado
-	}
-
 
 	def notificarConfirmados() {
 		invitadosConfirmados.forEach[usuario|this.notificarUsuario(usuario)]
