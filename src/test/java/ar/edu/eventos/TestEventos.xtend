@@ -1,6 +1,11 @@
 package ar.edu.eventos
 
 import ar.edu.eventos.exceptions.BusinessException
+import ar.edu.repositorios.Repositorio
+import ar.edu.servicios.Servicios
+import ar.edu.servicios.TarifaFija
+import ar.edu.servicios.TarifaPersona
+import ar.edu.servicios.TarifaPorHora
 import ar.edu.usuarios.Amateur
 import ar.edu.usuarios.Free
 import ar.edu.usuarios.Profesional
@@ -10,7 +15,6 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.uqbar.geodds.Point
-import repo.Repositorio
 
 class TestEventos {
 
@@ -48,6 +52,9 @@ class TestEventos {
 	Usuario miriam
 	Usuario gaston
 	Usuario carla
+	Servicios animacionMago
+	Servicios cateringFoodParty
+	Servicios candyBarWillyWonka
 	
 	@Before
 	def void init() {
@@ -261,6 +268,26 @@ class TestEventos {
 			fechaActual = LocalDateTime.of(2018, 05, 24, 11, 07)
 			tipoUsuario = new Profesional()
 		]
+		
+		//Servicios
+		animacionMago = new Servicios() =>[
+			tipoTarifa = new TarifaPorHora(300, 12)
+			nombre = "animacionMago"
+			tarifaPorKilometro = 7
+			ubicacionServicio = new Point(-34.515938, -58.485094)
+		]
+		cateringFoodParty = new Servicios() =>[
+			nombre = "cateringFoodParty"
+			tipoTarifa = new TarifaPersona(15, 0.8)
+			tarifaPorKilometro = 5
+			ubicacionServicio = new Point(-34.513628, -58.523435)
+		]
+		candyBarWillyWonka = new Servicios() =>[
+			nombre = "candyBarWillyWonka"
+			tipoTarifa = new TarifaFija(750)
+			tarifaPorKilometro = 20
+			ubicacionServicio = new Point(-34.569370, -58.484621)
+		]
 	}
 
 	@Test
@@ -271,6 +298,10 @@ class TestEventos {
 	@Test
 	def void probarDistancia() {
 		Assert.assertEquals(10.81, lollapalooza.distancia(puntoPrueba), 0.1d)
+	}
+	@Test
+	def void probarCapacidadMaximaEventoAbierto() {
+		Assert.assertEquals(6, lollapalooza.capacidadMaxima(), 0.1d)
 	}
 
 	// Eventos abiertos
@@ -684,7 +715,27 @@ class TestEventos {
 		
 	}
 	
+	@Test
+	def void pruebaCostoUnServicioConTarifaFija(){
+		lollapalooza.contratarServicio(candyBarWillyWonka)
+		Assert.assertEquals(206.2, candyBarWillyWonka.costoTraslado(lollapalooza), 0.1)
+		Assert.assertEquals(956.2, lollapalooza.costoTotalEvento, 0.1)
+	}
+	@Test
+	def void pruebaCostoUnServicioConTarifaPorHora(){
+		lollapalooza.contratarServicio(animacionMago)
+		Assert.assertEquals(34.62, animacionMago.costoTraslado(lollapalooza), 0.1)
+		Assert.assertEquals(7, lollapalooza.duracion, 0.1)
+		Assert.assertEquals(418.62, lollapalooza.costoTotalEvento, 0.1)
+	}
 	
+	@Test
+	def void pruebaCostoUnServicioConTarifaPorPersona(){
+		lollapalooza.contratarServicio(cateringFoodParty)
+		Assert.assertEquals(18.36, cateringFoodParty.costoTraslado(lollapalooza), 0.1)
+		Assert.assertEquals(5, lollapalooza.cantidadAsistentesPosibles, 0.1)
+		Assert.assertEquals(93.36, lollapalooza.costoTotalEvento, 0.1)
+	}
 	//ENTREGA 2
 	//Servicioes
 	

@@ -1,12 +1,14 @@
 package ar.edu.eventos
 
+import ar.edu.eventos.exceptions.BusinessException
+import ar.edu.servicios.Servicios
 import ar.edu.usuarios.Usuario
 import java.time.Duration
 import java.time.LocalDateTime
 import java.util.List
+import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.geodds.Point
-import ar.edu.eventos.exceptions.BusinessException
 
 @Accessors
 abstract class Evento {
@@ -18,7 +20,7 @@ abstract class Evento {
 	Locacion lugar
 	LocalDateTime fechaMaximaConfirmacion
 	LocalDateTime fechaCreacion
-
+	Set<Servicios> serviciosContratados = newHashSet
 	double porcentajeExito = 0.9
 	double porcentajeFracaso = 0.5
 	List<Usuario> asistentes = newArrayList
@@ -32,7 +34,14 @@ abstract class Evento {
 	def double distancia(Point unPunto) {
 		lugar.distancia(unPunto)
 	}
-
+	
+	def contratarServicio(Servicios servicio){
+		serviciosContratados.add(servicio)
+	}
+	
+	def costoTotalEvento(){
+		serviciosContratados.fold(0d, [ acum, servicio | acum + servicio.costo(this) ])
+	}
 	
 	def boolean validarFecha(LocalDateTime fecha1, LocalDateTime fecha2) {
 		fecha1.isBefore(fecha2)

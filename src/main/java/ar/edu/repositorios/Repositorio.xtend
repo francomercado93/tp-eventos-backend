@@ -1,4 +1,4 @@
-package repo
+package ar.edu.repositorios
 
 import ar.edu.usuarios.Usuario
 import java.util.HashSet
