@@ -1,7 +1,8 @@
 package ar.edu.eventos
 
 import ar.edu.eventos.exceptions.BusinessException
-import ar.edu.repositorios.Repositorio
+import ar.edu.repositorios.RepositorioServicio
+import ar.edu.repositorios.RepositorioUsuarios
 import ar.edu.servicios.Servicios
 import ar.edu.servicios.TarifaFija
 import ar.edu.servicios.TarifaPersona
@@ -60,17 +61,17 @@ class TestEventos {
 	def void init() {
 		// LOCACIONES
 		salonFiesta = new Locacion() => [
-			nombre = "Club3"
+			descripcion = "Club3"
 			puntoGeografico = new Point(9, 6)
 			superficie = 10d
 		]
 		tecnopolis = new Locacion() => [
-			nombre = "Tecnopolis"
+			descripcion = "Tecnopolis"
 			puntoGeografico = new Point(-34.559276, -58.505377)
 			superficie = 6d
 		]
 		hipodromo = new Locacion() => [
-			nombre = "hipodromo San Isidro"
+			descripcion = "hipodromo San Isidro"
 			puntoGeografico = new Point(-34.480860, -58.518295)
 			superficie = 4.8d
 		]
@@ -119,46 +120,68 @@ class TestEventos {
 		// PERSONAS
 		juan = new Usuario() => [
 			nombreUsuario = "juan"
+			nombreApellido ="Juan Martin del Potro"
+			mail = "juan00@gmail.com"
+			direccion = "Bolivar 234"
 			fechaActual = LocalDateTime.of(2018, 03, 15, 22, 00)
-			edad = 18
+			fechaNacimiento = LocalDateTime.of(2000, 01, 02, 05, 25)
 		]
 		martin = new Usuario() => [
 			nombreUsuario = "martin"
+			nombreApellido = "Martin Benitez"
+			mail = "juan00@gmail.com"
+			direccion = "America 2005"
 			fechaActual = LocalDateTime.of(2018, 03, 16, 00, 22)
-			edad = 17
+			fechaNacimiento = LocalDateTime.of(2001, 05, 12, 15,55)
+			
 		]
 
 		// Usuarios que compran entradas y cumplen requisitos
 		maxi = new Usuario() => [
-			nombreUsuario = "maxi"
+			nombreUsuario = "maxi5"
+			nombreApellido = "Maxi Coronel"
+			mail = "maxigg@gmail.com"
+			direccion = "Av. Triunvirato"
 			fechaActual = LocalDateTime.of(2018, 02, 15, 15, 30)
-			edad = 40
+			fechaNacimiento = LocalDateTime.of(1977, 08, 09, 22, 25)
 			comprarEntrada(lollapalooza)
 		]
 		gaby = new Usuario() => [
-			nombreUsuario = "Gaby"
+			nombreUsuario = "Gaby555"
+			nombreApellido = "Gabriel Martinez"
+			mail = "gaby_44@gmail.com"
+			direccion = "Azcuenaga 5667"
 			fechaActual = LocalDateTime.of(2017, 09, 02, 20, 15)
-			edad = 20
+			fechaNacimiento = LocalDateTime.of(1996, 10, 15, 00, 25)
 			comprarEntrada(lollapalooza)
 		]
 		maria = new Usuario() => [
-			nombreUsuario = "Maria"
+			nombreUsuario = "MariaSanchez4"
+			nombreApellido = "Maria Sanchez"
+			mail = "sanchezmaria@hotmail.com"
+			direccion = "Primera Junta 24"
 			fechaActual = LocalDateTime.of(2018, 02, 27, 05, 00)
-			edad = 35
+			fechaNacimiento = LocalDateTime.of(1983, 02, 02, 12, 00)
 			comprarEntrada(lollapalooza)
 		]
 		lucas = new Usuario() => [
-			nombreUsuario = "Lucas"
+			nombreUsuario = "Lucas41"
+			nombreApellido = "Lucas Benitez"
+			mail = "lucasb@gmail.com"
+			direccion = "Lacroze 5805"
 			fechaActual = LocalDateTime.of(2018, 01, 31, 19, 50)
-			edad = 26
+			fechaNacimiento = LocalDateTime.of(1991, 11, 11, 12, 00)
 			comprarEntrada(lollapalooza)
 			puntoDireccionUsuario = new Point(8.95, 6)
 
 		]
 		beatriz = new Usuario() => [
-			nombreUsuario = "Beatriz"
+			nombreUsuario = "Beatriz788"
+			nombreApellido = "Beatriz Fernandez"
+			mail = "bety@gmail.com"
+			direccion = "Calle 74 5511"
 			fechaActual = LocalDateTime.of(2018, 02, 15, 15, 30)
-			edad = 45
+			fechaNacimiento = LocalDateTime.of(1973, 02, 02, 12, 00)
 			comprarEntrada(lollapalooza)
 			tipoUsuario = new Free()
 
@@ -166,6 +189,9 @@ class TestEventos {
 		// Organizadores
 		free1 = new Usuario() => [
 			nombreUsuario = "Pablo"
+			nombreApellido = "Pablo Gomez"
+			mail = "pabloggz@gmail.com"
+			direccion = "Av. de los Incas 412"
 			fechaActual = LocalDateTime.of(2018, 05, 15, 19, 00)
 			tipoUsuario = new Free()
 		]
@@ -183,23 +209,35 @@ class TestEventos {
 		]
 
 		alejandro = new Usuario() => [
-			nombreUsuario = "Alejandro"
-			edad = 35
+			nombreUsuario = "Alej4ndro"
+			nombreApellido = "Alejandro Estevanez"
+			mail = "alejandro598@gmail.com"
+			direccion = "Pueyrredon 2233"
+			fechaNacimiento = LocalDateTime.of(1983, 02, 02, 12, 00)
 			fechaActual = LocalDateTime.of(2018, 05, 01, 10, 00)
 		]
 		marco = new Usuario() => [
-			nombreUsuario = "Marco"
-			edad = 22
+			nombreUsuario = "MarcoCD"
+			nombreApellido = "Marco Sanchez"
+			mail = "marquito@gmail.com"
+			direccion = "La crujia 898"
+			fechaNacimiento = LocalDateTime.of(1996, 05, 02, 12, 00)
 			fechaActual = LocalDateTime.of(2018, 05, 20, 17, 00)
 		]
 		tomas = new Usuario() => [
-			nombreUsuario = "Tomas"
-			edad = 29
+			nombreUsuario = "TomasQWE"
+			nombreApellido = "Tomas Diaz"
+			mail = "tommy@hotmail.com"
+			direccion = "25 de Mayo 741"
+			fechaNacimiento = LocalDateTime.of(1988, 12, 02, 12, 00)
 			fechaActual = LocalDateTime.of(2018, 05, 10, 20, 52)
 		]
 		miriam = new Usuario() => [
-			nombreUsuario = "Miriam"
-			edad = 25
+			nombreUsuario = "MiriamP"
+			nombreApellido = "Miriam Perez"
+			mail = "perezmiriam0@gmail.com"
+			direccion = "Entre Rios 1546"
+			fechaNacimiento = LocalDateTime.of(1993, 02, 15, 12, 00)
 			fechaActual = LocalDateTime.of(2018, 05, 11, 10, 00)
 		]
 		even1 = new EventoCerrado() => [
@@ -258,13 +296,13 @@ class TestEventos {
 		]
 		gaston = new Usuario() =>[
 			nombreUsuario = "Gaston"
-			edad = 23
+			fechaNacimiento = LocalDateTime.of(1995, 02, 02, 12, 00)
 			fechaActual = LocalDateTime.of(2018, 05, 24, 11, 06)
 			tipoUsuario = new Amateur()
 		]
 		carla = new Usuario() =>[
 			nombreUsuario = "Carla"
-			edad = 24
+			fechaNacimiento = LocalDateTime.of(1994, 02, 10, 12, 00)
 			fechaActual = LocalDateTime.of(2018, 05, 24, 11, 07)
 			tipoUsuario = new Profesional()
 		]
@@ -272,18 +310,18 @@ class TestEventos {
 		//Servicios
 		animacionMago = new Servicios() =>[
 			tipoTarifa = new TarifaPorHora(300, 12)
-			nombre = "animacionMago"
+			descripcion = "animacionMago"
 			tarifaPorKilometro = 7
 			ubicacionServicio = new Point(-34.515938, -58.485094)
 		]
 		cateringFoodParty = new Servicios() =>[
-			nombre = "cateringFoodParty"
+			descripcion = "cateringFoodParty"
 			tipoTarifa = new TarifaPersona(15, 0.8)
 			tarifaPorKilometro = 5
 			ubicacionServicio = new Point(-34.513628, -58.523435)
 		]
 		candyBarWillyWonka = new Servicios() =>[
-			nombre = "candyBarWillyWonka"
+			//descripcion = "candyBarWillyWonka"
 			tipoTarifa = new TarifaFija(750)
 			tarifaPorKilometro = 20
 			ubicacionServicio = new Point(-34.569370, -58.484621)
@@ -313,7 +351,7 @@ class TestEventos {
 
 	@Test(expected=typeof(BusinessException))
 	def void personaNoPuedeSacarEntradaSuperoFechaLimite() {//Quedan entradas y tiene edad minima
-		martin.edad = 19
+		martin.fechaNacimiento = LocalDateTime.of(1999, 01, 01, 00, 00)
 		martin.comprarEntrada(lollapalooza)
 	}
 
@@ -328,7 +366,7 @@ class TestEventos {
 		ultimoComprador = new Usuario() => [
 			nombreUsuario = "pablo"
 			fechaActual = LocalDateTime.of(2018, 03, 15, 16, 45)
-			edad = 33
+			fechaNacimiento = LocalDateTime.of(1985, 03, 15, 00, 00)
 			comprarEntrada(lollapalooza)
 		]
 		martin.comprarEntrada(lollapalooza)
@@ -370,7 +408,7 @@ class TestEventos {
 		ultimoComprador = new Usuario() => [
 			nombreUsuario = "pablo"
 			fechaActual = LocalDateTime.of(2018, 03, 15, 16, 45)
-			edad = 33
+			fechaNacimiento = LocalDateTime.of(1985, 03, 15, 00, 00)
 			comprarEntrada(lollapalooza)
 		]
 		Assert.assertTrue(lollapalooza.esExitoso)
@@ -706,14 +744,8 @@ class TestEventos {
 		lucas.confirmarInvitacion(cumple,3)
 		Assert.assertTrue(cumple.esFracaso())	
 	}
-	
-	@Test
-	def void haceralgo(){
-		var repo = new Repositorio<Usuario>()
-		repo.create(gaston)
-		repo.create(lucas)
-		
-	}
+	//ENTREGA 2
+	//Servicioes
 	
 	@Test
 	def void pruebaCostoUnServicioConTarifaFija(){
@@ -736,7 +768,65 @@ class TestEventos {
 		Assert.assertEquals(5, lollapalooza.cantidadAsistentesPosibles, 0.1)
 		Assert.assertEquals(93.36, lollapalooza.costoTotalEvento, 0.1)
 	}
-	//ENTREGA 2
-	//Servicioes
+	
+	@Test
+	def void pruebaCostoTotalEventoContrataTresServicios(){
+		lollapalooza.contratarServicio(cateringFoodParty)
+		lollapalooza.contratarServicio(animacionMago)
+		lollapalooza.contratarServicio(candyBarWillyWonka)
+		Assert.assertEquals(1468.18, lollapalooza.costoTotalEvento, 0.1)
+	}
+	@Test
+	def void pruebaSet(){
+		println(lucas.nombreUsuario)
+		martin.agregarAmigo(lucas)
+		println(martin.amigos.get(0).nombreUsuario)
+		martin.agregarAmigo(miriam)
+		lucas.nombreUsuario = "pedro"
+		println(martin.amigos.get(1).nombreUsuario)
+		println(lucas.nombreUsuario)
+		Assert.assertTrue(true)
+	}
+	
+	/* @Test
+	def void pruebaEdadUsuario(){
+		var franco = new Usuario() =>[
+			fechaNacimiento = LocalDateTime.of(1993, 02, 15, 00, 00)
+			fechaActual = LocalDateTime.of(2018, 02, 14, 12, 00)
+		]
+		Assert.assertEquals(24, franco.edadActual, 0.1)
+	}*/
+	
+	/* 	@Test
+	def void haceralgo(){
+		var repo = new Repositorio<Usuario>()
+		repo.create(gaston)
+		repo.create(lucas)
+		
+	}
+	*/
+	@Test (expected=typeof(BusinessException))
+	def void noSePuedeAgregarUsuarioQueFaltanDatos(){
+		var repo = new RepositorioUsuarios()
+		repo.create(gaston)
+	}
+	
+	@Test 
+	def void seAgregaUsuarioARepositorio(){
+		var repo = new RepositorioUsuarios()
+		repo.create(miriam)
+		Assert.assertFalse(repo.search(miriam.nombreUsuario).isEmpty)
+	}
+	
+	@Test (expected=typeof(BusinessException))
+	def void noSePuedeAgregarServicioQueFaltanDatos(){
+		var repo = new RepositorioServicio()
+		repo.create(candyBarWillyWonka)	//Le falta descripcion
+	}
+	
+	/* @Test 
+	def void pruebaJSON(){
+		
+	}*/
 	
 }
