@@ -13,7 +13,7 @@ class TarifaPorHora extends TipoTarifa {
 		tarifaPorHora = unaTarifaPorHora
 	}
 	
-	override def costo (Evento evento){
+	override costo (Evento evento){
 		this.tarifaMinima(evento) + this.costoTotalPorHora(evento) 
 	}
 	

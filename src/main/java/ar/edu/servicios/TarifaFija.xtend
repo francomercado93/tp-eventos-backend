@@ -10,7 +10,7 @@ class TarifaFija extends TipoTarifa {
 		super(unCostoFijo)
 	}
 	
-	override def costo(Evento evento) {
+	override costo(Evento evento) {
 		this.tarifaMinima(evento)
 	}
 	

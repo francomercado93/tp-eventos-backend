@@ -18,16 +18,17 @@ class Usuario {
 	String nombreApellido
 	String mail
 	LocalDateTime fechaNacimiento
-	String direccion
+	//Map<String, String> direccion = newHashMap
+	Direccion direccion
 	boolean esAntisocial
 	double radioCercania
 	Set<Usuario> amigos = newHashSet
 	LocalDateTime fechaActual
 	TipoUsuario tipoUsuario;
 	double saldoAFavor = 0
-	Point puntoDireccionUsuario
 	Collection<Evento> eventosOrganizados = new ArrayList<Evento>
 	Set<Invitacion> invitaciones = newHashSet
+	//Point coordenadas
 	
 	def validarCampos(){
 		if(nombreUsuario === null)
@@ -42,9 +43,16 @@ class Usuario {
 			throw new BusinessException("Error, falta direccion")	
 	}
 	
+	def setDireccion(String calle, int numero, String localidad, String provincia, Point punto){
+		direccion = new Direccion(calle, numero, localidad, provincia, punto)
+	}
+	
+	def Point coordenadas(){
+		new Point(direccion.coordenadas.get("x"), direccion.coordenadas.get("y"))
+	}
+	
 	def edad(){		//cambiar variable edad por metodo edad en tests
 		Duration.between(fechaNacimiento, fechaActual).getSeconds() / 31536000
-
 	}
 	
 	// Organizador
@@ -68,7 +76,6 @@ class Usuario {
 	
 	def crearEvento(Evento unEvento){		//En test creo el evento primero(para inicializar
 		if(this.puedoCrearEvento()){		//variables y luego se lo paso como parametro a
-			
 			unEvento.settearVariables(this)	//usuario organizador que es el que cuando lo "crea"
 			this.agregarEventoLista(unEvento)	//se setean la fecha de creacio y organizador
 		}
@@ -154,7 +161,7 @@ class Usuario {
 	}
 
 	def boolean eventoEstaCerca(EventoCerrado evento) {
-		evento.distancia(puntoDireccionUsuario) <= radioCercania
+		evento.distancia(coordenadas) <= radioCercania
 	}
 
 	def boolean asistenMasDeCuatroAmigos(EventoCerrado invitacion) {
@@ -223,4 +230,5 @@ class Usuario {
 		println("Fecha Inicio: "+ unEvento.inicioEvento)
 		println("Fecha fin: "+unEvento.finEvento)
 	}
+		
 }

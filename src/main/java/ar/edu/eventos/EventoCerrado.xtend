@@ -11,6 +11,9 @@ class EventoCerrado extends Evento {
 	Set<Usuario> invitadosConfirmados = newHashSet
 	Integer capacidadMaxima
 	
+	override porcentajeExito(){
+		0.8
+	}
 	
 	override capacidadMaxima() {
 		capacidadMaxima
@@ -21,7 +24,7 @@ class EventoCerrado extends Evento {
 	}
 
 	override double cantidadExito() {
-		this.cantidadTotalInvitaciones  * 0.8
+		this.cantidadTotalInvitaciones  * this.porcentajeExito
 	}
 	
 	def cantidadTotalInvitaciones(){
@@ -55,7 +58,7 @@ class EventoCerrado extends Evento {
 	}
 
 	override double cantidadFracaso() {
-		this.cantidadTotalInvitaciones  * 0.5
+		this.cantidadTotalInvitaciones  * this.porcentajeFracaso
 	}
 
 	def boolean estaConfirmado(Usuario unUsuario) {

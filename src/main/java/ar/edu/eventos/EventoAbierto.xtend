@@ -36,7 +36,7 @@ class EventoAbierto extends Evento {
 	}
 
 	override double cantidadExito() {
-		this.capacidadMaxima() * porcentajeExito
+		this.capacidadMaxima() * this.porcentajeExito
 	}
 
 	override esFracaso() {
@@ -44,7 +44,7 @@ class EventoAbierto extends Evento {
 	}
 
 	override double cantidadFracaso() {
-		this.capacidadMaxima() * porcentajeFracaso
+		this.capacidadMaxima() * this.porcentajeFracaso
 	}
 
 	override cancelarEvento() {

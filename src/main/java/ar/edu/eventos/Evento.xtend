@@ -21,12 +21,18 @@ abstract class Evento {
 	LocalDateTime fechaMaximaConfirmacion
 	LocalDateTime fechaCreacion
 	Set<Servicios> serviciosContratados = newHashSet
-	double porcentajeExito = 0.9
-	double porcentajeFracaso = 0.5
 	List<Usuario> asistentes = newArrayList
 	boolean estaCancelado = false
 	boolean estaPostergado = false
 
+	def double porcentajeExito(){
+		0.9
+	}
+	
+	def double porcentajeFracaso(){
+		0.5
+	}
+	
 	def duracion() {
 		Duration.between(inicioEvento, finEvento).getSeconds() / 3600d
 	}
