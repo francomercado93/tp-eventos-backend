@@ -1,8 +1,7 @@
 package ar.edu.eventos
 
 import ar.edu.eventos.exceptions.BusinessException
-import ar.edu.main.Main
-import ar.edu.repositorios.RepositorioServicio
+import ar.edu.repositorios.RepositorioServicios
 import ar.edu.repositorios.RepositorioUsuarios
 import ar.edu.servicios.Servicios
 import ar.edu.servicios.TarifaFija
@@ -12,8 +11,6 @@ import ar.edu.usuarios.Amateur
 import ar.edu.usuarios.Free
 import ar.edu.usuarios.Profesional
 import ar.edu.usuarios.Usuario
-import com.eclipsesource.json.Json
-import java.io.FileReader
 import java.time.LocalDateTime
 import org.junit.Assert
 import org.junit.Before
@@ -22,7 +19,7 @@ import org.uqbar.geodds.Point
 
 class TestEventos {
 
-	//EventoAbierto soundhearts
+	// EventoAbierto soundhearts
 	EventoAbierto lollapalooza
 	EventoCerrado casamiento
 	EventoCerrado cumple
@@ -38,8 +35,8 @@ class TestEventos {
 	Locacion tecnopolis
 	LocalDateTime inicioLolla = LocalDateTime.of(2018, 03, 27, 18, 00)
 	LocalDateTime finLolla = LocalDateTime.of(2018, 03, 28, 01, 00)
-	//LocalDateTime inicioSound = LocalDateTime.of(2018, 04, 14, 18, 00)
-	//LocalDateTime finSound = LocalDateTime.of(2018, 04, 14, 23, 30)
+	// LocalDateTime inicioSound = LocalDateTime.of(2018, 04, 14, 18, 00)
+	// LocalDateTime finSound = LocalDateTime.of(2018, 04, 14, 23, 30)
 	Point puntoPrueba = new Point(-34.577908, -58.526486)
 	Usuario juan
 	Usuario martin
@@ -59,7 +56,7 @@ class TestEventos {
 	Servicios animacionMago
 	Servicios cateringFoodParty
 	Servicios candyBarWillyWonka
-	
+
 	@Before
 	def void init() {
 		// LOCACIONES
@@ -81,14 +78,14 @@ class TestEventos {
 
 		// EVENTOS ABIERTOS
 		/*soundhearts = new EventoAbierto() => [
-			nombreEvento = "Soundhearts"
-			inicioEvento = inicioSound
-			finEvento = finSound
-			lugar = tecnopolis
-			edadMinima = 15
-			valorEntrada = 0
+		 * 	nombreEvento = "Soundhearts"
+		 * 	inicioEvento = inicioSound
+		 * 	finEvento = finSound
+		 * 	lugar = tecnopolis
+		 * 	edadMinima = 15
+		 * 	valorEntrada = 0
 
-		]*/
+		 ]*/
 		lollapalooza = new EventoAbierto() => [
 			nombreEvento = "lollapalooza"
 			inicioEvento = inicioLolla
@@ -120,7 +117,7 @@ class TestEventos {
 		// PERSONAS
 		juan = new Usuario() => [
 			nombreUsuario = "juan"
-			nombreApellido ="Juan Martin del Potro"
+			nombreApellido = "Juan Martin del Potro"
 			mail = "juan00@gmail.com"
 			setDireccion("Quintana", 2551, "San Martin", "Buenos Aires", new Point(-34.578651, -58.549614))
 			fechaActual = LocalDateTime.of(2018, 03, 15, 22, 00)
@@ -132,8 +129,8 @@ class TestEventos {
 			mail = "juan00@gmail.com"
 			setDireccion("America", 3450, "San Martin", "Buenos Aires", new Point(-34.560245, -58.546651))
 			fechaActual = LocalDateTime.of(2018, 03, 16, 00, 22)
-			fechaNacimiento = LocalDateTime.of(2001, 05, 12, 15,55)
-			
+			fechaNacimiento = LocalDateTime.of(2001, 05, 12, 15, 55)
+
 		]
 
 		// Usuarios que compran entradas y cumplen requisitos
@@ -141,7 +138,8 @@ class TestEventos {
 			nombreUsuario = "maxi5"
 			nombreApellido = "Maxi Coronel"
 			mail = "maxigg@gmail.com"
-			setDireccion("Carlos Francisco Melo", 2356, "Vicente Lopez", "Buenos Aires", new Point(-34.534199, -58.490467))
+			setDireccion("Carlos Francisco Melo", 2356, "Vicente Lopez", "Buenos Aires",
+				new Point(-34.534199, -58.490467))
 			fechaActual = LocalDateTime.of(2018, 02, 15, 15, 30)
 			fechaNacimiento = LocalDateTime.of(1977, 08, 09, 22, 25)
 			comprarEntrada(lollapalooza)
@@ -159,7 +157,7 @@ class TestEventos {
 			nombreUsuario = "MariaSanchez4"
 			nombreApellido = "Maria Sanchez"
 			mail = "sanchezmaria@hotmail.com"
-			setDireccion("Av. Bartolomé Mitre" , 4787, "Caseros", "Buenos Aires", new Point(-34.609812, -58.563639))
+			setDireccion("Av. Bartolomé Mitre", 4787, "Caseros", "Buenos Aires", new Point(-34.609812, -58.563639))
 			fechaActual = LocalDateTime.of(2018, 02, 27, 05, 00)
 			fechaNacimiento = LocalDateTime.of(1983, 02, 02, 12, 00)
 			comprarEntrada(lollapalooza)
@@ -168,7 +166,7 @@ class TestEventos {
 			nombreUsuario = "Lucas41"
 			nombreApellido = "Lucas Benitez"
 			mail = "lucasb@gmail.com"
-			setDireccion("Nogoya" , 3460, "Villa del Parque", "CABA", new Point(-34.605375, -58.496150))
+			setDireccion("Nogoya", 3460, "Villa del Parque", "CABA", new Point(-34.605375, -58.496150))
 			fechaActual = LocalDateTime.of(2018, 01, 31, 19, 50)
 			fechaNacimiento = LocalDateTime.of(1991, 11, 11, 12, 00)
 			comprarEntrada(lollapalooza)
@@ -178,7 +176,7 @@ class TestEventos {
 			nombreUsuario = "Beatriz788"
 			nombreApellido = "Beatriz Fernandez"
 			mail = "bety@gmail.com"
-			setDireccion("Gral Paz" , 1989, "Llavallol", "Buenos Aires", new Point(-34.785584, -58.420979))
+			setDireccion("Gral Paz", 1989, "Llavallol", "Buenos Aires", new Point(-34.785584, -58.420979))
 			fechaActual = LocalDateTime.of(2018, 02, 15, 15, 30)
 			fechaNacimiento = LocalDateTime.of(1973, 02, 02, 12, 00)
 			comprarEntrada(lollapalooza)
@@ -190,7 +188,7 @@ class TestEventos {
 			nombreUsuario = "Pablo"
 			nombreApellido = "Pablo Gomez"
 			mail = "pabloggz@gmail.com"
-			setDireccion("Pueyrredon" , 580, "San Antonio de Padua", "Buenos Aires", new Point(-34.671249, -58.711178))
+			setDireccion("Pueyrredon", 580, "San Antonio de Padua", "Buenos Aires", new Point(-34.671249, -58.711178))
 			fechaActual = LocalDateTime.of(2018, 05, 15, 19, 00)
 			tipoUsuario = new Free()
 		]
@@ -210,7 +208,7 @@ class TestEventos {
 			nombreUsuario = "Alej4ndro"
 			nombreApellido = "Alejandro Estevanez"
 			mail = "alejandro598@gmail.com"
-			setDireccion("Independencia" , 343, "Pilar", "Buenos Aires", new Point(-34.460323, -58.909506))
+			setDireccion("Independencia", 343, "Pilar", "Buenos Aires", new Point(-34.460323, -58.909506))
 			fechaNacimiento = LocalDateTime.of(1983, 02, 02, 12, 00)
 			fechaActual = LocalDateTime.of(2018, 05, 01, 10, 00)
 		]
@@ -218,7 +216,7 @@ class TestEventos {
 			nombreUsuario = "MarcoCD"
 			nombreApellido = "Marco Sanchez"
 			mail = "marquito@gmail.com"
-			setDireccion("Moreno" , 256, "Pilar", "Buenos Aires", new Point(-34.461846, -58.907565))
+			setDireccion("Moreno", 256, "Pilar", "Buenos Aires", new Point(-34.461846, -58.907565))
 			fechaNacimiento = LocalDateTime.of(1996, 05, 02, 12, 00)
 			fechaActual = LocalDateTime.of(2018, 05, 20, 17, 00)
 		]
@@ -226,7 +224,7 @@ class TestEventos {
 			nombreUsuario = "TomasQWE"
 			nombreApellido = "Tomas Diaz"
 			mail = "tommy@hotmail.com"
-			setDireccion("Av Colon" , 1090, "Ciudad de Cordoba", "Cordoba", new Point(-31.409261, -64.197778))
+			setDireccion("Av Colon", 1090, "Ciudad de Cordoba", "Cordoba", new Point(-31.409261, -64.197778))
 			fechaNacimiento = LocalDateTime.of(1988, 12, 02, 12, 00)
 			fechaActual = LocalDateTime.of(2018, 05, 10, 20, 52)
 		]
@@ -234,7 +232,7 @@ class TestEventos {
 			nombreUsuario = "MiriamP"
 			nombreApellido = "Miriam Perez"
 			mail = "perezmiriam0@gmail.com"
-			setDireccion("Falucho" , 2520, "Mar del Plata", "Buenos Aires", new Point(-38.005192, -57.551312))
+			setDireccion("Falucho", 2520, "Mar del Plata", "Buenos Aires", new Point(-38.005192, -57.551312))
 			fechaNacimiento = LocalDateTime.of(1993, 02, 15, 12, 00)
 			fechaActual = LocalDateTime.of(2018, 05, 11, 10, 00)
 		]
@@ -290,34 +288,34 @@ class TestEventos {
 			capacidadMaxima = 20
 
 		]
-		gaston = new Usuario() =>[
+		gaston = new Usuario() => [
 			nombreUsuario = "Gaston"
 			fechaNacimiento = LocalDateTime.of(1995, 02, 02, 12, 00)
 			fechaActual = LocalDateTime.of(2018, 05, 24, 11, 06)
 			tipoUsuario = new Amateur()
 		]
-		carla = new Usuario() =>[
+		carla = new Usuario() => [
 			nombreUsuario = "Carla"
 			fechaNacimiento = LocalDateTime.of(1994, 02, 10, 12, 00)
 			fechaActual = LocalDateTime.of(2018, 05, 24, 11, 07)
 			tipoUsuario = new Profesional()
 		]
-		
-		//Servicios
-		animacionMago = new Servicios() =>[
+
+		// Servicios
+		animacionMago = new Servicios() => [
 			tipoTarifa = new TarifaPorHora(300, 12)
 			descripcion = "animacionMago"
 			tarifaPorKilometro = 7
 			ubicacionServicio = new Point(-34.515938, -58.485094)
 		]
-		cateringFoodParty = new Servicios() =>[
+		cateringFoodParty = new Servicios() => [
 			descripcion = "cateringFoodParty"
 			tipoTarifa = new TarifaPersona(15, 0.8)
 			tarifaPorKilometro = 5
 			ubicacionServicio = new Point(-34.513628, -58.523435)
 		]
-		candyBarWillyWonka = new Servicios() =>[
-			//descripcion = "candyBarWillyWonka"
+		candyBarWillyWonka = new Servicios() => [
+			// descripcion = "candyBarWillyWonka"
 			tipoTarifa = new TarifaFija(750)
 			tarifaPorKilometro = 20
 			ubicacionServicio = new Point(-34.569370, -58.484621)
@@ -333,6 +331,7 @@ class TestEventos {
 	def void probarDistancia() {
 		Assert.assertEquals(10.81, lollapalooza.distancia(puntoPrueba), 0.1d)
 	}
+
 	@Test
 	def void probarCapacidadMaximaEventoAbierto() {
 		Assert.assertEquals(6, lollapalooza.capacidadMaxima(), 0.1d)
@@ -346,14 +345,14 @@ class TestEventos {
 	}
 
 	@Test(expected=typeof(BusinessException))
-	def void personaNoPuedeSacarEntradaSuperoFechaLimite() {//Quedan entradas y tiene edad minima
+	def void personaNoPuedeSacarEntradaSuperoFechaLimite() { // Quedan entradas y tiene edad minima
 		martin.fechaNacimiento = LocalDateTime.of(1999, 01, 01, 00, 00)
 		martin.comprarEntrada(lollapalooza)
 	}
 
 	@Test(expected=typeof(BusinessException))
 	def void personaNoPuedeSacarEntradaNoTieneEdadMinima() {
-		martin.fechaActual = LocalDateTime.of(2018, 03, 15, 16, 45)//Esta a tiempo y quedan entradas disponibles
+		martin.fechaActual = LocalDateTime.of(2018, 03, 15, 16, 45) // Esta a tiempo y quedan entradas disponibles
 		martin.comprarEntrada(lollapalooza)
 	}
 
@@ -372,17 +371,17 @@ class TestEventos {
 	def void siUnaPersonaQuiereDevolverEntradaPeroNoTieneSistemaNoLoDeja() {
 		juan.devolverEntrada(lollapalooza)
 	}
-	
+
 	@Test(expected=typeof(BusinessException))
 	def void siUnaPersonaQuiereDevolverEntradaElMismoDiaDElEvento() {
 		juan.comprarEntrada(lollapalooza)
-		juan.fechaActual = LocalDateTime.of(2018, 03, 15, 09, 30) //Devuelve en la fecha de confirmacion
+		juan.fechaActual = LocalDateTime.of(2018, 03, 15, 09, 30) // Devuelve en la fecha de confirmacion
 		println(lollapalooza.diasfechaMaximaConfirmacion(juan))
 		juan.devolverEntrada(lollapalooza)
 	}
-	
+
 	@Test
-	def void siUnaPersonaDevuelveEnIntervaloDe7DiasRestantesSeDevuelveUnPorcentaje() {//compra entrada y se arrepiente
+	def void siUnaPersonaDevuelveEnIntervaloDe7DiasRestantesSeDevuelveUnPorcentaje() { // compra entrada y se arrepiente
 		juan.fechaActual = LocalDateTime.of(2018, 03, 09, 22, 00)
 		juan.comprarEntrada(lollapalooza)
 		juan.devolverEntrada(lollapalooza)
@@ -424,6 +423,7 @@ class TestEventos {
 		Assert.assertEquals(4, lollapalooza.cantidadDisponibles, 0.1)
 		Assert.assertTrue(lollapalooza.esFracaso)
 	}
+
 	@Test
 	def void seVendieronMasDel50PorcientoYMenosDel90EntoncesEventoNoEsFracasoYNoEsExitoso() {
 		beatriz.devolverEntrada(lollapalooza)
@@ -432,28 +432,28 @@ class TestEventos {
 		Assert.assertFalse(lollapalooza.esFracaso)
 		Assert.assertFalse(lollapalooza.esExitoso)
 	}
-	//EVENTOS CERRADOS
-	//INVITACIONES
-	
+
+	// EVENTOS CERRADOS
+	// INVITACIONES
 	@Test
 	def void personaRecibeInvitacionEsAgregadoAlEvento() {
 		beatriz.invitarUsuario(lucas, casamiento, 3)
 		Assert.assertTrue(casamiento.estaInvitado(lucas))
 	}
-	
+
 	@Test(expected=typeof(BusinessException))
 	def void personaNoPuedeConfirmarInvitacionSiSuperaLaCantidadMaximaAcompaniantes() {
 		beatriz.invitarUsuario(lucas, casamiento, 3)
 		lucas.confirmarInvitacion(casamiento, 4)
 	}
-	
+
 	@Test(expected=typeof(BusinessException))
 	def void personaNoPuedeConfirmarInvitacionSiSuperaFechaMaximaDeConfirmacion() {
 		beatriz.invitarUsuario(lucas, casamiento, 3)
-		lucas.fechaActual = LocalDateTime.of(2018, 05, 26, 23, 59)	//fecha maxima de confirmacion es 2018, 05, 25, 23, 59)
+		lucas.fechaActual = LocalDateTime.of(2018, 05, 26, 23, 59) // fecha maxima de confirmacion es 2018, 05, 25, 23, 59)
 		lucas.confirmarInvitacion(casamiento, 2)
 	}
-	
+
 	@Test(expected=typeof(BusinessException))
 	def void organizadorNoPuedeRealizarInvitacionConCantidadAcompaniantesQueExcedeCapacidadMaxima() {
 		free1.crearEvento(casamiento)
@@ -465,10 +465,10 @@ class TestEventos {
 		tomas.confirmarInvitacion(casamiento, 10)
 		free1.invitarUsuario(miriam, casamiento, 10)
 		println(casamiento.cantidadAsistentesPosibles)
-		free1.invitarUsuario(lucas, casamiento, 6)//No se puede tiene 44 invitados mas 6+1 de la nueva invitacion, la invitacion puede ser de 5+1 o menos
-		}
-		
-		@Test(expected=typeof(BusinessException))
+		free1.invitarUsuario(lucas, casamiento, 6) // No se puede tiene 44 invitados mas 6+1 de la nueva invitacion, la invitacion puede ser de 5+1 o menos
+	}
+
+	@Test(expected=typeof(BusinessException))
 	def void organizadorNoPuedeInvitarMasDe50Personas() {
 		free1.crearEvento(casamiento)
 		free1.invitarUsuario(alejandro, casamiento, 10)
@@ -481,9 +481,10 @@ class TestEventos {
 		free1.invitarUsuario(lucas, casamiento, 5)
 		lucas.confirmarInvitacion(casamiento, 5)
 		println(casamiento.cantidadAsistentesPosibles)
-		free1.invitarUsuario(maria, casamiento, 0)	//No puede invitar a una persona mas
-		}
-	//TIPOS DE USUARIO
+		free1.invitarUsuario(maria, casamiento, 0) // No puede invitar a una persona mas
+	}
+
+	// TIPOS DE USUARIO
 	@Test
 	def void organizadorFreeCreaEventoSiNoHayEventoEnSimultaneoyNoSuperaLaCantidadMaximaPorMes() {
 		free1.crearEvento(casamiento)
@@ -512,7 +513,8 @@ class TestEventos {
 		free1.fechaActual = LocalDateTime.of(2018, 05, 31, 16, 00)
 		Assert.assertFalse(free1.puedoCrearEvento())
 	}
-	//ACEPTACION Y RECHAZOS MASIVOS
+
+	// ACEPTACION Y RECHAZOS MASIVOS
 	@Test
 	def void unUsuarioAceptaUnaInvitacionPendienteSiElOrganizadorEsSuAmigo() {
 		lucas.agregarAmigo(beatriz)
@@ -647,16 +649,18 @@ class TestEventos {
 		Assert.assertFalse(lollapalooza.estaInvitado(maxi))
 		Assert.assertEquals(500, maxi.saldoAFavor, 0.1)
 	}
+
 	@Test
-	def void usuarioAmateurQueiereOrganizar5eventosALaVezYPuedePorQueEsAmateur(){
+	def void usuarioAmateurQueiereOrganizar5eventosALaVezYPuedePorQueEsAmateur() {
 		gaston.crearEvento(even1)
 		gaston.crearEvento(even2)
 		gaston.crearEvento(even3)
 		gaston.crearEvento(even4)
-		Assert.assertTrue(gaston.puedoCrearEvento())		
+		Assert.assertTrue(gaston.puedoCrearEvento())
 	}
+
 	@Test(expected=typeof(BusinessException))
-	def void usuarioAmateurQueiereOrganizar6eventosALaVezYNoPuede(){
+	def void usuarioAmateurQueiereOrganizar6eventosALaVezYNoPuede() {
 		gaston.crearEvento(even1)
 		gaston.crearEvento(even2)
 		gaston.crearEvento(even3)
@@ -664,117 +668,124 @@ class TestEventos {
 		gaston.crearEvento(even5)
 		gaston.crearEvento(even6)
 	}
+
 	@Test
-	def void usuarioAmateurNoPuedeRealizarMasDe50Invitaciones(){
-		//realizar 50 invitaciones
+	def void usuarioAmateurNoPuedeRealizarMasDe50Invitaciones() {
+		// realizar 50 invitaciones
 		Assert.assertTrue(true)
-		
+
 	}
-	
+
 	@Test
-	def void usuarioProfesionalQuiereOrganizar6eventosALaVezYPuede(){
+	def void usuarioProfesionalQuiereOrganizar6eventosALaVezYPuede() {
 		carla.crearEvento(even1)
 		carla.crearEvento(even2)
 		carla.crearEvento(even3)
 		carla.crearEvento(even4)
 		carla.crearEvento(even5)
 		carla.crearEvento(even6)
-		Assert.assertTrue(carla.puedoCrearEvento)		
-	}
-	@Test
-	def void usuarioProfesionalQuiereOrganizarMasDe20eventosALaVezYNoPuede(){
-		//organizar mas de 20 eventos al mismo tiempo
-		Assert.assertTrue(true)		
+		Assert.assertTrue(carla.puedoCrearEvento)
 	}
 
 	@Test
-	def void eventoCerradoConfirmanMasDel80PoCientoEsExitiso(){
-		gaston.crearEvento(cumple)
-		gaston.invitarUsuario(lucas,cumple,3)
-		gaston.invitarUsuario(carla,cumple,2)
-		gaston.invitarUsuario(maxi,cumple,3)
-		gaston.invitarUsuario(marco,cumple,3)
-		gaston.invitarUsuario(beatriz,cumple,3)
-		carla.confirmarInvitacion(cumple,2)
-		lucas.confirmarInvitacion(cumple,3)
-		maxi.confirmarInvitacion(cumple,3)
-		marco.confirmarInvitacion(cumple,3)
-		Assert.assertTrue(cumple.esExitoso())	
+	def void usuarioProfesionalQuiereOrganizarMasDe20eventosALaVezYNoPuede() {
+		// organizar mas de 20 eventos al mismo tiempo
+		Assert.assertTrue(true)
 	}
+
 	@Test
-	def void eventoCerradoEsCanceladoNoEsExitoso(){
+	def void eventoCerradoConfirmanMasDel80PoCientoEsExitiso() {
 		gaston.crearEvento(cumple)
-		gaston.invitarUsuario(lucas,cumple,3)
-		gaston.invitarUsuario(carla,cumple,2)
-		gaston.invitarUsuario(maxi,cumple,3)
-		gaston.invitarUsuario(marco,cumple,3)
-		gaston.invitarUsuario(beatriz,cumple,3)
-		lucas.confirmarInvitacion(cumple,3)
-		maxi.confirmarInvitacion(cumple,3)
-		marco.confirmarInvitacion(cumple,3)
+		gaston.invitarUsuario(lucas, cumple, 3)
+		gaston.invitarUsuario(carla, cumple, 2)
+		gaston.invitarUsuario(maxi, cumple, 3)
+		gaston.invitarUsuario(marco, cumple, 3)
+		gaston.invitarUsuario(beatriz, cumple, 3)
+		carla.confirmarInvitacion(cumple, 2)
+		lucas.confirmarInvitacion(cumple, 3)
+		maxi.confirmarInvitacion(cumple, 3)
+		marco.confirmarInvitacion(cumple, 3)
+		Assert.assertTrue(cumple.esExitoso())
+	}
+
+	@Test
+	def void eventoCerradoEsCanceladoNoEsExitoso() {
+		gaston.crearEvento(cumple)
+		gaston.invitarUsuario(lucas, cumple, 3)
+		gaston.invitarUsuario(carla, cumple, 2)
+		gaston.invitarUsuario(maxi, cumple, 3)
+		gaston.invitarUsuario(marco, cumple, 3)
+		gaston.invitarUsuario(beatriz, cumple, 3)
+		lucas.confirmarInvitacion(cumple, 3)
+		maxi.confirmarInvitacion(cumple, 3)
+		marco.confirmarInvitacion(cumple, 3)
 		gaston.cancelarEvento(cumple)
-		Assert.assertFalse(cumple.esExitoso())	
+		Assert.assertFalse(cumple.esExitoso())
 	}
+
 	@Test
-	def void eventoCerradoConfirmanMenosDel80PorCientoYMasDEl50PorCientoNoEsFracasoNiExitoso(){
+	def void eventoCerradoConfirmanMenosDel80PorCientoYMasDEl50PorCientoNoEsFracasoNiExitoso() {
 		gaston.crearEvento(cumple)
-		gaston.invitarUsuario(alejandro,cumple,3)
-		gaston.invitarUsuario(marco,cumple,2)
-		gaston.invitarUsuario(tomas,cumple,3)
-		gaston.invitarUsuario(miriam,cumple,3)
-		gaston.invitarUsuario(juan,cumple,3)
-		alejandro.confirmarInvitacion(cumple,3)
-		juan.confirmarInvitacion(cumple,3)
-		marco.confirmarInvitacion(cumple,1)
-		Assert.assertFalse(cumple.esExitoso())	
+		gaston.invitarUsuario(alejandro, cumple, 3)
+		gaston.invitarUsuario(marco, cumple, 2)
+		gaston.invitarUsuario(tomas, cumple, 3)
+		gaston.invitarUsuario(miriam, cumple, 3)
+		gaston.invitarUsuario(juan, cumple, 3)
+		alejandro.confirmarInvitacion(cumple, 3)
+		juan.confirmarInvitacion(cumple, 3)
+		marco.confirmarInvitacion(cumple, 1)
+		Assert.assertFalse(cumple.esExitoso())
 		Assert.assertFalse(cumple.esFracaso())
 	}
+
 	@Test
-	def void eventoCerradoConfirmanMenosDel50PorCientoEsFracaso(){
+	def void eventoCerradoConfirmanMenosDel50PorCientoEsFracaso() {
 		gaston.crearEvento(cumple)
-		gaston.invitarUsuario(lucas,cumple,3)
-		gaston.invitarUsuario(carla,cumple,2)
-		gaston.invitarUsuario(maxi,cumple,3)
-		gaston.invitarUsuario(marco,cumple,3)
-		gaston.invitarUsuario(beatriz,cumple,3)
-		carla.confirmarInvitacion(cumple,2)
-		lucas.confirmarInvitacion(cumple,3)
-		Assert.assertTrue(cumple.esFracaso())	
+		gaston.invitarUsuario(lucas, cumple, 3)
+		gaston.invitarUsuario(carla, cumple, 2)
+		gaston.invitarUsuario(maxi, cumple, 3)
+		gaston.invitarUsuario(marco, cumple, 3)
+		gaston.invitarUsuario(beatriz, cumple, 3)
+		carla.confirmarInvitacion(cumple, 2)
+		lucas.confirmarInvitacion(cumple, 3)
+		Assert.assertTrue(cumple.esFracaso())
 	}
-	//ENTREGA 2
-	//Servicioes
-	
+
+	// ENTREGA 2
+	// Servicioes
 	@Test
-	def void pruebaCostoUnServicioConTarifaFija(){
+	def void pruebaCostoUnServicioConTarifaFija() {
 		lollapalooza.contratarServicio(candyBarWillyWonka)
 		Assert.assertEquals(206.2, candyBarWillyWonka.costoTraslado(lollapalooza), 0.1)
 		Assert.assertEquals(956.2, lollapalooza.costoTotalEvento, 0.1)
 	}
+
 	@Test
-	def void pruebaCostoUnServicioConTarifaPorHora(){
+	def void pruebaCostoUnServicioConTarifaPorHora() {
 		lollapalooza.contratarServicio(animacionMago)
 		Assert.assertEquals(34.62, animacionMago.costoTraslado(lollapalooza), 0.1)
 		Assert.assertEquals(7, lollapalooza.duracion, 0.1)
 		Assert.assertEquals(418.62, lollapalooza.costoTotalEvento, 0.1)
 	}
-	
+
 	@Test
-	def void pruebaCostoUnServicioConTarifaPorPersona(){
+	def void pruebaCostoUnServicioConTarifaPorPersona() {
 		lollapalooza.contratarServicio(cateringFoodParty)
 		Assert.assertEquals(18.36, cateringFoodParty.costoTraslado(lollapalooza), 0.1)
 		Assert.assertEquals(5, lollapalooza.cantidadAsistentesPosibles, 0.1)
 		Assert.assertEquals(93.36, lollapalooza.costoTotalEvento, 0.1)
 	}
-	
+
 	@Test
-	def void pruebaCostoTotalEventoContrataTresServicios(){
+	def void pruebaCostoTotalEventoContrataTresServicios() {
 		lollapalooza.contratarServicio(cateringFoodParty)
 		lollapalooza.contratarServicio(animacionMago)
 		lollapalooza.contratarServicio(candyBarWillyWonka)
 		Assert.assertEquals(1468.18, lollapalooza.costoTotalEvento, 0.1)
 	}
+
 	@Test
-	def void pruebaSet(){
+	def void pruebaSet() {
 		println(lucas.nombreUsuario)
 		martin.agregarAmigo(lucas)
 		println(martin.amigos.get(0).nombreUsuario)
@@ -784,51 +795,51 @@ class TestEventos {
 		println(lucas.nombreUsuario)
 		Assert.assertTrue(true)
 	}
-	
-	 @Test
-	def void pruebaEdadUsuario(){
-		var franco = new Usuario() =>[
+
+	@Test
+	def void pruebaEdadUsuario() {
+		var franco = new Usuario() => [
 			fechaNacimiento = LocalDateTime.of(1993, 02, 15, 00, 00)
 			fechaActual = LocalDateTime.of(2018, 02, 14, 12, 00)
 		]
 		Assert.assertEquals(25, franco.edad, 0.1)
 	}
-	
+
 	/* 	@Test
-	def void haceralgo(){
-		var repo = new Repositorio<Usuario>()
-		repo.create(gaston)
-		repo.create(lucas)
-		
-	}
-	*/
-	@Test (expected=typeof(BusinessException))
-	def void noSePuedeAgregarUsuarioQueFaltanDatos(){
+	 * def void haceralgo(){
+	 * 	var repo = new Repositorio<Usuario>()
+	 * 	repo.create(gaston)
+	 * 	repo.create(lucas)
+	 * 	
+	 * }
+	 */
+	@Test(expected=typeof(BusinessException))
+	def void noSePuedeAgregarUsuarioQueFaltanDatos() {
 		var repo = new RepositorioUsuarios()
 		repo.create(gaston)
 	}
-	
-	@Test 
-	def void seAgregaUsuarioARepositorio(){
+
+	@Test
+	def void seAgregaUsuarioARepositorio() {
 		var repo = new RepositorioUsuarios()
 		repo.create(miriam)
 		Assert.assertFalse(repo.search(miriam.nombreUsuario).isEmpty)
 	}
-	
-	@Test (expected=typeof(BusinessException))
-	def void noSePuedeAgregarServicioQueFaltanDatos(){
-		var repo = new RepositorioServicio()
-		repo.create(candyBarWillyWonka)	//Le falta descripcion
-		
+
+	@Test(expected=typeof(BusinessException))
+	def void noSePuedeAgregarServicioQueFaltanDatos() {
+		var repo = new RepositorioServicios()
+		repo.create(candyBarWillyWonka) // Le falta descripcion
 	}
-	
-	/*  @Test 
-	def void pruebaJSON(){
-		var FileReader fr = new FileReader("usuarios.json")
-		var main = new Main()
-		var str = Json.parse(fr).asString
-		main.conversionJsonUsuarios(str)
-		println(main.usuarios.get(0).nombreUsuario)
-		println(main.usuarios.get(1).nombreUsuario)
-	}*/
-}		
+
+/* @Test 
+ * 	def void pruebaJSONUsuario(){
+ * 		//var FileReader fr = new FileReader("usuarios.json")
+ * 		var main = new Main()
+ * 		//var str = Json.parse(fr).asString
+ * 		//var String value = Json.parse("usuarios.json").asString
+ * 		//main.conversionJsonAUsuarios(value)
+ * 		println(main.usuarios.get(0).nombreUsuario)
+ * 		println(main.usuarios.get(1).nombreUsuario)
+ }*/
+}
