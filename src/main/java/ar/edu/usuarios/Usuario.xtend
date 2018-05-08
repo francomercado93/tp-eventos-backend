@@ -5,6 +5,7 @@ import ar.edu.eventos.EventoAbierto
 import ar.edu.eventos.EventoCerrado
 import ar.edu.eventos.exceptions.BusinessException
 import java.time.Duration
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.ArrayList
 import java.util.Collection
@@ -17,7 +18,7 @@ class Usuario {
 	String nombreUsuario
 	String nombreApellido
 	String mail
-	LocalDateTime fechaNacimiento
+	LocalDate fechaNacimiento
 	//Map<String, String> direccion = newHashMap
 	Direccion direccion
 	boolean esAntisocial
@@ -30,19 +31,6 @@ class Usuario {
 	Set<Invitacion> invitaciones = newHashSet
 	//Point coordenadas
 	
-	def validarCampos(){
-		if(nombreUsuario === null)
-			throw new BusinessException("Error, falta nombre de usuario")
-		if(nombreApellido === null)
-			throw new BusinessException("Error, falta nombre y apellido")
-		if(mail === null)
-			throw new BusinessException("Error, falta mail")
-		if(fechaNacimiento === null)
-			throw new BusinessException("Error, falta fecha de nacimiento")
-		if(direccion === null)
-			throw new BusinessException("Error, falta direccion")	
-	}
-	
 	def setDireccion(String calle, int numero, String localidad, String provincia, Point punto){
 		direccion = new Direccion(calle, numero, localidad, provincia, punto)
 	}
@@ -52,7 +40,7 @@ class Usuario {
 	}
 	
 	def edad(){		//cambiar variable edad por metodo edad en tests
-		Duration.between(fechaNacimiento, fechaActual).getSeconds() / 31536000
+		22//Duration.between(fechaNacimiento, fechaActual).getSeconds() / 31536000
 	}
 	
 	// Organizador

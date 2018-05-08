@@ -5,11 +5,13 @@ import ar.edu.usuarios.Usuario
 
 class RepositorioUsuarios extends Repositorio<Usuario> {
 
+
 	override create(Usuario usuario) {
 		
 		if (!search(usuario.nombreUsuario).isEmpty)
 			throw new BusinessException("No se puede agregar dos veces al mismo usuario")
-		usuario.validarCampos()
+		if(validarCampos(usuario))
+			throw new BusinessException("Usuario no valido")
 		lista.add(usuario)
 	}
 
@@ -23,7 +25,8 @@ class RepositorioUsuarios extends Repositorio<Usuario> {
 			throw new BusinessException("No se encontro usuario")
 		else
 			this.delete(aux)
-		usuario.validarCampos()
+		if(validarCampos(usuario))
+			throw new BusinessException("Usuario no valido")
 		lista.add(usuario)
 	}
 
@@ -34,5 +37,10 @@ class RepositorioUsuarios extends Repositorio<Usuario> {
 	def boolean busquedaPorNombre(Usuario usuario, String string) {
 		usuario.nombreUsuario.equals(string) || usuario.nombreApellido.indexOf(string) != -1
 	}
-
+	
+	def validarCampos(Usuario usuario){
+		((usuario.nombreUsuario === null || usuario.nombreApellido === null || usuario.mail === null
+			|| usuario.fechaNacimiento === null  ||usuario.direccion === null ) )
+				
+	}
 }
