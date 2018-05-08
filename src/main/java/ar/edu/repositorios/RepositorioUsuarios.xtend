@@ -6,8 +6,8 @@ import ar.edu.usuarios.Usuario
 class RepositorioUsuarios extends Repositorio<Usuario> {
 
 	override create(Usuario usuario) {
-		var Usuario aux = search(usuario.nombreUsuario).get(0)
-		if (aux !== null)
+		
+		if (!search(usuario.nombreUsuario).isEmpty)
 			throw new BusinessException("No se puede agregar dos veces al mismo usuario")
 		usuario.validarCampos()
 		lista.add(usuario)

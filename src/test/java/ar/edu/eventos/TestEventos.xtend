@@ -669,12 +669,12 @@ class TestEventos {
 		gaston.crearEvento(even6)
 	}
 
-	@Test
+	/*@Test
 	def void usuarioAmateurNoPuedeRealizarMasDe50Invitaciones() {
 		// realizar 50 invitaciones
 		Assert.assertTrue(true)
 
-	}
+	}*/
 
 	@Test
 	def void usuarioProfesionalQuiereOrganizar6eventosALaVezYPuede() {
@@ -687,11 +687,11 @@ class TestEventos {
 		Assert.assertTrue(carla.puedoCrearEvento)
 	}
 
-	@Test
+	/* @Test
 	def void usuarioProfesionalQuiereOrganizarMasDe20eventosALaVezYNoPuede() {
 		// organizar mas de 20 eventos al mismo tiempo
 		Assert.assertTrue(true)
-	}
+	}*/
 
 	@Test
 	def void eventoCerradoConfirmanMasDel80PoCientoEsExitiso() {
@@ -784,35 +784,7 @@ class TestEventos {
 		Assert.assertEquals(1468.18, lollapalooza.costoTotalEvento, 0.1)
 	}
 
-	@Test
-	def void pruebaSet() {
-		println(lucas.nombreUsuario)
-		martin.agregarAmigo(lucas)
-		println(martin.amigos.get(0).nombreUsuario)
-		martin.agregarAmigo(miriam)
-		lucas.nombreUsuario = "pedro"
-		println(martin.amigos.get(1).nombreUsuario)
-		println(lucas.nombreUsuario)
-		Assert.assertTrue(true)
-	}
-
-	@Test
-	def void pruebaEdadUsuario() {
-		var franco = new Usuario() => [
-			fechaNacimiento = LocalDateTime.of(1993, 02, 15, 00, 00)
-			fechaActual = LocalDateTime.of(2018, 02, 14, 12, 00)
-		]
-		Assert.assertEquals(25, franco.edad, 0.1)
-	}
-
-	/* 	@Test
-	 * def void haceralgo(){
-	 * 	var repo = new Repositorio<Usuario>()
-	 * 	repo.create(gaston)
-	 * 	repo.create(lucas)
-	 * 	
-	 * }
-	 */
+	//Test repos
 	@Test(expected=typeof(BusinessException))
 	def void noSePuedeAgregarUsuarioQueFaltanDatos() {
 		var repo = new RepositorioUsuarios()
@@ -823,7 +795,8 @@ class TestEventos {
 	def void seAgregaUsuarioARepositorio() {
 		var repo = new RepositorioUsuarios()
 		repo.create(miriam)
-		Assert.assertFalse(repo.search(miriam.nombreUsuario).isEmpty)
+		println(repo.lista.get(0).nombreUsuario)
+		Assert.assertTrue(repo.lista.contains(miriam))
 	}
 
 	@Test(expected=typeof(BusinessException))
