@@ -89,7 +89,7 @@ abstract class Evento {
 	def double cantidadFracaso()
 
 	def diasfechaMaximaConfirmacion(Usuario unUsuario) {
-		(Duration.between(unUsuario.fechaActual, this.fechaMaximaConfirmacion)).getSeconds() / 86400
+		(Duration.between(unUsuario.fechaHoraActual, this.fechaMaximaConfirmacion)).getSeconds() / 86400
 	}
 
 	def cantidadDisponibles() { // Eventos abiertos => entradas, cerrados => invitaciones
@@ -111,7 +111,7 @@ abstract class Evento {
 	def boolean cumpleCondiciones(Usuario unUsuario)
 
 	def boolean usuarioEstaATiempo(Usuario unUsuario) {
-		unUsuario.fechaActual.isBefore(this.fechaMaximaConfirmacion)
+		unUsuario.fechaHoraActual.isBefore(this.fechaMaximaConfirmacion)
 	}
 
 	def void cancelarEvento() {
@@ -144,7 +144,7 @@ abstract class Evento {
 	}
 
 	def void settearVariables(Usuario unUsuario) {
-		fechaCreacion = unUsuario.fechaActual
+		fechaCreacion = unUsuario.fechaHoraActual
 		organizador = unUsuario
 	}
 

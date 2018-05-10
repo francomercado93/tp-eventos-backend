@@ -24,7 +24,7 @@ class Usuario {
 	boolean esAntisocial
 	double radioCercania
 	Set<Usuario> amigos = newHashSet
-	LocalDateTime fechaActual
+	LocalDateTime fechaHoraActual
 	TipoUsuario tipoUsuario;
 	double saldoAFavor = 0
 	Collection<Evento> eventosOrganizados = new ArrayList<Evento>
@@ -35,12 +35,19 @@ class Usuario {
 		direccion = new Direccion(calle, numero, localidad, provincia, punto)
 	}
 	
+	def printDireccion(){
+		println(direccion.calle)
+		println(direccion.numero)
+		println(direccion.localidad)
+		println(direccion.provincia)
+	}
+	
 	def Point coordenadas(){
 		new Point(direccion.coordenadas.get("x"), direccion.coordenadas.get("y"))
 	}
 	
 	def edad(){		//cambiar variable edad por metodo edad en tests
-		22//Duration.between(fechaNacimiento, fechaActual).getSeconds() / 31536000
+		Duration.between(LocalDateTime.of(fechaNacimiento, fechaHoraActual.toLocalTime), fechaHoraActual).getSeconds() / 31536000
 	}
 	
 	// Organizador
@@ -88,12 +95,12 @@ class Usuario {
 	}
 	
 	def cantidadEventosSimultaneos() {
-		this.eventosOrganizados.filter[evento | this.fechaActual.isBefore(evento.finEvento) ].size //fecha creacion evento = fecha actual del usuario	
+		this.eventosOrganizados.filter[evento | this.fechaHoraActual.isBefore(evento.finEvento) ].size //fecha creacion evento = fecha actual del usuario	
 	}
 	
 	def cantidadEventosOrganizadosMes() {
-		this.eventosOrganizados.filter[evento | evento.fechaCreacion.month == this.fechaActual.month 
-			|| evento.finEvento.month == this.fechaActual.month].size
+		this.eventosOrganizados.filter[evento | evento.fechaCreacion.month == this.fechaHoraActual.month 
+			|| evento.finEvento.month == this.fechaHoraActual.month].size
 	}
 //Usuario evento cerrado
 
