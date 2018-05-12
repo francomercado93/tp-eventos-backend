@@ -22,7 +22,7 @@ class RepositorioLocacion extends Repositorio<Locacion> {
 			// aux.editar()
 			// aux.validarCampos
 			this.delete(aux)
-			
+
 		locacion.validarCampos()
 		lista.add(locacion)
 	}

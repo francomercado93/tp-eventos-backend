@@ -6,10 +6,10 @@ import org.eclipse.xtend.lib.annotations.Accessors
 @Accessors
 class TarifaPersona extends TipoTarifa {
 
-	double porcentaje	//en decimal
-	
+	double porcentaje // en decimal
+
 	new(double costoPorPersona, double unPorcentaje) {
-		super(costoPorPersona)	//costoFijo
+		super(costoPorPersona) // costoFijo
 		porcentaje = unPorcentaje
 	}
 
@@ -20,8 +20,8 @@ class TarifaPersona extends TipoTarifa {
 	override tarifaMinima(Evento unevento) {
 		(porcentajePersonas(unevento)) * costoFijo
 	}
-	
-	def double porcentajePersonas(Evento unevento) {	//double o int ? 
+
+	def double porcentajePersonas(Evento unevento) { // double o int ? 
 		unevento.capacidadMaxima() * porcentaje
 	}
 

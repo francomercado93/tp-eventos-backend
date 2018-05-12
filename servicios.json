@@ -1,0 +1,14 @@
+[
+{
+"descripcion" : "Catering Food Party" ,
+"tarifaServicio" :{
+"tipo" : "TF" ,
+"valor" : 5000.00
+},
+"tarifaTraslado" : 30.00 ,
+"ubicacion" :{
+"x" : -34.572224 ,
+"y" : 58.535651
+}
+}
+]

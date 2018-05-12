@@ -25,14 +25,14 @@ abstract class Evento {
 	boolean estaCancelado = false
 	boolean estaPostergado = false
 
-	def double porcentajeExito(){
+	def double porcentajeExito() {
 		0.9
 	}
-	
-	def double porcentajeFracaso(){
+
+	def double porcentajeFracaso() {
 		0.5
 	}
-	
+
 	def duracion() {
 		Duration.between(inicioEvento, finEvento).getSeconds() / 3600d
 	}
@@ -40,29 +40,30 @@ abstract class Evento {
 	def double distancia(Point unPunto) {
 		lugar.distancia(unPunto)
 	}
-	
-	def contratarServicio(Servicios servicio){
+
+	def contratarServicio(Servicios servicio) {
 		serviciosContratados.add(servicio)
 	}
-	
-	def costoTotalEvento(){
-		serviciosContratados.fold(0d, [ acum, servicio | acum + servicio.costo(this) ])
+
+	def costoTotalEvento() {
+		serviciosContratados.fold(0d, [acum, servicio|acum + servicio.costo(this)])
 	}
-	
+
 	def boolean coherenciaFechas(LocalDateTime fecha1, LocalDateTime fecha2) {
 		fecha1.isBefore(fecha2)
 	}
 
 	def validarCampos() {
-		if (nombreEvento === null) 
+		if (nombreEvento === null)
 			throw new BusinessException("Falta nombre")
 		if (lugar === null) {
 			throw new BusinessException("Falta maxima de confirmacion")
 		}
 		this.validarFechas
-		if(!this.coherenciaFechas(fechaMaximaConfirmacion, inicioEvento))
-			throw new BusinessException("La fecha maxima de confirmacion debe ser menor que la fecha de inicio del evento")
-		if(!this.coherenciaFechas(inicioEvento, finEvento))
+		if (!this.coherenciaFechas(fechaMaximaConfirmacion, inicioEvento))
+			throw new BusinessException(
+				"La fecha maxima de confirmacion debe ser menor que la fecha de inicio del evento")
+		if (!this.coherenciaFechas(inicioEvento, finEvento))
 			throw new BusinessException("La fecha de inicio del evento debe ser menor a la de finalizacion")
 	}
 
@@ -77,7 +78,7 @@ abstract class Evento {
 			throw new BusinessException("Falta fin de evento")
 		}
 	}
-	
+
 	def double capacidadMaxima()
 
 	def boolean esExitoso()

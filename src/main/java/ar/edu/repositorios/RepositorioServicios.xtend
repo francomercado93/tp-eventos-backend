@@ -6,8 +6,13 @@ import ar.edu.servicios.Servicios
 class RepositorioServicios extends Repositorio<Servicios> {
 
 	override create(Servicios servicio) {
-		servicio.validarCampos()
+		if (this.validarCampos(servicio))
+			throw new BusinessException("Servicio no valido")
 		lista.add(servicio)
+	}
+
+	def boolean validarCampos(Servicios servicio) {
+		servicio.descripcion === null || servicio.ubicacionServicio === null || servicio.tipoTarifa === null
 	}
 
 	override delete(Servicios servicio) {
@@ -15,23 +20,18 @@ class RepositorioServicios extends Repositorio<Servicios> {
 	}
 
 	override update(Servicios servicio) {
-		var Servicios aux = search(servicio.descripcion).get(0)
-		if (aux === null)
-			throw new BusinessException("No se encontro usuario")
-		else
-			// aux.editar()
-			// aux.validarCampos
-			this.delete(aux)
-		servicio.validarCampos()
-		lista.add(servicio)
+		if (search(servicio.descripcion).isEmpty)
+			throw new BusinessException("No se encontro servicio")
+		this.delete(search(servicio.descripcion).get(0))
+		this.create(servicio)
 	}
 
-	override search(String string) { // ???
-		lista.filter(servicio|busquedaPorNombre(servicio, string)).toSet
+	override search(String nombre) {
+		lista.filter(servicio|this.busquedaPorNombre(servicio, nombre)).toSet
 	}
 
-	def boolean busquedaPorNombre(Servicios servicio, String string) {
-		servicio.descripcion.startsWith(string)
+	def boolean busquedaPorNombre(Servicios servicio, String nombre) {
+		servicio.descripcion.startsWith(nombre)
 	}
 
 }

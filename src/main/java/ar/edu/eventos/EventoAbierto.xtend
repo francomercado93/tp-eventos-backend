@@ -8,7 +8,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 class EventoAbierto extends Evento {
 
 	double espacioNecesarioPorPersona = 0.8
-	int edadMinima 
+	int edadMinima
 	double valorEntrada
 
 	override capacidadMaxima() {
@@ -30,9 +30,8 @@ class EventoAbierto extends Evento {
 		unUsuario.edad >= this.edadMinima
 	}
 
-
-	override boolean esExitoso() { 
-		super.cantidadAsistentesPosibles >= this.cantidadExito		
+	override boolean esExitoso() {
+		super.cantidadAsistentesPosibles >= this.cantidadExito
 	}
 
 	override double cantidadExito() {
@@ -51,7 +50,7 @@ class EventoAbierto extends Evento {
 		super.cancelarEvento
 		this.devolverValorEntradasAsistentes
 	}
-	
+
 	def devolverValorEntradasAsistentes() {
 		asistentes.forEach[usuario|this.devolverDinero(usuario)]
 	}

@@ -15,11 +15,11 @@ import org.uqbar.geodds.Point
 
 @Accessors
 class Usuario {
+	int id
 	String nombreUsuario
 	String nombreApellido
 	String mail
 	LocalDate fechaNacimiento
-	//Map<String, String> direccion = newHashMap
 	Direccion direccion
 	boolean esAntisocial
 	double radioCercania
@@ -29,21 +29,9 @@ class Usuario {
 	double saldoAFavor = 0
 	Collection<Evento> eventosOrganizados = new ArrayList<Evento>
 	Set<Invitacion> invitaciones = newHashSet
-	//Point coordenadas
 	
 	def setDireccion(String calle, int numero, String localidad, String provincia, Point punto){
 		direccion = new Direccion(calle, numero, localidad, provincia, punto)
-	}
-	
-	def printDireccion(){
-		println(direccion.calle)
-		println(direccion.numero)
-		println(direccion.localidad)
-		println(direccion.provincia)
-	}
-	
-	def Point coordenadas(){
-		new Point(direccion.coordenadas.get("x"), direccion.coordenadas.get("y"))
 	}
 	
 	def edad(){		//cambiar variable edad por metodo edad en tests
@@ -54,6 +42,7 @@ class Usuario {
 	def cambiarTipo(TipoUsuario unTipoUsuario){
 		tipoUsuario = unTipoUsuario
 	}
+	
 	//Solo puede realizar invitaciones si la cantidad acompaniantes de la nueva invitacion + la cantidad de posibles asistentes no supera 
 	//capacidad maxima, de esta forma el usuario puede confirmar siempre y cuando este a tiempo
 	def invitarUsuario(Usuario invitado, EventoCerrado unEvento, Integer cantidadAcompaniantesMaxima) {		
@@ -68,9 +57,9 @@ class Usuario {
 		var unaInvitacion = new Invitacion(invitado, unEvento, cantidadAcompaniantesMaxima)				
 		unaInvitacion.usuarioRecibeInvitacion()
 	}
-	
+	// EN tipo free => !unEvento.class.toString.equals("ar.edu.eventos.EventoAbierto") && !tipoUsuario.toString.equals("ar.edu.usuarios.Free@707f7052")
 	def crearEvento(Evento unEvento){		//En test creo el evento primero(para inicializar
-		if(this.puedoCrearEvento()){		//variables y luego se lo paso como parametro a
+		if( this.puedoCrearEvento()){		//variables y luego se lo paso como parametro a
 			unEvento.settearVariables(this)	//usuario organizador que es el que cuando lo "crea"
 			this.agregarEventoLista(unEvento)	//se setean la fecha de creacio y organizador
 		}
@@ -156,7 +145,7 @@ class Usuario {
 	}
 
 	def boolean eventoEstaCerca(EventoCerrado evento) {
-		evento.distancia(coordenadas) <= radioCercania
+		evento.distancia(direccion.coordenadas) <= radioCercania
 	}
 
 	def boolean asistenMasDeCuatroAmigos(EventoCerrado invitacion) {

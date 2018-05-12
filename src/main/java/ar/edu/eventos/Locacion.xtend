@@ -6,6 +6,8 @@ import org.uqbar.geodds.Point
 
 @Accessors
 class Locacion {
+
+	int id
 	String descripcion
 	Point puntoGeografico
 	double superficie
@@ -13,11 +15,12 @@ class Locacion {
 	def double distancia(Point unPunto) {
 		puntoGeografico.distance(unPunto)
 	}
+
 	def validarCampos() {
-		if(descripcion === null)
+		if (descripcion === null)
 			throw new BusinessException("Error, falta nombre de la locacion")
-			
-		if(puntoGeografico === null)
+
+		if (puntoGeografico === null)
 			throw new BusinessException("Error")
 	}
 }

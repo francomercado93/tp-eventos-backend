@@ -8,37 +8,38 @@ import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors
 class Free implements TipoUsuario {
-	
-	override maximaCantidadEventosPorMes(){
+
+	override maximaCantidadEventosPorMes() {
 		3
 	}
-	
-	override maximaCantidadEventosSimultaneos(){
+
+	override maximaCantidadEventosSimultaneos() {
 		0
 	}
-	
-	def Integer cantidadMaximaPersonasEvento(){
+
+	def Integer cantidadMaximaPersonasEvento() {
 		50
 	}
-	
+
 	override puedoOrganizarEvento(Usuario unUsuario) {
 		(unUsuario.cantidadEventosOrganizadosMes() < this.maximaCantidadEventosPorMes) &&
 			(unUsuario.cantidadEventosSimultaneos() == this.maximaCantidadEventosSimultaneos)
-
 	}
-	override cancelarEvento(Evento unEvento){
+
+	override cancelarEvento(Evento unEvento) {
 		println("Error: usuario free no puede cancelar eventos.")
 	}
 
-	override postergarEvento(Evento unEvento, LocalDateTime nuevaFechaInicio){
+	override postergarEvento(Evento unEvento, LocalDateTime nuevaFechaInicio) {
 		println("Error: usuario free no puede postergar eventos.")
 	}
-	override puedeInvitarUsuario(EventoCerrado unEvento, Integer cantidadAcompaniantesMaxima){
-		(unEvento.cantidadAsistentesPosibles + cantidadAcompaniantesMaxima + 1 <= this.cantidadMaximaPersonasEvento)		//Hasta 50 personas en total
+
+	override puedeInvitarUsuario(EventoCerrado unEvento, Integer cantidadAcompaniantesMaxima) {
+		(unEvento.cantidadAsistentesPosibles + cantidadAcompaniantesMaxima + 1 <= this.cantidadMaximaPersonasEvento) // Hasta 50 personas en total
 	}
 
-  /*override organizarEventoAbierto(EventoAbierto abierto){
-  	println("Usuario free no puede organizar evento abierto")
-  }
-  */
+/*override organizarEventoAbierto(EventoAbierto abierto){
+ * 	println("Usuario free no puede organizar evento abierto")
+ * }
+ */
 }

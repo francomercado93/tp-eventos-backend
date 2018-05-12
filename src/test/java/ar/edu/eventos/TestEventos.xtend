@@ -1,7 +1,7 @@
 package ar.edu.eventos
 
 import ar.edu.eventos.exceptions.BusinessException
-import ar.edu.main.TraductorJson
+import ar.edu.main.ConversionJson
 import ar.edu.repositorios.RepositorioServicios
 import ar.edu.repositorios.RepositorioUsuarios
 import ar.edu.servicios.Servicios
@@ -337,12 +337,12 @@ class TestEventos {
 			ubicacionServicio = new Point(-34.513628, -58.523435)
 		]
 		candyBarWillyWonka = new Servicios() => [
-			// descripcion = "candyBarWillyWonka"
+			descripcion = "candyBarWillyWonka"
 			tipoTarifa = new TarifaFija(750)
 			tarifaPorKilometro = 20
 			ubicacionServicio = new Point(-34.569370, -58.484621)
 		]
-	// listaUsuariosJson = 
+
 	}
 
 	@Test
@@ -475,6 +475,12 @@ class TestEventos {
 		lucas.fechaHoraActual = LocalDateTime.of(2018, 05, 26, 23, 59) // fecha maxima de confirmacion es 2018, 05, 25, 23, 59)
 		lucas.confirmarInvitacion(casamiento, 2)
 	}
+	/*@Test(expected=typeof(BusinessException))
+	def void freeNoPuedeOrganizarEvento() {
+		println(free1.tipoUsuario)
+		println(lollapalooza.class.toString)
+		free1.crearEvento(lollapalooza)
+	}*/
 
 	@Test(expected=typeof(BusinessException))
 	def void organizadorNoPuedeRealizarInvitacionConCantidadAcompaniantesQueExcedeCapacidadMaxima() {
@@ -599,7 +605,7 @@ class TestEventos {
 		beatriz.invitarUsuario(lucas, casamiento, 3)
 		lucas.radioCercania = 10
 		lucas.aceptarPendientes()
-		println(casamiento.distancia(lucas.coordenadas))
+		println(casamiento.distancia(lucas.direccion.coordenadas))
 		Assert.assertTrue(casamiento.estaConfirmado(lucas))
 	}
 
@@ -804,7 +810,7 @@ class TestEventos {
 		Assert.assertEquals(1468.18, lollapalooza.costoTotalEvento, 0.1)
 	}
 
-	// Test repos
+	// ===============TEST REPO USUARIO=============================
 	@Test(expected=typeof(BusinessException))
 	def void noSePuedeAgregarUsuarioQueFaltanDatos() {
 		var repo = new RepositorioUsuarios()
@@ -818,18 +824,48 @@ class TestEventos {
 		println(repo.lista.get(0).nombreUsuario)
 		Assert.assertTrue(repo.lista.contains(miriam))
 	}
-
+	
+	@Test
+	def void busquedaPorString() {
+		var repo = new RepositorioUsuarios()
+		repo.create(agustin)
+		repo.create(agustina)
+		repo.create(martin)
+		var Set<Usuario> result = repo.search("tin")
+		println(result.get(0).nombreApellido)
+		println(result.get(1).nombreApellido)
+		println(result.get(2).nombreApellido)
+		Assert.assertEquals(3, result.size, 0.1)
+	}
+	
 	@Test(expected=typeof(BusinessException))
-	def void noSePuedeAgregarServicioQueFaltanDatos() {
-		var repo = new RepositorioServicios()
-		repo.create(candyBarWillyWonka) // Le falta descripcion
+	def void noSePuedeActualizarUsuarioQueNoExisteEnRepositorio() {
+		var repo = new RepositorioUsuarios()
+		repo.update(gaston)
+	}
+	
+	@Test(expected=typeof(BusinessException))
+	def void noSePuedeActualizarUsuarioNoValido() {
+		var repo = new RepositorioUsuarios()
+		repo.create(lucas)
+		var nuevoLucas = new Usuario => [
+			nombreUsuario = "Lucas41"
+		]
+		repo.update(nuevoLucas)
+	}
+	
+	@Test
+	def void noSeRepitenLosUsuariosDeUnaLista() {
+		var repo = new RepositorioUsuarios()
+		repo.create(lucas)
+		repo.create(lucas)
+		Assert.assertEquals(1, repo.lista.size, 0.1)
 	}
 
-	@Test def void ProbarUpdate() {
+	@Test 
+	def void pruebaUpdateRepoUsuario() {
 		var repo = new RepositorioUsuarios()
-
 		repo.create(lucas)
-
 		var nuevoLucas = new Usuario => [
 			nombreUsuario = "Lucas41"
 			nombreApellido = "Lucas Benitez"
@@ -843,37 +879,136 @@ class TestEventos {
 		Assert.assertFalse(repo.lista.contains(lucas))
 		Assert.assertTrue(repo.lista.contains(nuevoLucas))
 	}
-
+	
+	//=========================TEST REPO SERVICIO=================================
+	
 	@Test(expected=typeof(BusinessException))
-	def void agregoUsuarioRepetido() {
-		var repo = new RepositorioUsuarios()
-		repo.create(lucas)
-		repo.create(lucas)
+	def void noSePuedeAgregarServicioQueFaltanDatos() {
+		var repo = new RepositorioServicios()
+		var cateringPocha = new Servicios() => [
+			descripcion = "catering Pocha"
+		]
+		repo.create(cateringPocha) // Le falta descripcion
 	}
-
+	
 	@Test
-	def void busquedaPorString() {
-		var repo = new RepositorioUsuarios()
-		repo.create(agustin)
-		repo.create(agustina)
-		repo.create(martin)
-		var Set<Usuario> result = repo.search("tin")
-		println(result.get(0).nombreApellido)
-		println(result.get(1).nombreApellido)
-		println(result.get(2).nombreApellido)
+	def void seAgregaServicioARepositorio() {
+		var repo = new RepositorioServicios()
+		repo.create(animacionMago)
+		println(repo.lista.get(0).descripcion)
+		Assert.assertTrue(repo.lista.contains(animacionMago))
+	}
+	
+	@Test
+	def void busquedaPorStringServicios() {
+		var repo = new RepositorioServicios()
+		var cateringPocha =  new Servicios =>[
+			descripcion = "cateringPocha"
+			tipoTarifa = new TarifaPersona(15, 0.8)
+			tarifaPorKilometro = 5
+			ubicacionServicio = new Point(-34.513628, -58.523435)
+		]
+		repo.create(cateringFoodParty)
+		repo.create(animacionMago)
+		repo.create(cateringPocha)
+		repo.create(candyBarWillyWonka)
+		var Set<Servicios> result = repo.search("catering")
+		println(result.get(0).descripcion)
+		println(result.get(1).descripcion)
+		Assert.assertEquals(2, result.size, 0.1)
+	}
+	
+	@Test(expected=typeof(BusinessException))
+	def void noSePuedeActualizarServicioQueNoExisteEnRepositorio() {
+		var repo = new RepositorioServicios()
+		var cervezaGratis = new Servicios()
+		repo.update(cervezaGratis)
+	}
+ 
+	@Test(expected=typeof(BusinessException))
+	def void noSePuedeActualizarServicioNoValido() {
+		var repo = new RepositorioServicios()
+		repo.create(animacionMago)
+		var animacionMagoBlack = new Servicios => [
+			tipoTarifa = new TarifaPorHora(300, 12)
+			descripcion = "animacionMago"
+		]
+		repo.update(animacionMagoBlack)
+	}
+	
+	@Test
+	def void noSeRepitenLosServiciosDeUnRepo() {
+		var repo = new RepositorioServicios()
+		repo.create(animacionMago)
+		repo.create(animacionMago)
+		Assert.assertEquals(1, repo.lista.size, 0.1)
 	}
 
+	@Test 
+	def void pruebaUpdateRepoServicios() {
+		var repo = new RepositorioServicios()
+		repo.create(animacionMago)
+		var animacionMagoBlack = new Servicios => [
+			tipoTarifa = new TarifaPorHora(300, 12)
+			descripcion = "animacionMago"
+			tarifaPorKilometro = 7
+			ubicacionServicio = new Point(-34.515938, -58.485094)
+		]
+		repo.update(animacionMagoBlack)
+		Assert.assertFalse(repo.lista.contains(animacionMago))
+		Assert.assertTrue(repo.lista.contains(animacionMagoBlack))
+	} 
+	//CONVERSION JSON
 	@Test
 	def void pruebaJSONUsuario() {
-		// var jsonFile = Json.parse(new FileReader("C:\\Users\\Public\\usuarios.json"))
-		var main = new TraductorJson()
-		// var str = jsonFile.asString
-		main.conversionJsonAUsuarios(
-			new FileReader("A:\\Documentos\\eclipse-workspace\\tp-eventos-2018-grupo-8\\usuarios.json"))
-		println(main.usuarios.get(0).nombreUsuario)
-		println(main.usuarios.get(0).nombreApellido)
-		println(main.usuarios.get(0).fechaNacimiento)
-		main.usuarios.get(0).printDireccion()
-		println(main.usuarios.get(1).nombreUsuario)
+		var main = new ConversionJson()
+		main.conversionJsonAUsuarios(new FileReader("A:\\Documentos\\eclipse-workspace\\tp-eventos-2018-grupo-8\\usuarios.json"))
+		println("Usuario 1")
+		println("Nombre usuario: "+ main.usuarios.get(0).nombreUsuario)
+		println("Nombre y apellido: "+ main.usuarios.get(0).nombreApellido)
+		println("Email: "+ main.usuarios.get(0).mail)
+		println("Fecha de nacimiento: "+ main.usuarios.get(0).fechaNacimiento)
+		println("Direccion: ") 
+		println("Calle: "+ main.usuarios.get(0).direccion.calle +" "+main.usuarios.get(0).direccion.numero)
+		println("Localidad: "+main.usuarios.get(0).direccion.localidad)
+		println("Provincia: "+ main.usuarios.get(0).direccion.provincia)
+		println("Coordenadas: "+main.usuarios.get(0).direccion.coordenadas)
+		println("Usuario 2")
+		println("Nombre usuario: "+ main.usuarios.get(1).nombreUsuario)
+		println("Nombre y apellido: "+ main.usuarios.get(1).nombreApellido)
+		println("Email: "+ main.usuarios.get(1).mail)
+		println("Fecha de nacimiento: "+ main.usuarios.get(1).fechaNacimiento)
+		println("Direccion: ") 
+		println("Calle: "+ main.usuarios.get(1).direccion.calle +" "+main.usuarios.get(1).direccion.numero)
+		println("Localidad: "+main.usuarios.get(1).direccion.localidad)
+		println("Provincia: "+ main.usuarios.get(1).direccion.provincia)
+		println("Coordenadas: "+main.usuarios.get(1).direccion.coordenadas)
+		Assert.assertEquals(2, main.usuarios.size, 0.1)
+	}
+	
+	@Test
+	def void pruebaJSONLocaciones() {
+		var main = new ConversionJson()
+		main.conversionJsonLocaciones(new FileReader("A:\\Documentos\\eclipse-workspace\\tp-eventos-2018-grupo-8\\locaciones.json"))
+		println("Locacion 1:")
+		println("Coordenadas: "+main.locaciones.get(0).puntoGeografico)
+		println("Nombre: "+main.locaciones.get(0).descripcion)
+		println("Locacion 2:")
+		println("Coordenadas: "+main.locaciones.get(1).puntoGeografico)
+		println("Nombre: "+main.locaciones.get(1).descripcion)
+		Assert.assertEquals(2, main.locaciones.size, 0.1)
+	}
+	
+	@Test
+	def void pruebaJSONServicios() {
+		var main = new ConversionJson()
+		main.conversionJsonServicios(new FileReader("A:\\Documentos\\eclipse-workspace\\tp-eventos-2018-grupo-8\\servicios.json"))
+		println("Servicios")
+		println("Descripcion: "+main.servicios.get(0).descripcion)
+		println("Tipo tarifa: "+main.servicios.get(0).tipoTarifa.class)
+		println("Valor: "+main.servicios.get(0).tipoTarifa.costoFijo)
+		println("Tarifa de traslado: "+main.servicios.get(0).tarifaPorKilometro)
+		println("Ubicacion Servicio: "+main.servicios.get(0).ubicacionServicio)
+		Assert.assertEquals(1, main.servicios.size, 0.1)
 	}
 }
