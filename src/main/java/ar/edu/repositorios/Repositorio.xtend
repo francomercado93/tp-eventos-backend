@@ -5,7 +5,8 @@ import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors
 abstract class Repositorio<T> {
-
+	
+	var int id = 0
 	Set<T> lista = newHashSet
 
 	def void create(T elemento)
@@ -14,9 +15,9 @@ abstract class Repositorio<T> {
 
 	def void update(T elemento)
 
-	def T searchById(int id) {
-		lista.get(id)
-	}
+	def T searchById(int id)
 
 	def Set<T> search(String value)
+	
+	def void asignarId(T elemento)
 }

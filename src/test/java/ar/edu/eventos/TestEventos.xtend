@@ -2,6 +2,7 @@ package ar.edu.eventos
 
 import ar.edu.eventos.exceptions.BusinessException
 import ar.edu.main.ConversionJson
+import ar.edu.repositorios.RepositorioLocacion
 import ar.edu.repositorios.RepositorioServicios
 import ar.edu.repositorios.RepositorioUsuarios
 import ar.edu.servicios.Servicios
@@ -37,6 +38,7 @@ class TestEventos {
 	Locacion salonFiesta
 	Locacion hipodromo
 	Locacion tecnopolis
+	Locacion hipodromoPalermo
 	LocalDateTime inicioLolla = LocalDateTime.of(2018, 03, 27, 18, 00)
 	LocalDateTime finLolla = LocalDateTime.of(2018, 03, 28, 01, 00)
 	// LocalDateTime inicioSound = LocalDateTime.of(2018, 04, 14, 18, 00)
@@ -79,6 +81,12 @@ class TestEventos {
 		hipodromo = new Locacion() => [
 			descripcion = "hipodromo San Isidro"
 			puntoGeografico = new Point(-34.480860, -58.518295)
+			superficie = 4.8d
+		]
+		
+		hipodromoPalermo = new Locacion() =>[
+			descripcion = "hipodromo Palermo"
+			puntoGeografico = new Point(-34.567684, -58.429661)
 			superficie = 4.8d
 		]
 
@@ -818,19 +826,31 @@ class TestEventos {
 	}
 
 	@Test
-	def void seAgregaUsuarioARepositorio() {
+	def void seAgregaUsuarioARepositorioYseAsignaId() {
 		var repo = new RepositorioUsuarios()
 		repo.create(miriam)
 		println(repo.lista.get(0).nombreUsuario)
+		Assert.assertEquals(0, miriam.id, 0)
 		Assert.assertTrue(repo.lista.contains(miriam))
+	}
+	
+	@Test
+	def void pruebaBusquedaPorId() {
+		var repo = new RepositorioUsuarios()
+		repo.create(miriam)
+		repo.create(lucas)
+		repo.create(agustin)
+		Assert.assertEquals(lucas, repo.searchById(1))
+		Assert.assertEquals(miriam, repo.searchById(0))
+		Assert.assertEquals(agustin, repo.searchById(2))
 	}
 	
 	@Test
 	def void busquedaPorString() {
 		var repo = new RepositorioUsuarios()
+		repo.create(martin)
 		repo.create(agustin)
 		repo.create(agustina)
-		repo.create(martin)
 		var Set<Usuario> result = repo.search("tin")
 		println(result.get(0).nombreApellido)
 		println(result.get(1).nombreApellido)
@@ -876,9 +896,13 @@ class TestEventos {
 			comprarEntrada(lollapalooza)
 		]
 		repo.update(nuevoLucas)
+		Assert.assertEquals(0, lucas.id)
+		Assert.assertEquals(0, nuevoLucas.id)
 		Assert.assertFalse(repo.lista.contains(lucas))
 		Assert.assertTrue(repo.lista.contains(nuevoLucas))
 	}
+	
+	
 	
 	//=========================TEST REPO SERVICIO=================================
 	
@@ -897,6 +921,17 @@ class TestEventos {
 		repo.create(animacionMago)
 		println(repo.lista.get(0).descripcion)
 		Assert.assertTrue(repo.lista.contains(animacionMago))
+	}
+	
+	@Test
+	def void pruebaBusquedaPorIdServicios() {
+		var repo = new RepositorioServicios()
+		repo.create(cateringFoodParty)
+		repo.create(animacionMago)
+		repo.create(candyBarWillyWonka)
+		Assert.assertEquals(animacionMago, repo.searchById(1))
+		Assert.assertEquals(cateringFoodParty, repo.searchById(0))
+		Assert.assertEquals(candyBarWillyWonka, repo.searchById(2))
 	}
 	
 	@Test
@@ -955,9 +990,105 @@ class TestEventos {
 			ubicacionServicio = new Point(-34.515938, -58.485094)
 		]
 		repo.update(animacionMagoBlack)
+		Assert.assertEquals(0, animacionMago.id)		//Tienenel mismo id
+		Assert.assertEquals(0, animacionMagoBlack.id)
 		Assert.assertFalse(repo.lista.contains(animacionMago))
 		Assert.assertTrue(repo.lista.contains(animacionMagoBlack))
-	} 
+	}
+	
+	//==================TEST LOCACIONES==================
+	@Test(expected=typeof(BusinessException))
+	def void noSePuedeAgregarLocacionQueFaltanDatos() {
+		var repo = new RepositorioLocacion()
+		var sociedadFomento3dF = new Locacion() => [
+			descripcion = "SociedadFomento3dF"
+		]
+		repo.create(sociedadFomento3dF) // Le falta descripcion
+	}
+	
+	@Test
+	def void seAgregaLocacionARepositorioYseAsignaId() {
+		var repo = new RepositorioLocacion()
+		repo.create(salonFiesta)
+		repo.create(hipodromo)
+		Assert.assertEquals(0, salonFiesta.id, 0)
+		Assert.assertEquals(1, hipodromo.id, 0)
+		Assert.assertTrue(repo.lista.contains(salonFiesta))
+		Assert.assertTrue(repo.lista.contains(hipodromo))
+	}
+ 
+	@Test
+	def void pruebaBusquedaPorIdLocacion() {
+		var repo = new RepositorioLocacion()
+		repo.create(salonFiesta)
+		repo.create(hipodromo)
+		repo.create(tecnopolis)
+		Assert.assertEquals(tecnopolis, repo.searchById(2))
+		Assert.assertEquals(salonFiesta, repo.searchById(0))
+		Assert.assertEquals(hipodromo, repo.searchById(1))
+	}
+	
+ 	@Test
+	def void busquedaPorStringLocacion() {
+		var repo = new RepositorioLocacion()
+		repo.create(salonFiesta)
+		repo.create(hipodromo)
+		repo.create(tecnopolis)
+		repo.create(hipodromoPalermo)
+		var Set<Locacion> result = repo.search("po")
+		println(result.get(0).descripcion)
+		println(result.get(1).descripcion)
+		println(result.get(2).descripcion)
+		Assert.assertEquals(tecnopolis, result.get(0))
+		Assert.assertEquals(hipodromoPalermo, result.get(1))
+		Assert.assertEquals(hipodromo, result.get(2))
+		Assert.assertEquals(3, result.size, 0.1)
+	}
+	
+	@Test(expected=typeof(BusinessException))
+	def void noSePuedeActualizarLocacionQueNoExisteEnRepositorio() {
+		var repo = new RepositorioLocacion()
+		repo.update(hipodromo)
+	}
+	
+	@Test(expected=typeof(BusinessException))
+	def void noSePuedeActualizarLocacionNoValido() {
+		var repo = new RepositorioLocacion()
+		var sociedad3dF = new Locacion() => [
+			descripcion = "Sociedad fomento 3 de Febrero"
+		]
+		repo.update(sociedad3dF)
+	}
+ 	
+	@Test
+	def void noSeRepitenLocacionesDeUnaLista() {
+		var repo = new RepositorioLocacion()
+		repo.create(hipodromo)
+		repo.create(hipodromo)
+		Assert.assertEquals(1, repo.lista.size, 0.1)
+	}
+
+	@Test 
+	def void pruebaUpdateRepoLocacion() {
+		var repo =  new RepositorioLocacion()
+		var sociedad3dF = new Locacion() => [
+			descripcion = "Sociedad fomento 3 de Febrero"
+			puntoGeografico = new Point(-34.567192, -58.538944)
+			superficie = 50
+		]
+		repo.create(sociedad3dF)
+		var sociedad3dFNuevo = new Locacion() => [
+			descripcion = "Sociedad fomento 3 de Febrero"
+			puntoGeografico = new Point(-34.567192, -58.538944)
+			superficie = 80
+		]
+		repo.update(sociedad3dFNuevo)
+		Assert.assertEquals(0, sociedad3dF.id)
+		Assert.assertEquals(0, sociedad3dFNuevo.id)
+		Assert.assertFalse(repo.lista.contains(sociedad3dF))
+		Assert.assertTrue(repo.lista.contains(sociedad3dFNuevo))
+	}
+	
 	//CONVERSION JSON
 	@Test
 	def void pruebaJSONUsuario() {

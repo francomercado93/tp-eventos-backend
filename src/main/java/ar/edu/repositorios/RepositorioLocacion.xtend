@@ -6,8 +6,25 @@ import ar.edu.eventos.exceptions.BusinessException
 class RepositorioLocacion extends Repositorio<Locacion> {
 
 	override create(Locacion locacion) {
-		locacion.validarCampos()
+		if (validarCampos(locacion))
+			throw new BusinessException("Locacion no valido")
+		this.asignarId(locacion)
 		lista.add(locacion)
+	}
+
+	def boolean validarCampos(Locacion locacion) {
+		locacion.descripcion === null || locacion.puntoGeografico === null
+	}
+
+	override asignarId(Locacion locacion) {
+		if (locacion.id == -1) {
+			locacion.id = id
+			id = id + 1
+		}
+	}
+
+	override Locacion searchById(int id) {
+		lista.findFirst(locacion|locacion.id == id)
 	}
 
 	override delete(Locacion locacion) {
@@ -15,16 +32,11 @@ class RepositorioLocacion extends Repositorio<Locacion> {
 	}
 
 	override update(Locacion locacion) {
-		var Locacion aux = search(locacion.descripcion).get(0)
-		if (aux === null)
-			throw new BusinessException("No se encontro usuario")
-		else
-			// aux.editar()
-			// aux.validarCampos
-			this.delete(aux)
-
-		locacion.validarCampos()
-		lista.add(locacion)
+		if (search(locacion.descripcion).isEmpty)
+			throw new BusinessException("No se encontro locacion " + locacion.descripcion)
+		locacion.id = search(locacion.descripcion).get(0).id
+		this.delete(search(locacion.descripcion).get(0)) // Si lo encuentra elimina el anterior objeto  del repo y agrega el nuevo
+		this.create(locacion)
 	}
 
 	override search(String string) { // ???

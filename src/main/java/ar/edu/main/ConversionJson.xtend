@@ -102,8 +102,4 @@ class ConversionJson {
 		]
 		servicio
 	}
-/*def void actualizarRepoUsuarios(){
- * 	var repoUsuario = new RepositorioUsuarios()
- * 	usuarios.forEach(usuario | repoUsuario.create(usuario))
- }*/
 }

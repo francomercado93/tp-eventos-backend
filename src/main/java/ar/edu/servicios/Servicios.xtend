@@ -7,7 +7,7 @@ import org.uqbar.geodds.Point
 @Accessors
 class Servicios {
 
-	int id
+	int id = -1
 	TipoTarifa tipoTarifa
 	double tarifaPorKilometro
 	Point ubicacionServicio

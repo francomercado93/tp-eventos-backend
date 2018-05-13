@@ -15,7 +15,7 @@ import org.uqbar.geodds.Point
 
 @Accessors
 class Usuario {
-	int id
+	int id = -1 
 	String nombreUsuario
 	String nombreApellido
 	String mail
