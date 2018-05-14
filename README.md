@@ -1,8 +1,6 @@
 # tp-eventos-2018-grupo-8
 
-Algoritmos II – TPI – UNSAM
-
-TP Integrador 2018 : Event OS
+[![Build Status](https://travis-ci.org/uqbar-project/eg-lista-correo-xtend.svg?branch=master)](https://travis-ci.org/algo2-unsam/tp-eventos-2018-grupo-8/) [![Coverage Status](https://coveralls.io/repos/github/algo2-unsam/tp-eventos-2018-grupo-8//badge.svg?branch=master&service=github)](https://coveralls.io/github/algo2-unsam/tp-eventos-2018-grupo-8/?branch=master&service=github) 
 
 Entrega 2
 
