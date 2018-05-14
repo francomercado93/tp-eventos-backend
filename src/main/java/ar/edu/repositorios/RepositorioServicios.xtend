@@ -23,7 +23,7 @@ class RepositorioServicios extends Repositorio<Servicios> {
 		lista.findFirst(servicio | servicio.id == id)
 	}
 	
-	def boolean validarCampos(Servicios servicio) {
+	override validarCampos(Servicios servicio) {
 		servicio.descripcion === null || servicio.ubicacionServicio === null || servicio.tipoTarifa === null
 	}
 
@@ -40,7 +40,7 @@ class RepositorioServicios extends Repositorio<Servicios> {
 	}
 
 	override search(String nombre) {
-		lista.filter(servicio|this.busquedaPorNombre(servicio, nombre)).toSet
+		lista.filter(servicio|this.busquedaPorNombre(servicio, nombre)).toList
 	}
 
 	def boolean busquedaPorNombre(Servicios servicio, String nombre) {

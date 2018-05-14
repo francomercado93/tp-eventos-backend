@@ -1,5 +1,6 @@
 package ar.edu.repositorios
 
+import java.util.List
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
 
@@ -17,7 +18,9 @@ abstract class Repositorio<T> {
 
 	def T searchById(int id)
 
-	def Set<T> search(String value)
+	def List<T> search(String value)
 	
 	def void asignarId(T elemento)
+	
+	def boolean validarCampos(T elemento)
 }

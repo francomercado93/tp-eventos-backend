@@ -10,7 +10,7 @@ interface TipoUsuario {
 	
 	def Integer maximaCantidadEventosSimultaneos()
 	
-	def boolean puedoOrganizarEvento(Usuario unUsuario)
+	def boolean puedoOrganizarEvento(Usuario unUsuario, Evento evento)
 
 	def void cancelarEvento(Evento unEvento)
 

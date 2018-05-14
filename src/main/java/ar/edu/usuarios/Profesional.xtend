@@ -15,7 +15,7 @@ class Profesional implements TipoUsuario{
 		20
 	}
 	
-	override puedoOrganizarEvento(Usuario unUsuario){
+	override puedoOrganizarEvento(Usuario unUsuario, Evento evento){
 		unUsuario.cantidadEventosOrganizadosMes() < this.maximaCantidadEventosPorMes &&
 			(unUsuario.cantidadEventosSimultaneos() < this.maximaCantidadEventosSimultaneos)
 	}

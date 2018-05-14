@@ -18,7 +18,7 @@ class Amateur implements TipoUsuario {
 		50
 	}
 	
-	override puedoOrganizarEvento(Usuario unUsuario){
+	override puedoOrganizarEvento(Usuario unUsuario, Evento evento){
 		(unUsuario.cantidadEventosSimultaneos() < this.maximaCantidadEventosSimultaneos)
 			
 	}

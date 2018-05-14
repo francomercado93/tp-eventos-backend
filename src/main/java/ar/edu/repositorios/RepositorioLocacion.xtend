@@ -12,7 +12,7 @@ class RepositorioLocacion extends Repositorio<Locacion> {
 		lista.add(locacion)
 	}
 
-	def boolean validarCampos(Locacion locacion) {
+	override validarCampos(Locacion locacion) {
 		locacion.descripcion === null || locacion.puntoGeografico === null
 	}
 
@@ -40,7 +40,7 @@ class RepositorioLocacion extends Repositorio<Locacion> {
 	}
 
 	override search(String string) { // ???
-		lista.filter(locacion|busquedaPorNombre(locacion, string)).toSet
+		lista.filter(locacion|busquedaPorNombre(locacion, string)).toList
 	}
 
 	def boolean busquedaPorNombre(Locacion locacion, String string) {

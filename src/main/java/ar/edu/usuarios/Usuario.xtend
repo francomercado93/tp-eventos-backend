@@ -59,7 +59,7 @@ class Usuario {
 	}
 	// EN tipo free => !unEvento.class.toString.equals("ar.edu.eventos.EventoAbierto") && !tipoUsuario.toString.equals("ar.edu.usuarios.Free@707f7052")
 	def crearEvento(Evento unEvento){		//En test creo el evento primero(para inicializar
-		if( this.puedoCrearEvento()){		//variables y luego se lo paso como parametro a
+		if( this.puedoCrearEvento(unEvento)){		//variables y luego se lo paso como parametro a
 			unEvento.settearVariables(this)	//usuario organizador que es el que cuando lo "crea"
 			this.agregarEventoLista(unEvento)	//se setean la fecha de creacio y organizador
 		}
@@ -67,8 +67,8 @@ class Usuario {
 			throw new BusinessException("Error no se puede crear evento")
 	}
 	
-	def boolean puedoCrearEvento(){
-		tipoUsuario.puedoOrganizarEvento(this)
+	def boolean puedoCrearEvento(Evento evento){
+		tipoUsuario.puedoOrganizarEvento(this, evento)
 	}
 	
 	def void agregarEventoLista(Evento unEvento){

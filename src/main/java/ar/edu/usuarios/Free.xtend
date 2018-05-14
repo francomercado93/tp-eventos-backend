@@ -21,9 +21,10 @@ class Free implements TipoUsuario {
 		50
 	}
 
-	override puedoOrganizarEvento(Usuario unUsuario) {
-		(unUsuario.cantidadEventosOrganizadosMes() < this.maximaCantidadEventosPorMes) &&
-			(unUsuario.cantidadEventosSimultaneos() == this.maximaCantidadEventosSimultaneos)
+	override puedoOrganizarEvento(Usuario unUsuario, Evento evento) {
+		!evento.class.equals(ar.edu.eventos.EventoAbierto) && 
+			(unUsuario.cantidadEventosOrganizadosMes() < this.maximaCantidadEventosPorMes) &&
+				(unUsuario.cantidadEventosSimultaneos() == this.maximaCantidadEventosSimultaneos)
 	}
 
 	override cancelarEvento(Evento unEvento) {

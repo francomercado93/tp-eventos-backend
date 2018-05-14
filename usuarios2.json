@@ -1,0 +1,50 @@
+[
+	{
+	"nombreUsuario" : "lucas_capo" ,
+	"nombreApellido" : "Lucas Lopez" ,
+	"email" : "lucas_93@hotmail.com" ,
+	"fechaNacimiento" : "15/01/1993" ,
+	"direccion" :{
+		"calle" : "25 de Mayo" ,
+		"numero" : 3918 ,
+		"localidad" : "San Martín" ,
+		"provincia" : "Buenos Aires" ,
+			"coordenadas" :{
+			"x" : -34.572224 ,
+			"y" : 58.535651
+			}
+		}
+	},
+	{
+	"nombreUsuario" : "martin1990" ,
+	"nombreApellido" : "Martín Varela" ,
+	"email" : "martinvarela90@yahoo.com" ,
+	"fechaNacimiento" : "18/11/1990" ,
+		"direccion" :{
+		"calle" : "Av. Triunvirato" ,
+		"numero" : 4065 ,
+		"localidad" : "CABA" ,
+		"provincia" : "" ,
+			"coordenadas" :{
+			"x" : -33.582360 ,
+			"y" : 60.516598
+			}
+		}
+	},
+	{
+	"nombreUsuario" : "agustin" ,
+	"nombreApellido" : "agustin gonzalez" ,
+	"email" : "agustinGO@gmail.com" ,
+	"fechaNacimiento" : "02/01/2000" ,
+		"direccion" :{
+		"calle" : "Quintana" ,
+		"numero" : 2551 ,
+		"localidad" : "San Martin" ,
+		"provincia" : "Buenos Aires" ,
+			"coordenadas" :{
+			"x" : -34.578651 ,
+			"y" : -58.549614
+			}
+		}
+	}
+]

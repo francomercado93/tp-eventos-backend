@@ -1,6 +1,7 @@
 package ar.edu.eventos
 
 import ar.edu.eventos.exceptions.BusinessException
+import ar.edu.main.Actualizaciones
 import ar.edu.main.ConversionJson
 import ar.edu.repositorios.RepositorioLocacion
 import ar.edu.repositorios.RepositorioServicios
@@ -16,7 +17,7 @@ import ar.edu.usuarios.Usuario
 import java.io.FileReader
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.Set
+import java.util.List
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -483,13 +484,13 @@ class TestEventos {
 		lucas.fechaHoraActual = LocalDateTime.of(2018, 05, 26, 23, 59) // fecha maxima de confirmacion es 2018, 05, 25, 23, 59)
 		lucas.confirmarInvitacion(casamiento, 2)
 	}
-	/*@Test(expected=typeof(BusinessException))
-	def void freeNoPuedeOrganizarEvento() {
+	@Test(expected=typeof(BusinessException))
+	def void freeNoPuedeOrganizarEventoAbierto() {
 		println(free1.tipoUsuario)
-		println(lollapalooza.class.toString)
+		println(lollapalooza.class)
 		free1.crearEvento(lollapalooza)
-	}*/
-
+	}
+	//1	
 	@Test(expected=typeof(BusinessException))
 	def void organizadorNoPuedeRealizarInvitacionConCantidadAcompaniantesQueExcedeCapacidadMaxima() {
 		free1.crearEvento(casamiento)
@@ -525,7 +526,7 @@ class TestEventos {
 	def void organizadorFreeCreaEventoSiNoHayEventoEnSimultaneoyNoSuperaLaCantidadMaximaPorMes() {
 		free1.crearEvento(casamiento)
 		free1.fechaHoraActual = LocalDateTime.of(2018, 05, 29, 16, 00) // free quiere crear un 
-		Assert.assertTrue(free1.puedoCrearEvento()) // evento cuando termina otro
+		Assert.assertTrue(free1.puedoCrearEvento(cumple)) // evento cuando termina otro
 		free1.crearEvento(cumple)
 		Assert.assertTrue(free1.eventosOrganizados.contains(cumple))
 	}
@@ -541,13 +542,13 @@ class TestEventos {
 	def void organizadorFreeNoCreaEventoSiSuperaLaCantidadMaximaPorMes() {
 		free1.crearEvento(casamiento)
 		free1.fechaHoraActual = LocalDateTime.of(2018, 05, 29, 11, 00)
-		Assert.assertTrue(free1.puedoCrearEvento())
+		Assert.assertTrue(free1.puedoCrearEvento(cumple))
 		free1.crearEvento(cumple)
 		free1.fechaHoraActual = LocalDateTime.of(2018, 05, 31, 12, 00)
-		Assert.assertTrue(free1.puedoCrearEvento())
+		Assert.assertTrue(free1.puedoCrearEvento(minifiesta1))
 		free1.crearEvento(minifiesta1)
 		free1.fechaHoraActual = LocalDateTime.of(2018, 05, 31, 16, 00)
-		Assert.assertFalse(free1.puedoCrearEvento())
+		Assert.assertFalse(free1.puedoCrearEvento(even1))
 	}
 
 	// ACEPTACION Y RECHAZOS MASIVOS
@@ -692,7 +693,7 @@ class TestEventos {
 		gaston.crearEvento(even2)
 		gaston.crearEvento(even3)
 		gaston.crearEvento(even4)
-		Assert.assertTrue(gaston.puedoCrearEvento())
+		Assert.assertTrue(gaston.puedoCrearEvento(even5))
 	}
 
 	@Test(expected=typeof(BusinessException))
@@ -719,7 +720,7 @@ class TestEventos {
 		carla.crearEvento(even4)
 		carla.crearEvento(even5)
 		carla.crearEvento(even6)
-		Assert.assertTrue(carla.puedoCrearEvento)
+		Assert.assertTrue(carla.puedoCrearEvento(lollapalooza))
 	}
 
 	/* @Test
@@ -817,10 +818,10 @@ class TestEventos {
 		lollapalooza.contratarServicio(candyBarWillyWonka)
 		Assert.assertEquals(1468.18, lollapalooza.costoTotalEvento, 0.1)
 	}
-
+	
 	// ===============TEST REPO USUARIO=============================
 	@Test(expected=typeof(BusinessException))
-	def void noSePuedeAgregarUsuarioQueFaltanDatos() {
+	def void noSePuedeAgregarUsuarioNoValido() {
 		var repo = new RepositorioUsuarios()
 		repo.create(gaston)
 	}
@@ -849,19 +850,19 @@ class TestEventos {
 	def void busquedaPorString() {
 		var repo = new RepositorioUsuarios()
 		repo.create(martin)
+		repo.create(marco)
+		repo.create(lucas)
 		repo.create(agustin)
 		repo.create(agustina)
-		var Set<Usuario> result = repo.search("tin")
-		println(result.get(0).nombreApellido)
-		println(result.get(1).nombreApellido)
-		println(result.get(2).nombreApellido)
+		var List<Usuario> result = repo.search("tin")
+		result.forEach(usr | println(usr.nombreUsuario))
 		Assert.assertEquals(3, result.size, 0.1)
 	}
 	
 	@Test(expected=typeof(BusinessException))
 	def void noSePuedeActualizarUsuarioQueNoExisteEnRepositorio() {
 		var repo = new RepositorioUsuarios()
-		repo.update(gaston)
+		repo.update(agustin)
 	}
 	
 	@Test(expected=typeof(BusinessException))
@@ -878,7 +879,8 @@ class TestEventos {
 	def void noSeRepitenLosUsuariosDeUnaLista() {
 		var repo = new RepositorioUsuarios()
 		repo.create(lucas)
-		repo.create(lucas)
+		var lucas2 = lucas
+		repo.create(lucas2)
 		Assert.assertEquals(1, repo.lista.size, 0.1)
 	}
 
@@ -886,6 +888,8 @@ class TestEventos {
 	def void pruebaUpdateRepoUsuario() {
 		var repo = new RepositorioUsuarios()
 		repo.create(lucas)
+		repo.create(agustin)
+		repo.create(marco)
 		var nuevoLucas = new Usuario => [
 			nombreUsuario = "Lucas41"
 			nombreApellido = "Lucas Benitez"
@@ -907,7 +911,7 @@ class TestEventos {
 	//=========================TEST REPO SERVICIO=================================
 	
 	@Test(expected=typeof(BusinessException))
-	def void noSePuedeAgregarServicioQueFaltanDatos() {
+	def void noSePuedeAgregarServicioNoValido() {
 		var repo = new RepositorioServicios()
 		var cateringPocha = new Servicios() => [
 			descripcion = "catering Pocha"
@@ -947,9 +951,8 @@ class TestEventos {
 		repo.create(animacionMago)
 		repo.create(cateringPocha)
 		repo.create(candyBarWillyWonka)
-		var Set<Servicios> result = repo.search("catering")
-		println(result.get(0).descripcion)
-		println(result.get(1).descripcion)
+		var List<Servicios> result = repo.search("catering")
+		result.forEach(serv | println(serv.descripcion))
 		Assert.assertEquals(2, result.size, 0.1)
 	}
 	
@@ -975,7 +978,8 @@ class TestEventos {
 	def void noSeRepitenLosServiciosDeUnRepo() {
 		var repo = new RepositorioServicios()
 		repo.create(animacionMago)
-		repo.create(animacionMago)
+		var animacionMagoB = animacionMago
+		repo.create(animacionMagoB)
 		Assert.assertEquals(1, repo.lista.size, 0.1)
 	}
 
@@ -998,7 +1002,7 @@ class TestEventos {
 	
 	//==================TEST LOCACIONES==================
 	@Test(expected=typeof(BusinessException))
-	def void noSePuedeAgregarLocacionQueFaltanDatos() {
+	def void noSePuedeAgregarLocacionNoValido() {
 		var repo = new RepositorioLocacion()
 		var sociedadFomento3dF = new Locacion() => [
 			descripcion = "SociedadFomento3dF"
@@ -1035,13 +1039,11 @@ class TestEventos {
 		repo.create(hipodromo)
 		repo.create(tecnopolis)
 		repo.create(hipodromoPalermo)
-		var Set<Locacion> result = repo.search("po")
-		println(result.get(0).descripcion)
-		println(result.get(1).descripcion)
-		println(result.get(2).descripcion)
-		Assert.assertEquals(tecnopolis, result.get(0))
-		Assert.assertEquals(hipodromoPalermo, result.get(1))
-		Assert.assertEquals(hipodromo, result.get(2))
+		var List<Locacion> result = repo.search("po")
+		result.forEach(loc | println(loc.descripcion))
+		Assert.assertTrue(result.contains(tecnopolis))
+		Assert.assertTrue(result.contains(hipodromo))
+		Assert.assertTrue(result.contains(hipodromoPalermo))
 		Assert.assertEquals(3, result.size, 0.1)
 	}
 	
@@ -1094,26 +1096,11 @@ class TestEventos {
 	def void pruebaJSONUsuario() {
 		var main = new ConversionJson()
 		main.conversionJsonAUsuarios(new FileReader("A:\\Documentos\\eclipse-workspace\\tp-eventos-2018-grupo-8\\usuarios.json"))
-		println("Usuario 1")
-		println("Nombre usuario: "+ main.usuarios.get(0).nombreUsuario)
-		println("Nombre y apellido: "+ main.usuarios.get(0).nombreApellido)
-		println("Email: "+ main.usuarios.get(0).mail)
-		println("Fecha de nacimiento: "+ main.usuarios.get(0).fechaNacimiento)
-		println("Direccion: ") 
-		println("Calle: "+ main.usuarios.get(0).direccion.calle +" "+main.usuarios.get(0).direccion.numero)
-		println("Localidad: "+main.usuarios.get(0).direccion.localidad)
-		println("Provincia: "+ main.usuarios.get(0).direccion.provincia)
-		println("Coordenadas: "+main.usuarios.get(0).direccion.coordenadas)
-		println("Usuario 2")
-		println("Nombre usuario: "+ main.usuarios.get(1).nombreUsuario)
-		println("Nombre y apellido: "+ main.usuarios.get(1).nombreApellido)
-		println("Email: "+ main.usuarios.get(1).mail)
-		println("Fecha de nacimiento: "+ main.usuarios.get(1).fechaNacimiento)
-		println("Direccion: ") 
-		println("Calle: "+ main.usuarios.get(1).direccion.calle +" "+main.usuarios.get(1).direccion.numero)
-		println("Localidad: "+main.usuarios.get(1).direccion.localidad)
-		println("Provincia: "+ main.usuarios.get(1).direccion.provincia)
-		println("Coordenadas: "+main.usuarios.get(1).direccion.coordenadas)
+		main.usuarios.forEach(usuario | println("\nNombre usuario: "+ usuario.nombreUsuario+"\nNombre y apellido: "+
+			 usuario.nombreApellido+"\nEmail: "+ usuario.mail+"\nFecha de nacimiento: "+ 
+			 usuario.fechaNacimiento+"\nDireccion:\nCalle: "+usuario.direccion.calle +" "
+			 +usuario.direccion.numero+"\nLocalidad: "+usuario.direccion.localidad+"\nProvincia: "+ 
+			 usuario.direccion.provincia+"\nCoordenadas: "+usuario.direccion.coordenadas))
 		Assert.assertEquals(2, main.usuarios.size, 0.1)
 	}
 	
@@ -1141,5 +1128,25 @@ class TestEventos {
 		println("Tarifa de traslado: "+main.servicios.get(0).tarifaPorKilometro)
 		println("Ubicacion Servicio: "+main.servicios.get(0).ubicacionServicio)
 		Assert.assertEquals(1, main.servicios.size, 0.1)
+	}
+	@Test
+	def void pruebaActualizacionUsuariosJsonARepo(){
+		var repo = new RepositorioUsuarios()
+		repo.create(agustin)
+		repo.create(agustina)
+		println("==========Repo sin actualizar===============")
+		repo.lista.forEach(usuario | println("Usuario "+usuario.nombreUsuario+"\nMail "+usuario.mail))
+		var conversion = new ConversionJson()
+		conversion.conversionJsonAUsuarios(new FileReader("A:\\Documentos\\eclipse-workspace\\tp-eventos-2018-grupo-8\\usuarios2.json"))
+		var main = new Actualizaciones()
+		//Actualiza al usuario agustin y agrega dos usuarios que no estaban en el repositorio
+		main.actualizarRepositorioUsuarios(conversion.usuarios, repo)
+		println("==========Repo  actualizado=================")
+		repo.lista.forEach(usuario | println("Usuario "+usuario.nombreUsuario+"\nMail "+usuario.mail))
+		Assert.assertTrue(repo.lista.contains(conversion.usuarios.get(0)))
+		Assert.assertTrue(repo.lista.contains(conversion.usuarios.get(1)))
+		Assert.assertTrue(repo.lista.contains(conversion.usuarios.get(2)))
+		Assert.assertFalse(repo.lista.contains(agustin))
+		Assert.assertEquals(4, repo.lista.size)
 	}
 }
