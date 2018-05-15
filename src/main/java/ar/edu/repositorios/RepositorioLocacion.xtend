@@ -6,14 +6,14 @@ import ar.edu.eventos.exceptions.BusinessException
 class RepositorioLocacion extends Repositorio<Locacion> {
 
 	override create(Locacion locacion) {
-		if (validarCampos(locacion))
-			throw new BusinessException("Locacion no valido")
+		this.validarCampos(locacion)
 		this.asignarId(locacion)
-		lista.add(locacion)
+		super.create(locacion)
 	}
 
 	override validarCampos(Locacion locacion) {
-		locacion.descripcion === null || locacion.puntoGeografico === null
+		if(locacion.descripcion === null || locacion.puntoGeografico === null)
+			throw new BusinessException("Locacion no valido")
 	}
 
 	override asignarId(Locacion locacion) {
@@ -27,10 +27,6 @@ class RepositorioLocacion extends Repositorio<Locacion> {
 		lista.findFirst(locacion|locacion.id == id)
 	}
 
-	override delete(Locacion locacion) {
-		lista.remove(locacion)
-	}
-
 	override update(Locacion locacion) {
 		if (search(locacion.descripcion).isEmpty)
 			throw new BusinessException("No se encontro locacion " + locacion.descripcion)
@@ -39,11 +35,7 @@ class RepositorioLocacion extends Repositorio<Locacion> {
 		this.create(locacion)
 	}
 
-	override search(String string) { // ???
-		lista.filter(locacion|busquedaPorNombre(locacion, string)).toList
-	}
-
-	def boolean busquedaPorNombre(Locacion locacion, String string) {
+	override busquedaPorNombre(Locacion locacion, String string) {
 		locacion.descripcion.indexOf(string) != -1
 	}
 

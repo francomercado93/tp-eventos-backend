@@ -1149,4 +1149,9 @@ class TestEventos {
 		Assert.assertFalse(repo.lista.contains(agustin))
 		Assert.assertEquals(4, repo.lista.size)
 	}
+	@Test(expected=typeof(BusinessException))
+	def void noSePuedeActualizarUsuarioQueNoExisteEnRepositor() {
+		var repo = new RepositorioUsuarios()
+		repo.update(agustin)
+	}
 }

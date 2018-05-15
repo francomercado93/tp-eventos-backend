@@ -6,10 +6,9 @@ import ar.edu.servicios.Servicios
 class RepositorioServicios extends Repositorio<Servicios> {
 
 	override create(Servicios servicio) {
-		if (this.validarCampos(servicio))
-			throw new BusinessException("Servicio no valido")
+		this.validarCampos(servicio)
 		this.asignarId(servicio)
-		lista.add(servicio)
+		super.create(servicio)
 	}
 	
 	override asignarId(Servicios servicio) {
@@ -24,11 +23,8 @@ class RepositorioServicios extends Repositorio<Servicios> {
 	}
 	
 	override validarCampos(Servicios servicio) {
-		servicio.descripcion === null || servicio.ubicacionServicio === null || servicio.tipoTarifa === null
-	}
-
-	override delete(Servicios servicio) {
-		lista.remove(servicio)
+		if(servicio.descripcion === null || servicio.ubicacionServicio === null || servicio.tipoTarifa === null)
+			throw new BusinessException("Servicio no valido")
 	}
 
 	override update(Servicios servicio) {
@@ -39,11 +35,7 @@ class RepositorioServicios extends Repositorio<Servicios> {
 		this.create(servicio)
 	}
 
-	override search(String nombre) {
-		lista.filter(servicio|this.busquedaPorNombre(servicio, nombre)).toList
-	}
-
-	def boolean busquedaPorNombre(Servicios servicio, String nombre) {
+	override busquedaPorNombre(Servicios servicio, String nombre) {
 		servicio.descripcion.startsWith(nombre)
 	}
 	
