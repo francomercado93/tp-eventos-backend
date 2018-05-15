@@ -30,14 +30,24 @@ class RepositorioServicios extends Repositorio<Servicios> {
 	override update(Servicios servicio) {
 		if (this.search(servicio.descripcion).isEmpty)
 			throw new BusinessException("No se encontro servicio")
-		servicio.id = this.search(servicio.descripcion).get(0).id
-		this.delete(search(servicio.descripcion).get(0))
-		this.create(servicio)
+		actualizarElemento(servicio)
+		
 	}
 
 	override busquedaPorNombre(Servicios servicio, String nombre) {
 		servicio.descripcion.startsWith(nombre)
 	}
 	
-
+  override actualizarElemento(Servicios servicio){
+  	var servRepo = search(servicio.descripcion).get(0)
+		if(!servicio.descripcion.equals(servRepo.descripcion))
+			servRepo.descripcion = servicio.descripcion
+		if(!servicio.tipoTarifa.equals(servRepo.tipoTarifa))
+			servRepo.tipoTarifa = servicio.tipoTarifa
+		if(!servicio.tarifaPorKilometro.equals(servRepo.tarifaPorKilometro))
+			servRepo.tarifaPorKilometro = servicio.tarifaPorKilometro
+		if(!servicio.ubicacionServicio.equals(servRepo.ubicacionServicio))
+			servRepo.ubicacionServicio = servicio.ubicacionServicio	
+  	
+  }
 }

@@ -30,13 +30,19 @@ class RepositorioLocacion extends Repositorio<Locacion> {
 	override update(Locacion locacion) {
 		if (search(locacion.descripcion).isEmpty)
 			throw new BusinessException("No se encontro locacion " + locacion.descripcion)
-		locacion.id = search(locacion.descripcion).get(0).id
-		this.delete(search(locacion.descripcion).get(0)) // Si lo encuentra elimina el anterior objeto  del repo y agrega el nuevo
-		this.create(locacion)
+	actualizarElemento(locacion)
 	}
 
 	override busquedaPorNombre(Locacion locacion, String string) {
 		locacion.descripcion.indexOf(string) != -1
 	}
+	
+	override actualizarElemento(Locacion locacion) {
+		var locacionRepo = search(locacion.descripcion).get(0)
+		
+		if(!locacion.descripcion.equals(locacionRepo.descripcion))
+			locacionRepo.descripcion= locacion.descripcion
+		if(!locacion.puntoGeografico.equals(locacionRepo.puntoGeografico))
+			locacionRepo.puntoGeografico = locacion.puntoGeografico
 
-}
+}}

@@ -31,4 +31,10 @@ abstract class Repositorio<T> {
 	def void asignarId(T elemento)
 	
 	def void validarCampos(T elemento)
+	
+	def void actualizarElemento(T elemento)
+	
+	//def void updateAll(ConversionJson unjson)
+		
+
 }

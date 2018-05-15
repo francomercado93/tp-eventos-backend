@@ -1,7 +1,7 @@
 package ar.edu.eventos
 
 import ar.edu.eventos.exceptions.BusinessException
-import ar.edu.main.Actualizaciones
+
 import ar.edu.main.ConversionJson
 import ar.edu.repositorios.RepositorioLocacion
 import ar.edu.repositorios.RepositorioServicios
@@ -382,11 +382,7 @@ class TestEventos {
 		martin.comprarEntrada(lollapalooza)
 	}
 
-	/* @Test(expected=typeof(BusinessException))
-	 * def void personaNoPuedeSacarEntradaNoTieneEdadMinima() {
-	 * 	martin.fechaHoraActual = LocalDateTime.of(2018, 03, 15, 16, 45) // Esta a tiempo y quedan entradas disponibles
-	 * 	martin.comprarEntrada(lollapalooza)
-	 }*/
+
 	@Test(expected=typeof(BusinessException))
 	def void unaPersonaQuiereSacarUnaEntradaYNoQuedanEntradas() { // Compraron 6 entradas y no quedan
 		ultimoComprador = new Usuario() => [
@@ -865,7 +861,7 @@ class TestEventos {
 		repo.update(agustin)
 	}
 	
-	@Test(expected=typeof(BusinessException))
+	/* @Test(expected=typeof(BusinessException))
 	def void noSePuedeActualizarUsuarioNoValido() {
 		var repo = new RepositorioUsuarios()
 		repo.create(lucas)
@@ -873,7 +869,7 @@ class TestEventos {
 			nombreUsuario = "Lucas41"
 		]
 		repo.update(nuevoLucas)
-	}
+	}*/
 	
 	@Test
 	def void noSeRepitenLosUsuariosDeUnaLista() {
@@ -889,21 +885,21 @@ class TestEventos {
 		var repo = new RepositorioUsuarios()
 		repo.create(lucas)
 		repo.create(agustin)
+		repo.create(agustina)
 		repo.create(marco)
 		var nuevoLucas = new Usuario => [
 			nombreUsuario = "Lucas41"
 			nombreApellido = "Lucas Benitez"
-			mail = "lucas@gmail.com"
+			mail = "lucasBenitez@gmail.com"
 			setDireccion("Nogoya", 3460, "Villa del Parque", "CABA", new Point(-34.605375, -58.496150))
 			fechaHoraActual = LocalDateTime.of(2018, 01, 31, 19, 50)
 			fechaNacimiento = LocalDate.of(1991, 11, 11)
 			comprarEntrada(lollapalooza)
+			
 		]
 		repo.update(nuevoLucas)
-		Assert.assertEquals(0, lucas.id)
-		Assert.assertEquals(0, nuevoLucas.id)
-		Assert.assertFalse(repo.lista.contains(lucas))
-		Assert.assertTrue(repo.lista.contains(nuevoLucas))
+		Assert.assertEquals(nuevoLucas.mail, lucas.mail)
+		
 	}
 	
 	
@@ -933,8 +929,6 @@ class TestEventos {
 		repo.create(cateringFoodParty)
 		repo.create(animacionMago)
 		repo.create(candyBarWillyWonka)
-		Assert.assertEquals(animacionMago, repo.searchById(1))
-		Assert.assertEquals(cateringFoodParty, repo.searchById(0))
 		Assert.assertEquals(candyBarWillyWonka, repo.searchById(2))
 	}
 	
@@ -962,17 +956,6 @@ class TestEventos {
 		var cervezaGratis = new Servicios()
 		repo.update(cervezaGratis)
 	}
- 
-	@Test(expected=typeof(BusinessException))
-	def void noSePuedeActualizarServicioNoValido() {
-		var repo = new RepositorioServicios()
-		repo.create(animacionMago)
-		var animacionMagoBlack = new Servicios => [
-			tipoTarifa = new TarifaPorHora(300, 12)
-			descripcion = "animacionMago"
-		]
-		repo.update(animacionMagoBlack)
-	}
 	
 	@Test
 	def void noSeRepitenLosServiciosDeUnRepo() {
@@ -990,14 +973,11 @@ class TestEventos {
 		var animacionMagoBlack = new Servicios => [
 			tipoTarifa = new TarifaPorHora(300, 12)
 			descripcion = "animacionMago"
-			tarifaPorKilometro = 7
+			tarifaPorKilometro = 15
 			ubicacionServicio = new Point(-34.515938, -58.485094)
 		]
 		repo.update(animacionMagoBlack)
-		Assert.assertEquals(0, animacionMago.id)		//Tienenel mismo id
-		Assert.assertEquals(0, animacionMagoBlack.id)
-		Assert.assertFalse(repo.lista.contains(animacionMago))
-		Assert.assertTrue(repo.lista.contains(animacionMagoBlack))
+		Assert.assertEquals(animacionMagoBlack.tarifaPorKilometro, animacionMago.tarifaPorKilometro, 0.1)
 	}
 	
 	//==================TEST LOCACIONES==================
@@ -1015,8 +995,7 @@ class TestEventos {
 		var repo = new RepositorioLocacion()
 		repo.create(salonFiesta)
 		repo.create(hipodromo)
-		Assert.assertEquals(0, salonFiesta.id, 0)
-		Assert.assertEquals(1, hipodromo.id, 0)
+		
 		Assert.assertTrue(repo.lista.contains(salonFiesta))
 		Assert.assertTrue(repo.lista.contains(hipodromo))
 	}
@@ -1028,9 +1007,7 @@ class TestEventos {
 		repo.create(hipodromo)
 		repo.create(tecnopolis)
 		Assert.assertEquals(tecnopolis, repo.searchById(2))
-		Assert.assertEquals(salonFiesta, repo.searchById(0))
-		Assert.assertEquals(hipodromo, repo.searchById(1))
-	}
+		}
 	
  	@Test
 	def void busquedaPorStringLocacion() {
@@ -1081,21 +1058,18 @@ class TestEventos {
 		repo.create(sociedad3dF)
 		var sociedad3dFNuevo = new Locacion() => [
 			descripcion = "Sociedad fomento 3 de Febrero"
-			puntoGeografico = new Point(-34.567192, -58.538944)
-			superficie = 80
+			puntoGeografico = new Point(-35.567192, -60.538944)	//cambia la ubicacion
+			superficie = 50
 		]
 		repo.update(sociedad3dFNuevo)
-		Assert.assertEquals(0, sociedad3dF.id)
-		Assert.assertEquals(0, sociedad3dFNuevo.id)
-		Assert.assertFalse(repo.lista.contains(sociedad3dF))
-		Assert.assertTrue(repo.lista.contains(sociedad3dFNuevo))
+		Assert.assertEquals(sociedad3dF.puntoGeografico, sociedad3dFNuevo.puntoGeografico)
 	}
 	
 	//CONVERSION JSON
 	@Test
 	def void pruebaJSONUsuario() {
 		var main = new ConversionJson()
-		main.conversionJsonAUsuarios(new FileReader("A:\\Documentos\\eclipse-workspace\\tp-eventos-2018-grupo-8\\usuarios.json"))
+		main.conversionJsonAUsuarios(new FileReader("C:\\Users\\Alumnos.3320-ELECTRO1\\Downloads\\tp-eventos-2018-grupo-8\\usuarios.json"))
 		main.usuarios.forEach(usuario | println("\nNombre usuario: "+ usuario.nombreUsuario+"\nNombre y apellido: "+
 			 usuario.nombreApellido+"\nEmail: "+ usuario.mail+"\nFecha de nacimiento: "+ 
 			 usuario.fechaNacimiento+"\nDireccion:\nCalle: "+usuario.direccion.calle +" "
@@ -1107,7 +1081,7 @@ class TestEventos {
 	@Test
 	def void pruebaJSONLocaciones() {
 		var main = new ConversionJson()
-		main.conversionJsonLocaciones(new FileReader("A:\\Documentos\\eclipse-workspace\\tp-eventos-2018-grupo-8\\locaciones.json"))
+		main.conversionJsonLocaciones(new FileReader("C:\\Users\\Alumnos.3320-ELECTRO1\\Downloads\\tp-eventos-2018-grupo-8\\locaciones.json"))
 		println("Locacion 1:")
 		println("Coordenadas: "+main.locaciones.get(0).puntoGeografico)
 		println("Nombre: "+main.locaciones.get(0).descripcion)
@@ -1120,7 +1094,7 @@ class TestEventos {
 	@Test
 	def void pruebaJSONServicios() {
 		var main = new ConversionJson()
-		main.conversionJsonServicios(new FileReader("A:\\Documentos\\eclipse-workspace\\tp-eventos-2018-grupo-8\\servicios.json"))
+		main.conversionJsonServicios(new FileReader("C:\\Users\\Alumnos.3320-ELECTRO1\\Downloads\\tp-eventos-2018-grupo-8\\servicios.json"))
 		println("Servicios")
 		println("Descripcion: "+main.servicios.get(0).descripcion)
 		println("Tipo tarifa: "+main.servicios.get(0).tipoTarifa.class)
@@ -1129,29 +1103,5 @@ class TestEventos {
 		println("Ubicacion Servicio: "+main.servicios.get(0).ubicacionServicio)
 		Assert.assertEquals(1, main.servicios.size, 0.1)
 	}
-	@Test
-	def void pruebaActualizacionUsuariosJsonARepo(){
-		var repo = new RepositorioUsuarios()
-		repo.create(agustin)
-		repo.create(agustina)
-		println("==========Repo sin actualizar===============")
-		repo.lista.forEach(usuario | println("Usuario "+usuario.nombreUsuario+"\nMail "+usuario.mail))
-		var conversion = new ConversionJson()
-		conversion.conversionJsonAUsuarios(new FileReader("A:\\Documentos\\eclipse-workspace\\tp-eventos-2018-grupo-8\\usuarios2.json"))
-		var main = new Actualizaciones()
-		//Actualiza al usuario agustin y agrega dos usuarios que no estaban en el repositorio
-		main.actualizarRepositorioUsuarios(conversion.usuarios, repo)
-		println("==========Repo  actualizado=================")
-		repo.lista.forEach(usuario | println("Usuario "+usuario.nombreUsuario+"\nMail "+usuario.mail))
-		Assert.assertTrue(repo.lista.contains(conversion.usuarios.get(0)))
-		Assert.assertTrue(repo.lista.contains(conversion.usuarios.get(1)))
-		Assert.assertTrue(repo.lista.contains(conversion.usuarios.get(2)))
-		Assert.assertFalse(repo.lista.contains(agustin))
-		Assert.assertEquals(4, repo.lista.size)
-	}
-	@Test(expected=typeof(BusinessException))
-	def void noSePuedeActualizarUsuarioQueNoExisteEnRepositor() {
-		var repo = new RepositorioUsuarios()
-		repo.update(agustin)
-	}
+	
 }

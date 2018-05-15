@@ -26,17 +26,29 @@ class RepositorioUsuarios extends Repositorio<Usuario> {
 		// BUSCA CON EL NOMBRE USUARIO. ASIGNACION DE ID AL OBJETO ACTUALIZADO SE HACE DESPUES
 		if (search(usrActualizado.nombreUsuario).isEmpty)
 			throw new BusinessException("No se encontro el usuario " + usrActualizado.nombreUsuario)
-		//if(lista.contains(usrActualizado))
-			this.actualizar(usrActualizado)
+
+		this.actualizarElemento(usrActualizado)
 	}
 	
-	def actualizar(Usuario usuario) {
-		//var usrRepo = search(usuario.nombreUsuario).get(0)
-		//if(!usuario.nombreApellido.equals(usrRepo.nombreApellido))
-			//usrRepo.nombreApellido = usuario.nombreApellido
-		usuario.id = search(usuario.nombreUsuario).get(0).id
-		this.delete(search(usuario.nombreUsuario).get(0)) // Si lo encuentra elimina el anterior objeto  del repo y agrega el nuevo
-		this.create(usuario)
+	override actualizarElemento(Usuario usuario) {
+		var usrRepo = search(usuario.nombreUsuario).get(0)
+		if(!usuario.nombreApellido.equals(usrRepo.nombreApellido))
+			usrRepo.nombreApellido = usuario.nombreApellido
+		if(!usuario.mail.equals(usrRepo.mail))
+			usrRepo.mail = usuario.mail
+		if(!usuario.fechaNacimiento.equals(usrRepo.fechaNacimiento))
+			usrRepo.fechaNacimiento = usuario.fechaNacimiento
+		if(!usuario.direccion.calle.equals(usrRepo.direccion.calle))
+			usrRepo.direccion.calle = usuario.direccion.calle
+		if(!(usuario.direccion.numero == (usrRepo.direccion.numero)))
+			usrRepo.direccion.numero = usuario.direccion.numero
+		if(!usuario.direccion.localidad.equals(usrRepo.direccion.localidad))
+			usrRepo.direccion.localidad = usuario.direccion.localidad
+		if(!usuario.direccion.provincia.equals(usrRepo.direccion.provincia))
+			usrRepo.direccion.provincia = usuario.direccion.provincia
+		if(!usuario.direccion.coordenadas.equals(usrRepo.direccion.coordenadas))
+			usrRepo.direccion.coordenadas = usuario.direccion.coordenadas
+	
 	}
 
 	override busquedaPorNombre(Usuario usuario, String nombre) {
@@ -48,5 +60,8 @@ class RepositorioUsuarios extends Repositorio<Usuario> {
 			usuario.fechaNacimiento === null || usuario.direccion === null)
 			throw new BusinessException("Usuario no valido")
 	}
+	/*override updateAll(ConversionJson json){
+		
+	}*/
 
 }
