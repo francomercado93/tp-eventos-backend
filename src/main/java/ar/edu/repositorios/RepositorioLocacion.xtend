@@ -30,7 +30,7 @@ class RepositorioLocacion extends Repositorio<Locacion> {
 	override update(Locacion locacion) {
 		if (search(locacion.descripcion).isEmpty)
 			throw new BusinessException("No se encontro locacion " + locacion.descripcion)
-	actualizarElemento(locacion)
+		this.actualizarElemento(locacion)
 	}
 
 	override busquedaPorNombre(Locacion locacion, String string) {

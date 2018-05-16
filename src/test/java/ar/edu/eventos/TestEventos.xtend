@@ -1069,7 +1069,7 @@ class TestEventos {
 	@Test
 	def void pruebaJSONUsuario() {
 		var main = new ConversionJson()
-		main.conversionJsonAUsuarios(new FileReader("C:\\Users\\Alumnos.3320-ELECTRO1\\Downloads\\tp-eventos-2018-grupo-8\\usuarios.json"))
+		main.conversionJsonAUsuarios(new FileReader("A:\\Documentos\\eclipse-workspace\\tp-eventos-2018-grupo-8\\usuarios.json"))
 		main.usuarios.forEach(usuario | println("\nNombre usuario: "+ usuario.nombreUsuario+"\nNombre y apellido: "+
 			 usuario.nombreApellido+"\nEmail: "+ usuario.mail+"\nFecha de nacimiento: "+ 
 			 usuario.fechaNacimiento+"\nDireccion:\nCalle: "+usuario.direccion.calle +" "
@@ -1081,7 +1081,7 @@ class TestEventos {
 	@Test
 	def void pruebaJSONLocaciones() {
 		var main = new ConversionJson()
-		main.conversionJsonLocaciones(new FileReader("C:\\Users\\Alumnos.3320-ELECTRO1\\Downloads\\tp-eventos-2018-grupo-8\\locaciones.json"))
+		main.conversionJsonLocaciones(new FileReader("A:\\Documentos\\eclipse-workspace\\tp-eventos-2018-grupo-8\\locaciones.json"))
 		println("Locacion 1:")
 		println("Coordenadas: "+main.locaciones.get(0).puntoGeografico)
 		println("Nombre: "+main.locaciones.get(0).descripcion)
@@ -1094,7 +1094,7 @@ class TestEventos {
 	@Test
 	def void pruebaJSONServicios() {
 		var main = new ConversionJson()
-		main.conversionJsonServicios(new FileReader("C:\\Users\\Alumnos.3320-ELECTRO1\\Downloads\\tp-eventos-2018-grupo-8\\servicios.json"))
+		main.conversionJsonServicios(new FileReader("A:\\Documentos\\eclipse-workspace\\tp-eventos-2018-grupo-8\\servicios.json"))
 		println("Servicios")
 		println("Descripcion: "+main.servicios.get(0).descripcion)
 		println("Tipo tarifa: "+main.servicios.get(0).tipoTarifa.class)

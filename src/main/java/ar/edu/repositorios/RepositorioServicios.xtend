@@ -30,7 +30,7 @@ class RepositorioServicios extends Repositorio<Servicios> {
 	override update(Servicios servicio) {
 		if (this.search(servicio.descripcion).isEmpty)
 			throw new BusinessException("No se encontro servicio")
-		actualizarElemento(servicio)
+		this.actualizarElemento(servicio)
 		
 	}
 

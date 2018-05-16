@@ -23,31 +23,30 @@ class RepositorioUsuarios extends Repositorio<Usuario> {
 	}
 
 	override update(Usuario usrActualizado) {
-		// BUSCA CON EL NOMBRE USUARIO. ASIGNACION DE ID AL OBJETO ACTUALIZADO SE HACE DESPUES
 		if (search(usrActualizado.nombreUsuario).isEmpty)
 			throw new BusinessException("No se encontro el usuario " + usrActualizado.nombreUsuario)
 
 		this.actualizarElemento(usrActualizado)
 	}
 	
-	override actualizarElemento(Usuario usuario) {
-		var usrRepo = search(usuario.nombreUsuario).get(0)
-		if(!usuario.nombreApellido.equals(usrRepo.nombreApellido))
-			usrRepo.nombreApellido = usuario.nombreApellido
-		if(!usuario.mail.equals(usrRepo.mail))
-			usrRepo.mail = usuario.mail
-		if(!usuario.fechaNacimiento.equals(usrRepo.fechaNacimiento))
-			usrRepo.fechaNacimiento = usuario.fechaNacimiento
-		if(!usuario.direccion.calle.equals(usrRepo.direccion.calle))
-			usrRepo.direccion.calle = usuario.direccion.calle
-		if(!(usuario.direccion.numero == (usrRepo.direccion.numero)))
-			usrRepo.direccion.numero = usuario.direccion.numero
-		if(!usuario.direccion.localidad.equals(usrRepo.direccion.localidad))
-			usrRepo.direccion.localidad = usuario.direccion.localidad
-		if(!usuario.direccion.provincia.equals(usrRepo.direccion.provincia))
-			usrRepo.direccion.provincia = usuario.direccion.provincia
-		if(!usuario.direccion.coordenadas.equals(usrRepo.direccion.coordenadas))
-			usrRepo.direccion.coordenadas = usuario.direccion.coordenadas
+	override actualizarElemento(Usuario usrActualizado) {
+		var usrRepo = search(usrActualizado.nombreUsuario).get(0)
+		if(!usrActualizado.nombreApellido.equals(usrRepo.nombreApellido))
+			usrRepo.nombreApellido = usrActualizado.nombreApellido
+		if(!usrActualizado.mail.equals(usrRepo.mail))
+			usrRepo.mail = usrActualizado.mail
+		if(!usrActualizado.fechaNacimiento.equals(usrRepo.fechaNacimiento))
+			usrRepo.fechaNacimiento = usrActualizado.fechaNacimiento
+		if(!usrActualizado.direccion.calle.equals(usrRepo.direccion.calle))
+			usrRepo.direccion.calle = usrActualizado.direccion.calle
+		if(!(usrActualizado.direccion.numero == (usrRepo.direccion.numero)))
+			usrRepo.direccion.numero = usrActualizado.direccion.numero
+		if(!usrActualizado.direccion.localidad.equals(usrRepo.direccion.localidad))
+			usrRepo.direccion.localidad = usrActualizado.direccion.localidad
+		if(!usrActualizado.direccion.provincia.equals(usrRepo.direccion.provincia))
+			usrRepo.direccion.provincia = usrActualizado.direccion.provincia
+		if(!usrActualizado.direccion.coordenadas.equals(usrRepo.direccion.coordenadas))
+			usrRepo.direccion.coordenadas = usrActualizado.direccion.coordenadas
 	
 	}
 
