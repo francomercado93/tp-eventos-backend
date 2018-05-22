@@ -10,7 +10,6 @@ import ar.edu.usuarios.Usuario
 import com.eclipsesource.json.Json
 import com.eclipsesource.json.JsonObject
 import com.eclipsesource.json.JsonValue
-import java.io.FileReader
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Set
@@ -24,7 +23,7 @@ class ConversionJson {
 	Set<Locacion> locaciones = newHashSet // lista actualizada de locaciones recibidos
 	Set<Servicios> servicios = newHashSet
 
-	def conversionJsonAUsuarios(FileReader usuarios) {
+	def conversionJsonAUsuarios(String usuarios) {
 		var listUsers = Json.parse(usuarios).asArray()
 		for (JsonValue usr : listUsers) {
 			this.usuarios.add(this.jsonUser(usr.asObject))
@@ -48,7 +47,7 @@ class ConversionJson {
 		usuario
 	}
 
-	def conversionJsonLocaciones(FileReader locacionInput) {
+	def conversionJsonLocaciones(String locacionInput) {
 		var listLocaciones = Json.parse(locacionInput).asArray
 		for (JsonValue locacion : listLocaciones) {
 			locaciones.add(this.jsonLocacion(locacion.asObject))
@@ -85,7 +84,7 @@ class ConversionJson {
 		}
 	}
 
-	def conversionJsonServicios(FileReader servicioInput) {
+	def conversionJsonServicios(String servicioInput) {
 		var listServ = Json.parse(servicioInput).asArray
 		for (JsonValue servObj : listServ) {
 			servicios.add(this.jsonServicio(servObj.asObject))

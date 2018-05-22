@@ -6,12 +6,14 @@ import ar.edu.usuarios.Usuario
 class RepositorioUsuarios extends Repositorio<Usuario> {
 
 	override create(Usuario usuario) {
-		this.validarCampos(usuario)
-		this.asignarId(usuario)
-		super.create(usuario)
+		if(!lista.exists[ usr | usr.nombreUsuario.equals(usuario.nombreUsuario) ]){ //con list
+			this.validarCampos(usuario)
+			this.asignarId(usuario)
+			super.create(usuario)
+		}
 	}
 
-	override Usuario searchById(int id) {
+	override searchById(int id) {
 		lista.findFirst(usuario|usuario.id == id)
 	}
 
@@ -25,7 +27,7 @@ class RepositorioUsuarios extends Repositorio<Usuario> {
 	override update(Usuario usrActualizado) {
 		if (search(usrActualizado.nombreUsuario).isEmpty)
 			throw new BusinessException("No se encontro el usuario " + usrActualizado.nombreUsuario)
-
+		this.validarCampos(usrActualizado)		//El usuario actualizado tiene que ser valido
 		this.actualizarElemento(usrActualizado)
 	}
 	
@@ -59,8 +61,15 @@ class RepositorioUsuarios extends Repositorio<Usuario> {
 			usuario.fechaNacimiento === null || usuario.direccion === null)
 			throw new BusinessException("Usuario no valido")
 	}
-	/*override updateAll(ConversionJson json){
-		
-	}*/
+	
+	override updateAll(){
+		getDatosACtualizados()
+		conversion.usuarios.forEach(usuario | create(usuario))
+		conversion.usuarios.forEach(usuario | update(usuario))
+	}
+	
+	override getDatosACtualizados() {
+		conversion.conversionJsonAUsuarios(updateService.getUserUpdates)
+	}
 
 }

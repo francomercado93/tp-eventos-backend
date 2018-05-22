@@ -1,20 +1,24 @@
 package ar.edu.repositorios
 
+import ar.edu.main.ConversionJson
+import ar.edu.main.StubUpdateService
 import java.util.List
-import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.uqbar.updateService.UpdateService
 
 @Accessors
 abstract class Repositorio<T> {
-	
-	var int id = 0
-	Set<T> lista = newHashSet
 
-	def void create(T elemento){
+	int id = 0
+	List<T> lista = newArrayList
+	UpdateService updateService = new StubUpdateService
+	ConversionJson conversion = new ConversionJson
+
+	def void create(T elemento) {
 		lista.add(elemento)
 	}
 
-	def void delete(T elemento){
+	def void delete(T elemento) {
 		lista.remove(elemento)
 	}
 
@@ -22,19 +26,20 @@ abstract class Repositorio<T> {
 
 	def T searchById(int id)
 
-	def List<T> search(String value){
+	def List<T> search(String value) {
 		lista.filter(elemento|this.busquedaPorNombre(elemento, value)).toList
 	}
-	
+
 	def boolean busquedaPorNombre(T elemento, String value)
-	
+
 	def void asignarId(T elemento)
-	
+
 	def void validarCampos(T elemento)
-	
+
 	def void actualizarElemento(T elemento)
-	
-	//def void updateAll(ConversionJson unjson)
-		
+
+	def void updateAll()
+
+	def void getDatosACtualizados()
 
 }

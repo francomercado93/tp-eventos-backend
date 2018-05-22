@@ -6,13 +6,15 @@ import ar.edu.eventos.exceptions.BusinessException
 class RepositorioLocacion extends Repositorio<Locacion> {
 
 	override create(Locacion locacion) {
-		this.validarCampos(locacion)
-		this.asignarId(locacion)
-		super.create(locacion)
+		if (!lista.exists[loc|loc.descripcion.equals(locacion.descripcion)]) {
+			this.validarCampos(locacion)
+			this.asignarId(locacion)
+			super.create(locacion)
+		}
 	}
 
 	override validarCampos(Locacion locacion) {
-		if(locacion.descripcion === null || locacion.puntoGeografico === null)
+		if (locacion.descripcion === null || locacion.puntoGeografico === null)
 			throw new BusinessException("Locacion no valido")
 	}
 
@@ -36,13 +38,22 @@ class RepositorioLocacion extends Repositorio<Locacion> {
 	override busquedaPorNombre(Locacion locacion, String string) {
 		locacion.descripcion.indexOf(string) != -1
 	}
-	
+
 	override actualizarElemento(Locacion locacion) {
 		var locacionRepo = search(locacion.descripcion).get(0)
-		
-		if(!locacion.descripcion.equals(locacionRepo.descripcion))
-			locacionRepo.descripcion= locacion.descripcion
-		if(!locacion.puntoGeografico.equals(locacionRepo.puntoGeografico))
+		if (!locacion.descripcion.equals(locacionRepo.descripcion))
+			locacionRepo.descripcion = locacion.descripcion
+		if (!locacion.puntoGeografico.equals(locacionRepo.puntoGeografico))
 			locacionRepo.puntoGeografico = locacion.puntoGeografico
+	}
 
-}}
+	override updateAll() {
+		getDatosACtualizados()
+		conversion.locaciones.forEach(locacion|create(locacion))
+		conversion.locaciones.forEach(locacion|update(locacion))
+	}
+
+	override getDatosACtualizados() {
+		conversion.conversionJsonLocaciones(updateService.getLocationUpdates)
+	}
+}

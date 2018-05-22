@@ -1,8 +1,8 @@
 package ar.edu.eventos
 
 import ar.edu.eventos.exceptions.BusinessException
-
 import ar.edu.main.ConversionJson
+import ar.edu.main.StubUpdateService
 import ar.edu.repositorios.RepositorioLocacion
 import ar.edu.repositorios.RepositorioServicios
 import ar.edu.repositorios.RepositorioUsuarios
@@ -14,7 +14,6 @@ import ar.edu.usuarios.Amateur
 import ar.edu.usuarios.Free
 import ar.edu.usuarios.Profesional
 import ar.edu.usuarios.Usuario
-import java.io.FileReader
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.List
@@ -70,7 +69,7 @@ class TestEventos {
 	def void init() {
 		// LOCACIONES
 		salonFiesta = new Locacion() => [
-			descripcion = "Club3"
+			descripcion = "Salon de Fiesta"
 			puntoGeografico = new Point(-34.603695, -58.410973)
 			superficie = 10d
 		]
@@ -133,7 +132,7 @@ class TestEventos {
 		agustin = new Usuario() => [
 			nombreUsuario = "agustin"
 			nombreApellido = "agustin gonzalez"
-			mail = "juan00@gmail.com"
+			mail = "agustinKpo@gmail.com"
 			setDireccion("Quintana", 2551, "San Martin", "Buenos Aires", new Point(-34.578651, -58.549614))
 			fechaHoraActual = LocalDateTime.of(2018, 03, 15, 22, 00)
 			fechaNacimiento = LocalDate.of(2000, 01, 02)
@@ -141,7 +140,7 @@ class TestEventos {
 		agustina = new Usuario() => [
 			nombreUsuario = "agustina"
 			nombreApellido = "agustina pastor"
-			mail = "juan00@gmail.com"
+			mail = "agus2000@gmail.com"
 			setDireccion("Quintana", 2551, "San Martin", "Buenos Aires", new Point(-34.578651, -58.549614))
 			fechaHoraActual = LocalDateTime.of(2018, 03, 15, 22, 00)
 			fechaNacimiento = LocalDate.of(2000, 01, 02)
@@ -157,7 +156,7 @@ class TestEventos {
 		martin = new Usuario() => [
 			nombreUsuario = "martin"
 			nombreApellido = "Martin Benitez"
-			mail = "juan00@gmail.com"
+			mail = "martinBntz@gmail.com"
 			setDireccion("America", 3450, "San Martin", "Buenos Aires", new Point(-34.560245, -58.546651))
 			fechaHoraActual = LocalDateTime.of(2018, 03, 16, 00, 22)
 			fechaNacimiento = LocalDate.of(2001, 05, 12)
@@ -335,18 +334,18 @@ class TestEventos {
 		// Servicios
 		animacionMago = new Servicios() => [
 			tipoTarifa = new TarifaPorHora(300, 12)
-			descripcion = "animacionMago"
+			descripcion = "Animacion Mago"
 			tarifaPorKilometro = 7
 			ubicacionServicio = new Point(-34.515938, -58.485094)
 		]
 		cateringFoodParty = new Servicios() => [
-			descripcion = "cateringFoodParty"
+			descripcion = "Catering Food Party"
 			tipoTarifa = new TarifaPersona(15, 0.8)
 			tarifaPorKilometro = 5
 			ubicacionServicio = new Point(-34.513628, -58.523435)
 		]
 		candyBarWillyWonka = new Servicios() => [
-			descripcion = "candyBarWillyWonka"
+			descripcion = "candy Bar Willy Wonka"
 			tipoTarifa = new TarifaFija(750)
 			tarifaPorKilometro = 20
 			ubicacionServicio = new Point(-34.569370, -58.484621)
@@ -861,7 +860,7 @@ class TestEventos {
 		repo.update(agustin)
 	}
 	
-	/* @Test(expected=typeof(BusinessException))
+	@Test(expected=typeof(BusinessException))
 	def void noSePuedeActualizarUsuarioNoValido() {
 		var repo = new RepositorioUsuarios()
 		repo.create(lucas)
@@ -869,7 +868,7 @@ class TestEventos {
 			nombreUsuario = "Lucas41"
 		]
 		repo.update(nuevoLucas)
-	}*/
+	}
 	
 	@Test
 	def void noSeRepitenLosUsuariosDeUnaLista() {
@@ -890,19 +889,16 @@ class TestEventos {
 		var nuevoLucas = new Usuario => [
 			nombreUsuario = "Lucas41"
 			nombreApellido = "Lucas Benitez"
-			mail = "lucasBenitez@gmail.com"
+			mail = "lucasBenitez@gmail.com"	//CAMBIA EL MAIL
 			setDireccion("Nogoya", 3460, "Villa del Parque", "CABA", new Point(-34.605375, -58.496150))
 			fechaHoraActual = LocalDateTime.of(2018, 01, 31, 19, 50)
 			fechaNacimiento = LocalDate.of(1991, 11, 11)
 			comprarEntrada(lollapalooza)
-			
 		]
 		repo.update(nuevoLucas)
-		Assert.assertEquals(nuevoLucas.mail, lucas.mail)
+		Assert.assertEquals(nuevoLucas.mail, repo.search(lucas.nombreUsuario).get(0).mail)
 		
 	}
-	
-	
 	
 	//=========================TEST REPO SERVICIO=================================
 	
@@ -936,7 +932,7 @@ class TestEventos {
 	def void busquedaPorStringServicios() {
 		var repo = new RepositorioServicios()
 		var cateringPocha =  new Servicios =>[
-			descripcion = "cateringPocha"
+			descripcion = "Catering Pocha"
 			tipoTarifa = new TarifaPersona(15, 0.8)
 			tarifaPorKilometro = 5
 			ubicacionServicio = new Point(-34.513628, -58.523435)
@@ -945,7 +941,7 @@ class TestEventos {
 		repo.create(animacionMago)
 		repo.create(cateringPocha)
 		repo.create(candyBarWillyWonka)
-		var List<Servicios> result = repo.search("catering")
+		var List<Servicios> result = repo.search("Catering")
 		result.forEach(serv | println(serv.descripcion))
 		Assert.assertEquals(2, result.size, 0.1)
 	}
@@ -972,7 +968,7 @@ class TestEventos {
 		repo.create(animacionMago)
 		var animacionMagoBlack = new Servicios => [
 			tipoTarifa = new TarifaPorHora(300, 12)
-			descripcion = "animacionMago"
+			descripcion = "Animacion Mago"
 			tarifaPorKilometro = 15
 			ubicacionServicio = new Point(-34.515938, -58.485094)
 		]
@@ -987,11 +983,11 @@ class TestEventos {
 		var sociedadFomento3dF = new Locacion() => [
 			descripcion = "SociedadFomento3dF"
 		]
-		repo.create(sociedadFomento3dF) // Le falta descripcion
+		repo.create(sociedadFomento3dF) // Le falta coordenadas
 	}
 	
 	@Test
-	def void seAgregaLocacionARepositorioYseAsignaId() {
+	def void seAgregaLocacionARepositorio() {
 		var repo = new RepositorioLocacion()
 		repo.create(salonFiesta)
 		repo.create(hipodromo)
@@ -1069,39 +1065,85 @@ class TestEventos {
 	@Test
 	def void pruebaJSONUsuario() {
 		var main = new ConversionJson()
-		main.conversionJsonAUsuarios(new FileReader("A:\\Documentos\\eclipse-workspace\\tp-eventos-2018-grupo-8\\usuarios.json"))
+		var usuariosActualizados = new StubUpdateService
+		main.conversionJsonAUsuarios(usuariosActualizados.getUserUpdates)
 		main.usuarios.forEach(usuario | println("\nNombre usuario: "+ usuario.nombreUsuario+"\nNombre y apellido: "+
 			 usuario.nombreApellido+"\nEmail: "+ usuario.mail+"\nFecha de nacimiento: "+ 
 			 usuario.fechaNacimiento+"\nDireccion:\nCalle: "+usuario.direccion.calle +" "
 			 +usuario.direccion.numero+"\nLocalidad: "+usuario.direccion.localidad+"\nProvincia: "+ 
 			 usuario.direccion.provincia+"\nCoordenadas: "+usuario.direccion.coordenadas))
-		Assert.assertEquals(2, main.usuarios.size, 0.1)
+		Assert.assertEquals(3, main.usuarios.size, 0.1)
 	}
 	
 	@Test
 	def void pruebaJSONLocaciones() {
 		var main = new ConversionJson()
-		main.conversionJsonLocaciones(new FileReader("A:\\Documentos\\eclipse-workspace\\tp-eventos-2018-grupo-8\\locaciones.json"))
-		println("Locacion 1:")
-		println("Coordenadas: "+main.locaciones.get(0).puntoGeografico)
-		println("Nombre: "+main.locaciones.get(0).descripcion)
-		println("Locacion 2:")
-		println("Coordenadas: "+main.locaciones.get(1).puntoGeografico)
-		println("Nombre: "+main.locaciones.get(1).descripcion)
-		Assert.assertEquals(2, main.locaciones.size, 0.1)
+		var locacionesActualizadas = new StubUpdateService
+		main.conversionJsonLocaciones(locacionesActualizadas.getLocationUpdates)
+		main.locaciones.forEach(locacion | println("\nNombre: "+locacion.descripcion+"\nCoordenadas :"+locacion.puntoGeografico))
+		Assert.assertEquals(3, main.locaciones.size, 0.1)
 	}
 	
 	@Test
 	def void pruebaJSONServicios() {
 		var main = new ConversionJson()
-		main.conversionJsonServicios(new FileReader("A:\\Documentos\\eclipse-workspace\\tp-eventos-2018-grupo-8\\servicios.json"))
-		println("Servicios")
-		println("Descripcion: "+main.servicios.get(0).descripcion)
-		println("Tipo tarifa: "+main.servicios.get(0).tipoTarifa.class)
-		println("Valor: "+main.servicios.get(0).tipoTarifa.costoFijo)
-		println("Tarifa de traslado: "+main.servicios.get(0).tarifaPorKilometro)
-		println("Ubicacion Servicio: "+main.servicios.get(0).ubicacionServicio)
-		Assert.assertEquals(1, main.servicios.size, 0.1)
+		var serviciosActualizados = new StubUpdateService
+		main.conversionJsonServicios(serviciosActualizados.getServiceUpdates)
+		main.servicios.forEach(servicio | println("\nDescripcion: "+servicio.descripcion+"\nCoordenadas :"
+			+servicio.ubicacionServicio+"\nTipo tarifa: "+servicio.tipoTarifa.class+"\nValor: "
+			+ servicio.tipoTarifa.costoFijo+"\nTarifa de traslado: "+servicio.tarifaPorKilometro))
+		Assert.assertEquals(2, main.servicios.size, 0.1)
 	}
 	
+	//=======ENTREGA 3====================================
+
+	@Test
+	def void pruebaUpdateAllUsuarios() {
+		var repo = new RepositorioUsuarios()
+		repo.create(agustin)
+		repo.create(agustina)
+		repo.create(lucas)
+		repo.create(miriam)
+		println("==========Repo sin actualizar================")
+		repo.lista.forEach(usuario | println("\nNombre usuario: "+ usuario.nombreUsuario+"\nEmail: "+ usuario.mail))
+		repo.updateAll()	//Actualiza usuario agustin y agrega dos usuarios mas
+		println("\n===============Repo actualizado==========")
+		repo.lista.forEach(usuario | println("\nNombre usuario: "+ usuario.nombreUsuario+"\nEmail: "+ usuario.mail))
+		Assert.assertEquals(6, repo.lista.size, 0.1)
+	}
+	
+	@Test
+	def void pruebaUpdateAllServicios() {
+		var repo = new RepositorioServicios()
+		repo.create(animacionMago)
+		repo.create(cateringFoodParty)
+		repo.create(candyBarWillyWonka)
+		println("==========Repo sin actualizar================")
+		repo.lista.forEach(servicio | println("\nDescripcion: "+servicio.descripcion+"\nCoordenadas :"
+			+servicio.ubicacionServicio+"\nTipo tarifa: "+servicio.tipoTarifa.class+"\nValor: "
+			+ servicio.tipoTarifa.costoFijo+"\nTarifa de traslado: "+servicio.tarifaPorKilometro))
+		repo.updateAll()//Actualiza el tipo de tarifa de catering food party y agrega nuevos servicios al repositorio
+		println("\n===============Repo actualizado==========")
+		repo.lista.forEach(servicio | println("\nDescripcion: "+servicio.descripcion+"\nCoordenadas :"
+			+servicio.ubicacionServicio+"\nTipo tarifa: "+servicio.tipoTarifa.class+"\nValor: "
+			+ servicio.tipoTarifa.costoFijo+"\nTarifa de traslado: "+servicio.tarifaPorKilometro))
+		Assert.assertEquals(4, repo.lista.size, 0.1)
+	}
+	
+	@Test
+	def void pruebaUpdateAllLocaciones() {
+		var repo = new RepositorioLocacion()
+		repo.create(tecnopolis)
+		repo.create(hipodromo)
+		repo.create(hipodromoPalermo)
+		repo.create(salonFiesta)
+		println("==========Repo sin actualizar================")
+		repo.lista.forEach(locacion | println("\nDescripcion: "+locacion.descripcion+"\nCoordenadas :"
+			+locacion.puntoGeografico))
+		repo.updateAll()//Actualiza las coordenadas del salon de Fiesta y agrega los nuevos datos
+		println("\n===============Repo actualizado==========")
+		repo.lista.forEach(locacion | println("\nDescripcion: "+locacion.descripcion+"\nCoordenadas :"
+			+locacion.puntoGeografico))
+		Assert.assertEquals(6, repo.lista.size, 0.1)
+	}
 }
