@@ -11,6 +11,7 @@ import java.util.ArrayList
 import java.util.Collection
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.uqbar.ccService.CreditCard
 import org.uqbar.geodds.Point
 
 @Accessors
@@ -29,6 +30,8 @@ class Usuario {
 	double saldoAFavor = 0
 	Collection<Evento> eventosOrganizados = new ArrayList<Evento>
 	Set<Invitacion> invitaciones = newHashSet
+	CreditCard miTarjeta
+	
 	
 	def setDireccion(String calle, int numero, String localidad, String provincia, Point punto){
 		direccion = new Direccion(calle, numero, localidad, provincia, punto)
@@ -116,8 +119,11 @@ class Usuario {
 	}
 	
 	//Usuario Evento Abierto
-	def comprarEntrada(EventoAbierto unEvento) {
-		unEvento.usuarioCompraEntrada(this)
+	def comprarEntrada(EventoAbierto unEvento /* , CreditCardService servicioTarjeta*/) {
+		//if(servicioTarjeta.pay(miTarjeta, unEvento.valorEntrada).statusCode == 0)
+			unEvento.usuarioCompraEntrada(this)
+		//else
+		//	throw new BusinessException(servicioTarjeta.pay(miTarjeta, unEvento.valorEntrada).statusMessage)
 	}
 
 	def devolverEntrada(EventoAbierto unEvento) {
