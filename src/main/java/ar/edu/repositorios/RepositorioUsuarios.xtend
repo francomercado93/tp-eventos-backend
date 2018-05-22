@@ -71,5 +71,4 @@ class RepositorioUsuarios extends Repositorio<Usuario> {
 	override getDatosACtualizados() {
 		conversion.conversionJsonAUsuarios(updateService.getUserUpdates)
 	}
-
 }

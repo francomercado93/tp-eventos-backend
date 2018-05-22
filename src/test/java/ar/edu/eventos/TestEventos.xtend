@@ -20,7 +20,12 @@ import java.util.List
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import org.uqbar.ccService.CCResponse
+import org.uqbar.ccService.CreditCard
+import org.uqbar.ccService.CreditCardService
 import org.uqbar.geodds.Point
+
+import static org.mockito.Mockito.*
 
 class TestEventos {
 
@@ -64,9 +69,9 @@ class TestEventos {
 	Servicios animacionMago
 	Servicios cateringFoodParty
 	Servicios candyBarWillyWonka
-	//CreditCard unaTarjeta
-	//CreditCardService servicioTarjetaPagoExitoso
-	//CreditCardService servicioTarjetaPagoRechazado
+	CreditCard unaTarjeta
+	CreditCardService servicioTarjetaPagoExitoso
+	CreditCardService servicioTarjetaPagoRechazado
 	
 	@Before
 	def void init() {
@@ -76,8 +81,8 @@ class TestEventos {
 			number = "45464113154121"
 			cvc = "544"
 			expirationDate = "12/2024"
-		]
-		*/
+		]*/
+		
 		// LOCACIONES
 		salonFiesta = new Locacion() => [
 			descripcion = "Salon de Fiesta"
@@ -186,7 +191,7 @@ class TestEventos {
 				new Point(-34.534199, -58.490467))
 			fechaHoraActual = LocalDateTime.of(2018, 02, 15, 15, 30)
 			fechaNacimiento = LocalDate.of(1977, 08, 09)
-			comprarEntrada(lollapalooza/* ,servicioTarjetaPagoExitoso*/)
+			//comprarEntrada(lollapalooza ,servicioTarjetaPagoExitoso)
 		]
 		gaby = new Usuario() => [
 			nombreUsuario = "Gaby555"
@@ -195,7 +200,7 @@ class TestEventos {
 			setDireccion("Av. Maipú 3144", 2356, "Olivos", "Buenos Aires", new Point(-34.507145, -58.492910))
 			fechaHoraActual = LocalDateTime.of(2017, 09, 02, 20, 15)
 			fechaNacimiento = LocalDate.of(1996, 10, 15)
-			comprarEntrada(lollapalooza/* , servicioTarjetaPagoExitoso*/)
+			comprarEntrada(lollapalooza )
 		]
 		maria = new Usuario() => [
 			nombreUsuario = "MariaSanchez4"
@@ -204,7 +209,7 @@ class TestEventos {
 			setDireccion("Av. Bartolomé Mitre", 4787, "Caseros", "Buenos Aires", new Point(-34.609812, -58.563639))
 			fechaHoraActual = LocalDateTime.of(2018, 02, 27, 05, 00)
 			fechaNacimiento = LocalDate.of(1983, 02, 02)
-			comprarEntrada(lollapalooza/* , servicioTarjetaPagoExitoso*/)
+			comprarEntrada(lollapalooza)
 		]
 		lucas = new Usuario() => [
 			nombreUsuario = "Lucas41"
@@ -213,7 +218,7 @@ class TestEventos {
 			setDireccion("Nogoya", 3460, "Villa del Parque", "CABA", new Point(-34.605375, -58.496150))
 			fechaHoraActual = LocalDateTime.of(2018, 01, 31, 19, 50)
 			fechaNacimiento = LocalDate.of(1991, 11, 11)
-			comprarEntrada(lollapalooza/* , servicioTarjetaPagoExitoso*/)
+			comprarEntrada(lollapalooza)
 
 		]
 		beatriz = new Usuario() => [
@@ -223,7 +228,7 @@ class TestEventos {
 			setDireccion("Gral Paz", 1989, "Llavallol", "Buenos Aires", new Point(-34.785584, -58.420979))
 			fechaHoraActual = LocalDateTime.of(2018, 02, 15, 15, 30)
 			fechaNacimiento = LocalDate.of(1973, 02, 02)
-			comprarEntrada(lollapalooza/* , servicioTarjetaPagoExitoso*/)
+			comprarEntrada(lollapalooza)
 			tipoUsuario = new Free()
 
 		]
@@ -385,14 +390,14 @@ class TestEventos {
 	// Eventos abiertos
 	@Test
 	def void personaSacaEntrada() {
-		juan.comprarEntrada(lollapalooza)//, servicioTarjetaPagoExitoso)
+		juan.comprarEntrada(lollapalooza)
 		Assert.assertTrue(lollapalooza.estaInvitado(juan))
 	}
 
 	@Test(expected=typeof(BusinessException))
 	def void personaNoPuedeSacarEntradaSuperoFechaLimite() { // Quedan entradas y tiene edad minima
 		martin.fechaNacimiento = LocalDate.of(1999, 01, 01)
-		martin.comprarEntrada(lollapalooza/* , servicioTarjetaPagoExitoso*/)
+		martin.comprarEntrada(lollapalooza )
 	}
 
 
@@ -403,8 +408,8 @@ class TestEventos {
 			fechaHoraActual = LocalDateTime.of(2018, 03, 15, 16, 45)
 			fechaNacimiento = LocalDate.of(1985, 03, 15)
 		]
-		ultimoComprador.comprarEntrada(lollapalooza/* , servicioTarjetaPagoExitoso*/)
-		martin.comprarEntrada(lollapalooza/* , servicioTarjetaPagoExitoso*/)
+		ultimoComprador.comprarEntrada(lollapalooza)
+		martin.comprarEntrada(lollapalooza)
 	}
 
 	@Test(expected=typeof(BusinessException))
@@ -414,7 +419,7 @@ class TestEventos {
 
 	@Test(expected=typeof(BusinessException))
 	def void siUnaPersonaQuiereDevolverEntradaElMismoDiaDElEvento() {
-		juan.comprarEntrada(lollapalooza/* , servicioTarjetaPagoExitoso*/)
+		juan.comprarEntrada(lollapalooza )
 		juan.fechaHoraActual = LocalDateTime.of(2018, 03, 15, 09, 30) // Devuelve en la fecha de confirmacion
 		println(lollapalooza.diasfechaMaximaConfirmacion(juan))
 		juan.devolverEntrada(lollapalooza)
@@ -423,7 +428,7 @@ class TestEventos {
 	@Test
 	def void siUnaPersonaDevuelveEnIntervaloDe7DiasRestantesSeDevuelveUnPorcentaje() { // compra entrada y se arrepiente
 		juan.fechaHoraActual = LocalDateTime.of(2018, 03, 09, 22, 00)
-		juan.comprarEntrada(lollapalooza/*, servicioTarjetaPagoExitoso*/)
+		juan.comprarEntrada(lollapalooza)
 		juan.devolverEntrada(lollapalooza)
 		Assert.assertEquals(350d, juan.saldoAFavor, 0.1)
 		Assert.assertEquals(1, lollapalooza.cantidadDisponibles, 0.1)
@@ -432,7 +437,7 @@ class TestEventos {
 	@Test
 	def void siUnaPersonaDevuelveEntradaAntesDe7DiasSeDevuelve80Porciento() {
 		juan.fechaHoraActual = LocalDateTime.of(2018, 03, 06, 22, 00)
-		juan.comprarEntrada(lollapalooza/* , servicioTarjetaPagoExitoso*/)
+		juan.comprarEntrada(lollapalooza )
 		juan.devolverEntrada(lollapalooza)
 		Assert.assertEquals(400, juan.saldoAFavor, 0.1)
 		Assert.assertEquals(1, lollapalooza.cantidadDisponibles, 0.1)
@@ -444,7 +449,7 @@ class TestEventos {
 			nombreUsuario = "pablo"
 			fechaHoraActual = LocalDateTime.of(2018, 03, 15, 16, 45)
 			fechaNacimiento = LocalDate.of(1985, 03, 15)
-			comprarEntrada(lollapalooza/* , servicioTarjetaPagoExitoso*/)
+			comprarEntrada(lollapalooza)
 		]
 		Assert.assertTrue(lollapalooza.esExitoso)
 	}
@@ -907,7 +912,7 @@ class TestEventos {
 			setDireccion("Nogoya", 3460, "Villa del Parque", "CABA", new Point(-34.605375, -58.496150))
 			fechaHoraActual = LocalDateTime.of(2018, 01, 31, 19, 50)
 			fechaNacimiento = LocalDate.of(1991, 11, 11)
-			comprarEntrada(lollapalooza/* , servicioTarjetaPagoExitoso*/)
+			comprarEntrada(lollapalooza)
 		]
 		repo.update(nuevoLucas)
 		Assert.assertEquals(nuevoLucas.mail, repo.search(lucas.nombreUsuario).get(0).mail)
@@ -1159,15 +1164,36 @@ class TestEventos {
 		repo.lista.forEach(locacion | println("\nDescripcion: "+locacion.descripcion+"\nCoordenadas :"
 			+locacion.puntoGeografico))
 		Assert.assertEquals(6, repo.lista.size, 0.1)
-	}
+	 }
 	/* @Test
 	def void usuarioTieneSaldoYCompraEntrada() {
+		juan.miTarjeta = unaTarjeta
+	
+		juan.comprarEntrada(lollapalooza)
+		Assert.assertTrue(lollapalooza.estaInvitado(juan))
 		
-		martin.comprarEntrada(lollapalooza, servicioTarjetaPagoExitoso)
 	}
+	@Test(expected=typeof(BusinessException))
+	def void usuarioNoPuedeComprarEntradaTarjetaNovalida() {
+		servicioTarjetaPagoExitoso = new CreditCardService
+		juan.comprarEntrada(lollapalooza)
+	}
+	
+	@Test(expected=typeof(BusinessException))
+	def void usuarioNoPuedeComprarEntradaPagoRechazado() {
+		servicioTarjetaPagoRechazado = mockearCreditCardServicePagoRechazado(unaTarjeta, lollapalooza.valorEntrada)
+		juan.comprarEntrada(lollapalooza)
+	}
+	
 	def CreditCardService mockearCreditCardServicePagoExitoso(CreditCard tarjeta, double valor) {
 		val servicioTarjetaTemp = mock(typeof(CreditCardService))
 		when(servicioTarjetaTemp.pay(tarjeta, valor)).thenReturn(new CCResponse()=>[statusCode = 0 statusMessage = "Transaccion Exitosa"])
+		return servicioTarjetaTemp
+	}
+	
+	def CreditCardService mockearCreditCardServicePagoRechazado(CreditCard tarjeta, double valor) {
+		val servicioTarjetaTemp = mock(typeof(CreditCardService))
+		when(servicioTarjetaTemp.pay(tarjeta, valor)).thenReturn(new CCResponse()=>[statusCode = 2 statusMessage = "Pago rechazado"])
 		return servicioTarjetaTemp
 	}*/
 }

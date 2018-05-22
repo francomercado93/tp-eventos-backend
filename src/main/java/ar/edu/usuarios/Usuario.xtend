@@ -1,5 +1,6 @@
 package ar.edu.usuarios
 
+import ar.edu.creditCard.PagoConTarjeta
 import ar.edu.eventos.Evento
 import ar.edu.eventos.EventoAbierto
 import ar.edu.eventos.EventoCerrado
@@ -31,7 +32,7 @@ class Usuario {
 	Collection<Evento> eventosOrganizados = new ArrayList<Evento>
 	Set<Invitacion> invitaciones = newHashSet
 	CreditCard miTarjeta
-	
+	PagoConTarjeta nuevoPago
 	
 	def setDireccion(String calle, int numero, String localidad, String provincia, Point punto){
 		direccion = new Direccion(calle, numero, localidad, provincia, punto)
@@ -119,13 +120,12 @@ class Usuario {
 	}
 	
 	//Usuario Evento Abierto
-	def comprarEntrada(EventoAbierto unEvento /* , CreditCardService servicioTarjeta*/) {
-		//if(servicioTarjeta.pay(miTarjeta, unEvento.valorEntrada).statusCode == 0)
-			unEvento.usuarioCompraEntrada(this)
-		//else
-		//	throw new BusinessException(servicioTarjeta.pay(miTarjeta, unEvento.valorEntrada).statusMessage)
-	}
+	def comprarEntrada(EventoAbierto unEvento) {	
 
+		nuevoPago.puedePagar(unEvento.valorEntrada)
+		unEvento.usuarioCompraEntrada(this)
+	}
+	
 	def devolverEntrada(EventoAbierto unEvento) {
 		if(unEvento.estaInvitado(this) && unEvento.diasfechaMaximaConfirmacion(this) > 0){
 			unEvento.devolverDinero(this)
