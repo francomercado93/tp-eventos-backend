@@ -8,9 +8,9 @@ class PagoConTarjeta {
 	CreditCard tarjeta
 	CreditCardService servicioTarjeta 
 	
-	new(CreditCard unaTarjeta, CreditCardService unServicioTarjeta){
+	new(CreditCard unaTarjeta /*CreditCardService unServicioTarjeta*/){
 		tarjeta = unaTarjeta
-		servicioTarjeta = unServicioTarjeta
+		//servicioTarjeta = unServicioTarjeta
 	}
 	
 	def puedePagar(double valor ){

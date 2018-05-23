@@ -12,7 +12,9 @@ import java.util.ArrayList
 import java.util.Collection
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.uqbar.ccService.CCResponse
 import org.uqbar.ccService.CreditCard
+import org.uqbar.ccService.CreditCardService
 import org.uqbar.geodds.Point
 
 @Accessors
@@ -33,6 +35,8 @@ class Usuario {
 	Set<Invitacion> invitaciones = newHashSet
 	CreditCard miTarjeta
 	PagoConTarjeta nuevoPago
+	
+	CreditCardService servicioTarjeta
 	
 	def setDireccion(String calle, int numero, String localidad, String provincia, Point punto){
 		direccion = new Direccion(calle, numero, localidad, provincia, punto)
@@ -121,8 +125,14 @@ class Usuario {
 	
 	//Usuario Evento Abierto
 	def comprarEntrada(EventoAbierto unEvento) {	
+//		nuevoPago = new PagoConTarjeta(miTarjeta)
+//		nuevoPago.puedePagar(unEvento.valorEntrada)
+		//val CCResponse response = servicioTarjeta.pay(tarjeta, valor)
 
-		nuevoPago.puedePagar(unEvento.valorEntrada)
+		//if(response.statusCode != 0) {
+			//throw new BusinessException(response.statusMessage)
+//		}
+
 		unEvento.usuarioCompraEntrada(this)
 	}
 	
