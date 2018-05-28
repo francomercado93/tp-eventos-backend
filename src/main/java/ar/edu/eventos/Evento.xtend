@@ -144,7 +144,7 @@ abstract class Evento {
 			usuario.notificacionEventoPostergado(this)
 	}
 
-	def void settearVariables(Usuario unUsuario) {
+	def void setFechaCreacionyOrganizador(Usuario unUsuario) {
 		fechaCreacion = unUsuario.fechaHoraActual
 		organizador = unUsuario
 	}

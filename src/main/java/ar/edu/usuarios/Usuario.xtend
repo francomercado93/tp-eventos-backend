@@ -1,6 +1,5 @@
 package ar.edu.usuarios
 
-import ar.edu.creditCard.PagoConTarjeta
 import ar.edu.eventos.Evento
 import ar.edu.eventos.EventoAbierto
 import ar.edu.eventos.EventoCerrado
@@ -34,8 +33,7 @@ class Usuario {
 	Collection<Evento> eventosOrganizados = new ArrayList<Evento>
 	Set<Invitacion> invitaciones = newHashSet
 	CreditCard miTarjeta
-	PagoConTarjeta nuevoPago
-	
+	//PagoConTarjeta nuevoPago
 	CreditCardService servicioTarjeta
 	
 	def setDireccion(String calle, int numero, String localidad, String provincia, Point punto){
@@ -54,11 +52,15 @@ class Usuario {
 	//Solo puede realizar invitaciones si la cantidad acompaniantes de la nueva invitacion + la cantidad de posibles asistentes no supera 
 	//capacidad maxima, de esta forma el usuario puede confirmar siempre y cuando este a tiempo
 	def invitarUsuario(Usuario invitado, EventoCerrado unEvento, Integer cantidadAcompaniantesMaxima) {		
-		if(unEvento.chequearCapacidad(cantidadAcompaniantesMaxima) && tipoUsuario.puedeInvitarUsuario(unEvento, cantidadAcompaniantesMaxima))	//Se chequea las condiciones de cada tipoUsuario
+		if(checkCondicionesParaInvitar(unEvento, cantidadAcompaniantesMaxima))	//Se chequea las condiciones de cada tipoUsuario
 			this.realizarInvitacion(invitado, unEvento, cantidadAcompaniantesMaxima)
 		else
 			throw new BusinessException("No se puede realizar invitacion, el evento llego a su maxima capacidad o alcanzo 
 				la cantidad maxima de invitaciones/invitados")
+	}
+	
+	def boolean checkCondicionesParaInvitar(EventoCerrado unEvento, Integer cantidadAcompaniantesMaxima) {
+		eventosOrganizados.contains(unEvento) && unEvento.chequearCapacidad(cantidadAcompaniantesMaxima) && tipoUsuario.puedeInvitarUsuario(unEvento, cantidadAcompaniantesMaxima)
 	}
 	
 	def realizarInvitacion(Usuario invitado, EventoCerrado unEvento, Integer cantidadAcompaniantesMaxima) {
@@ -68,7 +70,7 @@ class Usuario {
 	// EN tipo free => !unEvento.class.toString.equals("ar.edu.eventos.EventoAbierto") && !tipoUsuario.toString.equals("ar.edu.usuarios.Free@707f7052")
 	def crearEvento(Evento unEvento){		//En test creo el evento primero(para inicializar
 		if( this.puedoCrearEvento(unEvento)){		//variables y luego se lo paso como parametro a
-			unEvento.settearVariables(this)	//usuario organizador que es el que cuando lo "crea"
+			unEvento.setFechaCreacionyOrganizador(this)	//usuario organizador que es el que cuando lo "crea"
 			this.agregarEventoLista(unEvento)	//se setean la fecha de creacio y organizador
 		}
 		else
@@ -127,14 +129,21 @@ class Usuario {
 	def comprarEntrada(EventoAbierto unEvento) {	
 //		nuevoPago = new PagoConTarjeta(miTarjeta)
 //		nuevoPago.puedePagar(unEvento.valorEntrada)
-		//val CCResponse response = servicioTarjeta.pay(tarjeta, valor)
-
-		//if(response.statusCode != 0) {
-			//throw new BusinessException(response.statusMessage)
-//		}
-
+		val CCResponse response = servicioTarjeta.pay(miTarjeta, unEvento.valorEntrada)
+		if(response.statusCode != 0) {
+			throw new BusinessException(response.statusMessage)
+		}
 		unEvento.usuarioCompraEntrada(this)
+		println(response.statusMessage)
 	}
+	/*def comprarEntradaTarjeta(EventoAbierto unEvento) {
+		val CCResponse response = servicioTarjeta.pay(miTarjeta, unEvento.valorEntrada)
+		if(response.statusCode != 0) {
+			throw new BusinessException(response.statusMessage)
+		}
+		unEvento.usuarioCompraEntrada(this)
+		println(response.statusMessage)
+	}*/
 	
 	def devolverEntrada(EventoAbierto unEvento) {
 		if(unEvento.estaInvitado(this) && unEvento.diasfechaMaximaConfirmacion(this) > 0){
@@ -229,6 +238,5 @@ class Usuario {
 		println("Fecha maxima confirmacion: "+unEvento.fechaMaximaConfirmacion)
 		println("Fecha Inicio: "+ unEvento.inicioEvento)
 		println("Fecha fin: "+unEvento.finEvento)
-	}
-		
+	}	
 }
