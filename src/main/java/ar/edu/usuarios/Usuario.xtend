@@ -125,10 +125,8 @@ class Usuario {
 		invitaciones.findFirst(invitacion | invitacion.evento == unEvento)//obtengo la invitacion con el evento
 	}
 	
-	//Usuario Evento Abierto
+
 	def comprarEntrada(EventoAbierto unEvento) {	
-//		nuevoPago = new PagoConTarjeta(miTarjeta)
-//		nuevoPago.puedePagar(unEvento.valorEntrada)
 		val CCResponse response = servicioTarjeta.pay(miTarjeta, unEvento.valorEntrada)
 		if(response.statusCode != 0) {
 			throw new BusinessException(response.statusMessage)
@@ -136,14 +134,6 @@ class Usuario {
 		unEvento.usuarioCompraEntrada(this)
 		println(response.statusMessage)
 	}
-	/*def comprarEntradaTarjeta(EventoAbierto unEvento) {
-		val CCResponse response = servicioTarjeta.pay(miTarjeta, unEvento.valorEntrada)
-		if(response.statusCode != 0) {
-			throw new BusinessException(response.statusMessage)
-		}
-		unEvento.usuarioCompraEntrada(this)
-		println(response.statusMessage)
-	}*/
 	
 	def devolverEntrada(EventoAbierto unEvento) {
 		if(unEvento.estaInvitado(this) && unEvento.diasfechaMaximaConfirmacion(this) > 0){

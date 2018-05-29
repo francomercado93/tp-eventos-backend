@@ -20,5 +20,4 @@ class Servicios {
 	def costoTraslado(Evento evento) {
 		tarifaPorKilometro * evento.distancia(ubicacionServicio)
 	}
-
 }
