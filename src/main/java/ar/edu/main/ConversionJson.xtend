@@ -1,7 +1,6 @@
 package ar.edu.main
 
 import ar.edu.eventos.Locacion
-import ar.edu.servicios.Servicios
 import ar.edu.servicios.TarifaFija
 import ar.edu.servicios.TarifaPersona
 import ar.edu.servicios.TarifaPorHora
@@ -15,13 +14,14 @@ import java.time.format.DateTimeFormatter
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.geodds.Point
+import ar.edu.servicios.Servicio
 
 @Accessors
 class ConversionJson {
 
 	Set<Usuario> usuarios = newHashSet // lista actualizada de usuarios recibidos, hacer actualizacion repo recorriendo la lista
 	Set<Locacion> locaciones = newHashSet // lista actualizada de locaciones recibidos
-	Set<Servicios> servicios = newHashSet
+	Set<Servicio> servicios = newHashSet
 
 	def conversionJsonAUsuarios(String usuarios) {
 		var listUsers = Json.parse(usuarios).asArray()
@@ -92,7 +92,7 @@ class ConversionJson {
 	}
 
 	def jsonServicio(JsonObject servObj) {
-		var servicio = new Servicios() => [
+		var servicio = new Servicio() => [
 			descripcion = servObj.get("descripcion").asString
 			tipoTarifa = this.conversionJsonTarifa(servObj.get("tarifaServicio").asObject)
 			tarifaPorKilometro = servObj.get("tarifaTraslado").asDouble

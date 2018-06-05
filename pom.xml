@@ -48,6 +48,12 @@
 			<artifactId>eventOS-CreditCardService</artifactId>
 			<version>0.0.2</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.github.algo2-unsam</groupId>
+			<artifactId>mailService</artifactId>
+			<version>0.0.1</version>
+		</dependency>
 
 	</dependencies>
 

@@ -1,7 +1,6 @@
 package ar.edu.eventos
 
 import ar.edu.eventos.exceptions.BusinessException
-import ar.edu.servicios.Servicios
 import ar.edu.usuarios.Usuario
 import java.time.Duration
 import java.time.LocalDateTime
@@ -9,6 +8,7 @@ import java.util.List
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.geodds.Point
+import ar.edu.servicios.Servicio
 
 @Accessors
 abstract class Evento {
@@ -20,11 +20,12 @@ abstract class Evento {
 	Locacion lugar
 	LocalDateTime fechaMaximaConfirmacion
 	LocalDateTime fechaCreacion
-	Set<Servicios> serviciosContratados = newHashSet
+	Set<Servicio> serviciosContratados = newHashSet
 	List<Usuario> asistentes = newArrayList
 	boolean estaCancelado = false
 	boolean estaPostergado = false
-
+	List<String> artistas 	//Solo los eventos abiertos pueden agregar artistas
+	
 	def double porcentajeExito() {
 		0.9
 	}
@@ -41,7 +42,7 @@ abstract class Evento {
 		lugar.distancia(unPunto)
 	}
 
-	def contratarServicio(Servicios servicio) {
+	def contratarServicio(Servicio servicio) {
 		serviciosContratados.add(servicio)
 	}
 

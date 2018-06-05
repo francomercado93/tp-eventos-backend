@@ -1,11 +1,11 @@
 package ar.edu.repositorios
 
 import ar.edu.eventos.exceptions.BusinessException
-import ar.edu.servicios.Servicios
+import ar.edu.servicios.Servicio
 
-class RepositorioServicios extends Repositorio<Servicios> {
+class RepositorioServicios extends Repositorio<Servicio> {
 
-	override create(Servicios servicio) {
+	override create(Servicio servicio) {
 		if (!lista.exists[serv|serv.descripcion.equals(servicio.descripcion)]) {
 			this.validarCampos(servicio)
 			this.asignarId(servicio)
@@ -13,34 +13,34 @@ class RepositorioServicios extends Repositorio<Servicios> {
 		}
 	}
 
-	override asignarId(Servicios servicio) {
+	override asignarId(Servicio servicio) {
 		if (servicio.id == -1) {
 			servicio.id = id
 			id = id + 1
 		}
 	}
 
-	override Servicios searchById(int id) {
+	override Servicio searchById(int id) {
 		lista.findFirst(servicio|servicio.id == id)
 	}
 
-	override validarCampos(Servicios servicio) {
+	override validarCampos(Servicio servicio) {
 		if (servicio.descripcion === null || servicio.ubicacionServicio === null || servicio.tipoTarifa === null)
 			throw new BusinessException("Servicio no valido")
 	}
 
-	override update(Servicios servicio) {
+	override update(Servicio servicio) {
 		if (this.search(servicio.descripcion).isEmpty)
 			throw new BusinessException("No se encontro servicio")
 		this.actualizarElemento(servicio)
 
 	}
 
-	override busquedaPorNombre(Servicios servicio, String nombre) {
+	override busquedaPorNombre(Servicio servicio, String nombre) {
 		servicio.descripcion.startsWith(nombre)
 	}
 
-	override actualizarElemento(Servicios servicio) {
+	override actualizarElemento(Servicio servicio) {
 		var servRepo = search(servicio.descripcion).get(0)
 		if (!servicio.descripcion.equals(servRepo.descripcion))
 			servRepo.descripcion = servicio.descripcion

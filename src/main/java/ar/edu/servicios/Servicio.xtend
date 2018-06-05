@@ -5,7 +5,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.geodds.Point
 
 @Accessors
-class Servicios {
+class Servicio {
 
 	int id = -1
 	TipoTarifa tipoTarifa

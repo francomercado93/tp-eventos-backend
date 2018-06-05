@@ -49,5 +49,22 @@ class TestServicios extends JuegoDatosTest {
 		lollapalooza.contratarServicio(candyBarWillyWonka)
 		Assert.assertEquals(1468.18, lollapalooza.costoTotalEvento, 0.1)
 	}
-// TEST CON TARIFA COSTO MINIMO Y SIN COSTO MINIMO
+	
+	@Test
+	def void pruebaCostoSubServicioSimple() {
+		lollapalooza.contratarServicio(servicioSandwichs)
+		Assert.assertEquals(121.79, lollapalooza.costoTotalEvento, 0.1)
+	}
+	
+	@Test
+	def void pruebaCostoSubServicioMultiple() {
+		lollapalooza.contratarServicio(servicioLunchMario)
+		Assert.assertEquals(235.59, lollapalooza.costoTotalEvento, 0.1)
+	}
+	
+	@Test
+	def void pruebaCostoServicioMultipleConSubServiciosMultiplesYSimples() {
+		lollapalooza.contratarServicio(animacionYCateringManolo)
+		Assert.assertEquals(1414.14, lollapalooza.costoTotalEvento, 0.1)
+	}
 }

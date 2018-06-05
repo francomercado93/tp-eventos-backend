@@ -1,6 +1,7 @@
 package ar.edu.eventos
 
-import ar.edu.servicios.Servicios
+import ar.edu.servicios.Servicio
+import ar.edu.servicios.ServicioMultiple
 import ar.edu.servicios.TarifaFija
 import ar.edu.servicios.TarifaPersona
 import ar.edu.servicios.TarifaPorHora
@@ -59,10 +60,14 @@ abstract class JuegoDatosTest {
 	Usuario carla
 	Usuario agustin
 	Usuario agustina
-	Servicios animacionMago
-	Servicios cateringFoodParty
-	Servicios candyBarWillyWonka
-	Servicios animacionMagoCostoMinimo
+	Servicio animacionMago
+	Servicio cateringFoodParty
+	Servicio candyBarWillyWonka
+	Servicio animacionMagoCostoMinimo
+	Servicio servicioSandwichs
+	Servicio servicioComidaLight
+	ServicioMultiple servicioLunchMario
+	ServicioMultiple animacionYCateringManolo
 	
 	@Before
 	def void init() {
@@ -345,29 +350,62 @@ abstract class JuegoDatosTest {
 		]
 
 		// Servicios
-		animacionMago = new Servicios() => [
+		animacionMago = new Servicio() => [
 			tipoTarifa = new TarifaPorHora(300, 12)
 			descripcion = "Animacion Mago"
 			tarifaPorKilometro = 7
 			ubicacionServicio = new Point(-34.515938, -58.485094)
 		]
-		cateringFoodParty = new Servicios() => [
+		cateringFoodParty = new Servicio() => [
 			descripcion = "Catering Food Party"
 			tipoTarifa = new TarifaPersona(15, 0.8)
 			tarifaPorKilometro = 5
 			ubicacionServicio = new Point(-34.513628, -58.523435)
 		]
-		candyBarWillyWonka = new Servicios() => [
+		candyBarWillyWonka = new Servicio() => [
 			descripcion = "candy Bar Willy Wonka"
 			tipoTarifa = new TarifaFija(750)
 			tarifaPorKilometro = 20
 			ubicacionServicio = new Point(-34.569370, -58.484621)
 		]
-		animacionMagoCostoMinimo = new Servicios() => [
+		animacionMagoCostoMinimo = new Servicio() => [
 			tipoTarifa = new TarifaPorHora(300, 0)	
 			descripcion = "Animacion Mago barato"
 			tarifaPorKilometro = 7
 			ubicacionServicio = new Point(-34.515938, -58.485094)
+		]
+		servicioSandwichs = new Servicio() => [
+			tipoTarifa = new TarifaPersona(20, 0.75)
+			descripcion = "Servicio de sandwichs"
+			tarifaPorKilometro = 2
+			ubicacionServicio = new Point(-34.577354, -58.539091)
+		]
+		
+		servicioComidaLight = new Servicio() => [
+			tipoTarifa = new TarifaPersona(20, 0.75)
+			descripcion = "Servicio de comida light"
+			tarifaPorKilometro = 3
+			ubicacionServicio = new Point(-34.576095, -58.539751)
+		]
+		
+		servicioLunchMario = new ServicioMultiple() => [
+			porcentajeDescuento = 0.2
+			tipoTarifa = new TarifaPersona(60, 0.7)
+			descripcion = "Servicio de lunch Mario"
+			tarifaPorKilometro = 30
+			ubicacionServicio = new Point(-34.580130, -58.542373)
+			agregarSubservicio(servicioSandwichs)
+			agregarSubservicio(servicioComidaLight)
+		]
+		animacionYCateringManolo = new ServicioMultiple() => [
+			porcentajeDescuento = 0.25
+			tipoTarifa = new TarifaPersona(60, 0.7)
+			descripcion = "Servicio de lunch Mario"
+			tarifaPorKilometro = 30
+			ubicacionServicio = new Point(-34.580130, -58.542373)
+			agregarSubservicio(servicioLunchMario)
+			agregarSubservicio(animacionMago)
+			agregarSubservicio(candyBarWillyWonka)
 		]
 	}
 		

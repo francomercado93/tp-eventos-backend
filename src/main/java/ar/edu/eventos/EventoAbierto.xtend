@@ -67,4 +67,13 @@ class EventoAbierto extends Evento {
 		else
 			0.8
 	}
+	
+	def agregarArtista(String artista){
+		artistas = newArrayList
+		artistas.add(artista)
+	}
+	
+	def eliminarArtista(String artista){
+		artistas.remove(artista)
+	}
 }

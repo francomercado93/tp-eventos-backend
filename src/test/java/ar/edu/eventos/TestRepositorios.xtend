@@ -6,7 +6,6 @@ import ar.edu.main.StubUpdateService
 import ar.edu.repositorios.RepositorioLocacion
 import ar.edu.repositorios.RepositorioServicios
 import ar.edu.repositorios.RepositorioUsuarios
-import ar.edu.servicios.Servicios
 import ar.edu.servicios.TarifaPersona
 import ar.edu.servicios.TarifaPorHora
 import ar.edu.usuarios.Usuario
@@ -16,6 +15,7 @@ import java.util.List
 import org.junit.Assert
 import org.junit.Test
 import org.uqbar.geodds.Point
+import ar.edu.servicios.Servicio
 
 class TestRepositorios extends JuegoDatosTest{
 	
@@ -109,7 +109,7 @@ class TestRepositorios extends JuegoDatosTest{
 	@Test(expected=typeof(BusinessException))
 	def void noSePuedeAgregarServicioNoValido() {
 		var repo = new RepositorioServicios()
-		var cateringPocha = new Servicios() => [
+		var cateringPocha = new Servicio() => [
 			descripcion = "catering Pocha"
 		]
 		repo.create(cateringPocha) // Le falta descripcion
@@ -135,7 +135,7 @@ class TestRepositorios extends JuegoDatosTest{
 	@Test
 	def void busquedaPorStringServicios() {
 		var repo = new RepositorioServicios()
-		var cateringPocha =  new Servicios =>[
+		var cateringPocha =  new Servicio =>[
 			descripcion = "Catering Pocha"
 			tipoTarifa = new TarifaPersona(15, 0.8)
 			tarifaPorKilometro = 5
@@ -145,7 +145,7 @@ class TestRepositorios extends JuegoDatosTest{
 		repo.create(animacionMago)
 		repo.create(cateringPocha)
 		repo.create(candyBarWillyWonka)
-		var List<Servicios> result = repo.search("Catering")
+		var List<Servicio> result = repo.search("Catering")
 		result.forEach(serv | println(serv.descripcion))
 		Assert.assertEquals(2, result.size, 0.1)
 	}
@@ -153,7 +153,7 @@ class TestRepositorios extends JuegoDatosTest{
 	@Test(expected=typeof(BusinessException))
 	def void noSePuedeActualizarServicioQueNoExisteEnRepositorio() {
 		var repo = new RepositorioServicios()
-		var cervezaGratis = new Servicios()
+		var cervezaGratis = new Servicio()
 		repo.update(cervezaGratis)
 	}
 	
@@ -170,7 +170,7 @@ class TestRepositorios extends JuegoDatosTest{
 	def void pruebaUpdateRepoServicios() {
 		var repo = new RepositorioServicios()
 		repo.create(animacionMago)
-		var animacionMagoBlack = new Servicios => [
+		var animacionMagoBlack = new Servicio => [
 			tipoTarifa = new TarifaPorHora(300, 12)
 			descripcion = "Animacion Mago"
 			tarifaPorKilometro = 15
