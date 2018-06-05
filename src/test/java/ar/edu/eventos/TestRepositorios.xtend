@@ -6,6 +6,7 @@ import ar.edu.main.StubUpdateService
 import ar.edu.repositorios.RepositorioLocacion
 import ar.edu.repositorios.RepositorioServicios
 import ar.edu.repositorios.RepositorioUsuarios
+import ar.edu.servicios.Servicio
 import ar.edu.servicios.TarifaPersona
 import ar.edu.servicios.TarifaPorHora
 import ar.edu.usuarios.Usuario
@@ -15,7 +16,6 @@ import java.util.List
 import org.junit.Assert
 import org.junit.Test
 import org.uqbar.geodds.Point
-import ar.edu.servicios.Servicio
 
 class TestRepositorios extends JuegoDatosTest{
 	
@@ -29,6 +29,7 @@ class TestRepositorios extends JuegoDatosTest{
 	@Test
 	def void seAgregaUsuarioARepositorioYseAsignaId() {
 		var repo = new RepositorioUsuarios()
+		miriam.id = -1
 		repo.create(miriam)
 		println(repo.lista.get(0).nombreUsuario)
 		Assert.assertEquals(0, miriam.id, 0)
@@ -38,6 +39,9 @@ class TestRepositorios extends JuegoDatosTest{
 	@Test
 	def void pruebaBusquedaPorId() {
 		var repo = new RepositorioUsuarios()
+		miriam.id = -1
+		lucas.id = -1
+		agustin.id = -1
 		repo.create(miriam)
 		repo.create(lucas)
 		repo.create(agustin)

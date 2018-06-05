@@ -20,7 +20,8 @@ import org.uqbar.mailService.MailService
 
 @Accessors
 class Usuario {
-	int id = -1 
+	int id = -1
+	 
 	String nombreUsuario
 	String nombreApellido
 	String mail
@@ -36,9 +37,8 @@ class Usuario {
 	Set<Invitacion> invitaciones = newHashSet
 	CreditCard miTarjeta
 	CreditCardService servicioTarjeta
-	List<Notificacion> misNotificaciones
+	List<Notificacion> tiposNotificaciones = newArrayList
 	MailService servicioMail
-	
 	List<String> listaArtistasFan
 	
 	def setDireccion(String calle, int numero, String localidad, String provincia, Point punto){
@@ -79,11 +79,15 @@ class Usuario {
 			throw new BusinessException("Error no se puede crear evento")
 		}
 		this.agregarEventoLista(unEvento)	
-		//this.enviarNotificaciones()
+		this.enviarNotificaciones()
 	}
 	
 	def enviarNotificaciones() {
-		misNotificaciones.forEach(notificacion |  notificacion.enviar(this))
+		tiposNotificaciones.forEach(notificacion |  notificacion.enviar(this))
+	}
+	
+	def agregarTipoNotificacion(Notificacion nuevaNotifiacion){
+		tiposNotificaciones.add(nuevaNotifiacion)
 	}
 	
 	def boolean puedoCrearEvento(Evento evento){
@@ -241,7 +245,7 @@ class Usuario {
 	}
 	
 	def recibirNotificacion(Usuario organizador) {
-		println("El usuario "+organizador+"creo el evento "+this.ultimoEventoOrganizado())
+		println(nombreUsuario+": El usuario "+organizador.nombreUsuario+" creo el evento "+organizador.ultimoEventoOrganizado.nombreEvento)
 	}
 	
 	def ultimoEventoOrganizado() {
@@ -262,7 +266,7 @@ class Usuario {
 	}
 	
 	def recibirNotificacionArtista(String artista,  Evento evento) {
-		println("El artista "+artista+"se presentara en el evento "+evento )
+		println("El artista "+artista+"se presentara en el evento "+evento.nombreEvento )
 	}
 	
 }

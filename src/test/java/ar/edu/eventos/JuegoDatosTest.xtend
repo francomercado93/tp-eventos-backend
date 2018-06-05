@@ -1,5 +1,6 @@
 package ar.edu.eventos
 
+import ar.edu.repositorios.RepositorioUsuarios
 import ar.edu.servicios.Servicio
 import ar.edu.servicios.ServicioMultiple
 import ar.edu.servicios.TarifaFija
@@ -68,6 +69,7 @@ abstract class JuegoDatosTest {
 	Servicio servicioComidaLight
 	ServicioMultiple servicioLunchMario
 	ServicioMultiple animacionYCateringManolo
+	RepositorioUsuarios repoUsuariosTest
 	
 	@Before
 	def void init() {
@@ -132,7 +134,7 @@ abstract class JuegoDatosTest {
 			lugar = salonFiesta
 			capacidadMaxima = 20
 		]
-
+		
 		// PERSONAS
 		agustin = new Usuario() => [
 			nombreUsuario = "agustin"
@@ -141,6 +143,7 @@ abstract class JuegoDatosTest {
 			setDireccion("Quintana", 2551, "San Martin", "Buenos Aires", new Point(-34.578651, -58.549614))
 			fechaHoraActual = LocalDateTime.of(2018, 03, 15, 22, 00)
 			fechaNacimiento = LocalDate.of(2000, 01, 02)
+			
 		]
 		agustina = new Usuario() => [
 			nombreUsuario = "agustina"
@@ -149,6 +152,8 @@ abstract class JuegoDatosTest {
 			setDireccion("Quintana", 2551, "San Martin", "Buenos Aires", new Point(-34.578651, -58.549614))
 			fechaHoraActual = LocalDateTime.of(2018, 03, 15, 22, 00)
 			fechaNacimiento = LocalDate.of(2000, 01, 02)
+			radioCercania = 30
+			
 		]
 		juan = new Usuario() => [
 			nombreUsuario = "juan"
@@ -183,6 +188,7 @@ abstract class JuegoDatosTest {
 			miTarjeta = new CreditCard
 			servicioTarjeta = mockearCreditCardServicePagoExitoso(miTarjeta, lollapalooza.valorEntrada)
 			comprarEntrada(lollapalooza)
+			radioCercania = 30
 		]
 		gaby = new Usuario() => [
 			nombreUsuario = "Gaby555"
@@ -229,6 +235,7 @@ abstract class JuegoDatosTest {
 			servicioTarjeta = mockearCreditCardServicePagoExitoso(miTarjeta, lollapalooza.valorEntrada)
 			comprarEntrada(lollapalooza)
 			tipoUsuario = new Free()
+			
 
 		]
 		// Organizadores
@@ -236,9 +243,11 @@ abstract class JuegoDatosTest {
 			nombreUsuario = "Pablo"
 			nombreApellido = "Pablo Gomez"
 			mail = "pabloggz@gmail.com"
-			setDireccion("Pueyrredon", 580, "San Antonio de Padua", "Buenos Aires", new Point(-34.671249, -58.711178))
+			setDireccion("Av. Sta Fe ", 1370, "San Isidro", "Buenos Aires", new Point(-34.480860, -58.518295))
 			fechaHoraActual = LocalDateTime.of(2018, 05, 15, 19, 00)
+			fechaNacimiento = LocalDate.of(1993, 07, 15)
 			tipoUsuario = new Free()
+			
 		]
 		// EVENTOS CERRADOS
 		casamiento = new EventoCerrado() => [
@@ -259,6 +268,7 @@ abstract class JuegoDatosTest {
 			setDireccion("Independencia", 343, "Pilar", "Buenos Aires", new Point(-34.460323, -58.909506))
 			fechaNacimiento = LocalDate.of(1983, 02, 02)
 			fechaHoraActual = LocalDateTime.of(2018, 05, 01, 10, 00)
+			radioCercania = 15
 		]
 		marco = new Usuario() => [
 			nombreUsuario = "MarcoCD"
@@ -267,6 +277,7 @@ abstract class JuegoDatosTest {
 			setDireccion("Moreno", 256, "Pilar", "Buenos Aires", new Point(-34.461846, -58.907565))
 			fechaNacimiento = LocalDate.of(1996, 05, 02)
 			fechaHoraActual = LocalDateTime.of(2018, 05, 20, 17, 00)
+			radioCercania = 18
 		]
 		tomas = new Usuario() => [
 			nombreUsuario = "TomasQWE"
@@ -275,6 +286,7 @@ abstract class JuegoDatosTest {
 			setDireccion("Av Colon", 1090, "Ciudad de Cordoba", "Cordoba", new Point(-31.409261, -64.197778))
 			fechaNacimiento = LocalDate.of(1988, 12, 02)
 			fechaHoraActual = LocalDateTime.of(2018, 05, 10, 20, 52)
+	
 		]
 		miriam = new Usuario() => [
 			nombreUsuario = "MiriamP"
@@ -283,6 +295,7 @@ abstract class JuegoDatosTest {
 			setDireccion("Falucho", 2520, "Mar del Plata", "Buenos Aires", new Point(-38.005192, -57.551312))
 			fechaNacimiento = LocalDate.of(1993, 02, 15)
 			fechaHoraActual = LocalDateTime.of(2018, 05, 11, 10, 00)
+
 		]
 		even1 = new EventoCerrado() => [
 			nombreEvento = "even1"
@@ -344,10 +357,24 @@ abstract class JuegoDatosTest {
 		]
 		carla = new Usuario() => [
 			nombreUsuario = "Carla"
+			nombreApellido = "Carla Peterson"
 			fechaNacimiento = LocalDate.of(1994, 02, 10)
 			fechaHoraActual = LocalDateTime.of(2018, 05, 24, 11, 07)
 			tipoUsuario = new Profesional()
+			mail = "carlitap75@hotmail.com"
+			setDireccion("Av Colon", 1090, "Ciudad de Cordoba", "Cordoba", new Point(-31.409261, -64.197778))
+			fechaHoraActual = LocalDateTime.of(2018, 05, 10, 20, 52)
+			agregarAmigo(lucas)
+			agregarAmigo(agustin)
+			agregarAmigo(agustina)
+			agregarAmigo(alejandro)
 		]
+		
+		agustin.agregarAmigo(carla)
+		agustina.agregarAmigo(carla)
+		free1.agregarAmigo(carla)
+		tomas.agregarAmigo(carla)
+		miriam.agregarAmigo(carla)
 
 		// Servicios
 		animacionMago = new Servicio() => [
@@ -406,6 +433,24 @@ abstract class JuegoDatosTest {
 			agregarSubservicio(servicioLunchMario)
 			agregarSubservicio(animacionMago)
 			agregarSubservicio(candyBarWillyWonka)
+		]
+		repoUsuariosTest = new RepositorioUsuarios() => [
+			
+			create(juan)
+			create(martin)
+			create(maxi)
+			create(beatriz)
+			create(lucas)	//carla es amiga
+			create(maria)
+			create(gaby)
+			create(free1) 							//es amigo de carla
+			create(alejandro) //carla es amiga
+			create(marco)
+			create(tomas)							//es amigo de carla
+			create(miriam)							//es amigo de carla
+			create(carla)
+			create(agustin) //carla es amiga		//es amigo de carla
+			create(agustina) //carla es amiga		 //es amigo de carla
 		]
 	}
 		

@@ -1,13 +1,13 @@
 package ar.edu.notificaciones
 
 import ar.edu.usuarios.Usuario
-import java.util.ArrayList
 import java.util.List
+import org.eclipse.xtend.lib.annotations.Accessors
 
+@Accessors
 class NotificacionYMailContactosCercaEvento extends Notificacion {
 
-	List<Usuario> contactos = new ArrayList<Usuario>
-
+	List<Usuario> contactos = newArrayList
 	override enviar(Usuario organizador) {
 		obtenerContactosOrganizador(organizador)
 		enviarNotificaciones(organizador)
