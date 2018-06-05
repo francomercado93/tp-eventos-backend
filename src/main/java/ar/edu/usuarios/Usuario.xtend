@@ -8,6 +8,8 @@ import ar.edu.notificaciones.Notificacion
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.ArrayList
+import java.util.Collection
 import java.util.List
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
@@ -20,8 +22,7 @@ import org.uqbar.mailService.MailService
 
 @Accessors
 class Usuario {
-	int id = -1
-	 
+	int id = -1 
 	String nombreUsuario
 	String nombreApellido
 	String mail
@@ -33,10 +34,13 @@ class Usuario {
 	LocalDateTime fechaHoraActual
 	TipoUsuario tipoUsuario;
 	double saldoAFavor = 0
-	List<Evento> eventosOrganizados = newArrayList
+	Collection<Evento> eventosOrganizados = new ArrayList<Evento>
 	Set<Invitacion> invitaciones = newHashSet
 	CreditCard miTarjeta
+	//PagoConTarjeta nuevoPago
 	CreditCardService servicioTarjeta
+	List<Profesional> AConfirmar = newArrayList
+	Set<Profesional> ARechazar = newHashSet
 	List<Notificacion> tiposNotificaciones = newArrayList
 	MailService servicioMail
 	List<String> listaArtistasFan
@@ -65,8 +69,7 @@ class Usuario {
 	}
 	
 	def boolean checkCondicionesParaInvitar(EventoCerrado unEvento, Integer cantidadAcompaniantesMaxima) {
-		eventosOrganizados.contains(unEvento) && unEvento.chequearCapacidad(cantidadAcompaniantesMaxima) 
-		&& tipoUsuario.puedeInvitarUsuario(unEvento, cantidadAcompaniantesMaxima)
+		eventosOrganizados.contains(unEvento) && unEvento.chequearCapacidad(cantidadAcompaniantesMaxima) && tipoUsuario.puedeInvitarUsuario(unEvento, cantidadAcompaniantesMaxima)
 	}
 	
 	def realizarInvitacion(Usuario invitado, EventoCerrado unEvento, Integer cantidadAcompaniantesMaxima) {
@@ -74,12 +77,14 @@ class Usuario {
 		unaInvitacion.usuarioRecibeInvitacion()
 	}
 	// EN tipo free => !unEvento.class.toString.equals("ar.edu.eventos.EventoAbierto") && !tipoUsuario.toString.equals("ar.edu.usuarios.Free@707f7052")
-	def crearEvento(Evento unEvento){		
-		if(!this.puedoCrearEvento(unEvento)){		
-			throw new BusinessException("Error no se puede crear evento")
+	def crearEvento(Evento unEvento){		//En test creo el evento primero(para inicializar
+		if( this.puedoCrearEvento(unEvento)){		//variables y luego se lo paso como parametro a
+			unEvento.setFechaCreacionyOrganizador(this)	//usuario organizador que es el que cuando lo "crea"
+			this.agregarEventoLista(unEvento)	//se setean la fecha de creacio y organizador
+			this.enviarNotificaciones()
 		}
-		this.agregarEventoLista(unEvento)	
-		this.enviarNotificaciones()
+		else
+			throw new BusinessException("Error no se puede crear evento")
 	}
 	
 	def enviarNotificaciones() {
@@ -95,7 +100,6 @@ class Usuario {
 	}
 	
 	def void agregarEventoLista(Evento unEvento){
-		unEvento.setFechaCreacionyOrganizador(this)
 		eventosOrganizados.add(unEvento)
 	}
 	
@@ -108,11 +112,11 @@ class Usuario {
 	}
 	
 	def cantidadEventosSimultaneos() {
-		eventosOrganizados.filter[evento | this.fechaHoraActual.isBefore(evento.finEvento) ].size //fecha creacion evento = fecha actual del usuario	
+		this.eventosOrganizados.filter[evento | this.fechaHoraActual.isBefore(evento.finEvento) ].size //fecha creacion evento = fecha actual del usuario	
 	}
 	
 	def cantidadEventosOrganizadosMes() {
-		eventosOrganizados.filter[evento | evento.fechaCreacion.month == this.fechaHoraActual.month 
+		this.eventosOrganizados.filter[evento | evento.fechaCreacion.month == this.fechaHoraActual.month 
 			|| evento.finEvento.month == this.fechaHoraActual.month].size
 	}
 //Usuario evento cerrado
@@ -123,18 +127,27 @@ class Usuario {
 	}
 	
 	//Se recibe unEvento que funciona como una clave y luego se obtiene la invitacion
-	def confirmarInvitacion(EventoCerrado unEvento, Integer cantidadAcompaniantesConfirmados) {	//la cantidad de acompaniantes
-		var unaInvitacion = this.eventoInvitacion(unEvento)			//se la define cuando esta por confirmar
-		if(unaInvitacion !== null)
-			unaInvitacion.confirmar(cantidadAcompaniantesConfirmados)
-	}
 	
+	//CAMBIADO***** La accion se realiza por "TipoDeUsuario" de por medio
+	def confirmarInvitacion(EventoCerrado unEvento, Integer invitados) { // la cantidad de acompaniantes
+		var unaInvitacion = this.eventoInvitacion(unEvento)
+		if (tipoUsuario != null){
+			tipoUsuario.aceptarInvitacion(this, unEvento, invitados)
+			}
+		else if (unaInvitacion !== null){
+			unaInvitacion.confirmar(invitados)
+			}
+	}
+
+	// CAMBIADO***** La accion se realiza por "TipoDeUsuario" de por medio
 	def rechazarInvitacion(EventoCerrado unEvento) {
-		var unaInvitacion = this.eventoInvitacion(unEvento)		
-		if(unaInvitacion !== null)
+		var unaInvitacion = this.eventoInvitacion(unEvento)
+		if (tipoUsuario != null)
+			tipoUsuario.rechazarInvitacion(this, unEvento)
+		else if (unaInvitacion !== null)
 			unaInvitacion.rechazar()
 	}
-	
+	//Nuevo
 	def eventoInvitacion(EventoCerrado unEvento ){
 		invitaciones.findFirst(invitacion | invitacion.evento == unEvento)//obtengo la invitacion con el evento
 	}
@@ -242,8 +255,32 @@ class Usuario {
 		println("Fecha maxima confirmacion: "+unEvento.fechaMaximaConfirmacion)
 		println("Fecha Inicio: "+ unEvento.inicioEvento)
 		println("Fecha fin: "+unEvento.finEvento)
+	}	
+   def agregarInvitacionAceptada (Profesional unProfe){
+   	AConfirmar.add(unProfe)
+   }
+   def agregarInvitacionRechazada(Profesional unProfe){
+   	ARechazar.add(unProfe)
+   }
+
+//////////NUEVO
+   def cambiarDesicionDeUnAceptado(EventoCerrado unEvento){
+   val aCambiar=AConfirmar.findFirst(repaso | repaso.auxEvento == unEvento)
+    if(aCambiar===null)
+    throw new BusinessException ("Invitacion no encontrada")else
+    unEvento.removerUsuarioAconfirmar(aCambiar)
+     unEvento.agregarUsuariosArechazar(aCambiar)
+}
+   def cambiarDesicionDeUnRechazado(EventoCerrado unEvento){
+   val aCambiar=ARechazar.findFirst(repaso | repaso.auxEvento == unEvento)
+  
+   if(aCambiar===null)
+    throw new BusinessException ("Invitacion no encontrada")else
+    
+      unEvento.agregarUsuarioAconfirmar(aCambiar)
+      unEvento.removerUsuariosArechazar(aCambiar)
+//////////////////
 	}
-	
 	def recibirNotificacion(Usuario organizador) {
 		println(nombreUsuario+": El usuario "+organizador.nombreUsuario+" creo el evento "+organizador.ultimoEventoOrganizado.nombreEvento)
 	}
@@ -268,5 +305,4 @@ class Usuario {
 	def recibirNotificacionArtista(String artista,  Evento evento) {
 		println("El artista "+artista+"se presentara en el evento "+evento.nombreEvento )
 	}
-	
 }

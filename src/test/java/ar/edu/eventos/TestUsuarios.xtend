@@ -337,4 +337,36 @@ class TestUsuarios extends JuegoDatosTest {
 		juan.servicioTarjeta = mockearCreditCardServicePagoRechazado(juan.miTarjeta, lollapalooza.valorEntrada)
 		juan.comprarEntrada(lollapalooza)
 	}
+	
+	//TEST DE DE INVITACIONES RETRACTABLES	
+	@Test 
+ 
+	def void seConcretaLainvitacionAlEjecutarOrdenes(){
+		gaston.crearEvento(cumple)
+		gaston.invitarUsuario(carla, cumple, 2)
+		carla.confirmarInvitacion(cumple,2)	
+		Assert.assertEquals(0,cumple.invitadosConfirmados.size,0)
+		cumple.ejecutarOrdenesDeInvitacion()
+		Assert.assertEquals(1,cumple.invitadosConfirmados.size,0)
+		}
+	@Test
+	def void usuarioCambiaDesicionAceptadaAntesEjecutarOrden(){
+		gaston.crearEvento(cumple)
+		gaston.invitarUsuario(carla, cumple, 2)
+		carla.confirmarInvitacion(cumple,2)
+		carla.cambiarDesicionDeUnAceptado(cumple)
+		cumple.ejecutarOrdenesDeInvitacion()
+		Assert.assertEquals(0,cumple.invitadosConfirmados.size,0)
+	}
+	@Test
+		def void usuarioCambiaDesicionaRechazadaAntesEjecutarOrden(){
+		gaston.crearEvento(cumple)
+		gaston.invitarUsuario(carla, cumple, 2)
+		carla.confirmarInvitacion(cumple,2)
+		carla.rechazarInvitacion(cumple)
+		carla.cambiarDesicionDeUnRechazado(cumple)
+		cumple.ejecutarOrdenesDeInvitacion()
+		Assert.assertEquals(1,cumple.invitadosConfirmados.size,0)
+	}
+	
 }

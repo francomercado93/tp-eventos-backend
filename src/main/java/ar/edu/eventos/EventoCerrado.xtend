@@ -1,6 +1,7 @@
 package ar.edu.eventos
 
 import ar.edu.eventos.exceptions.BusinessException
+import ar.edu.usuarios.Profesional
 import ar.edu.usuarios.Usuario
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
@@ -9,6 +10,8 @@ import org.eclipse.xtend.lib.annotations.Accessors
 class EventoCerrado extends Evento {
 
 	Set<Usuario> invitadosConfirmados = newHashSet
+	Set<Profesional> usuariosAconfirmar = newHashSet
+	Set<Profesional> usuariosRechazar = newHashSet
 	Integer capacidadMaxima
 	
 	override porcentajeExito(){
@@ -102,5 +105,24 @@ class EventoCerrado extends Evento {
 		super.cancelarEvento
 		this.notificarConfirmados()
 	}
-
+	//////////NUEVA
+	def agregarUsuarioAconfirmar(Profesional unUsuario){
+		usuariosAconfirmar.add(unUsuario)
+		}
+	
+	def agregarUsuariosArechazar(Profesional unUsuario){
+		usuariosRechazar.add(unUsuario)
+	}
+	
+	def removerUsuarioAconfirmar(Profesional unUsuario){
+		usuariosAconfirmar.remove(unUsuario)
+	}
+	def removerUsuariosArechazar(Profesional unUsuario){
+		usuariosRechazar.remove(unUsuario)
+	}
+	def ejecutarOrdenesDeInvitacion(){
+     usuariosAconfirmar.forEach[usuario|usuario.procesarInvitacionAceptada()]
+     usuariosRechazar.forEach[usuario|usuario.procesarInvitacionRechazada()]
+    }
+       /////////
 }
