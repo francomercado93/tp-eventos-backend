@@ -3,6 +3,7 @@ package ar.edu.usuarios
 import ar.edu.eventos.Evento
 import ar.edu.eventos.EventoCerrado
 import java.time.LocalDateTime
+
 /*
  * Class amateur
  */
@@ -34,6 +35,7 @@ class Amateur implements TipoUsuario {
 	}
 	override puedeInvitarUsuario(EventoCerrado unEvento, Integer cantidadAcompaniantesMaxima){
 		unEvento.asistentes.size() < this.cantidadMaximaInvitaciones		
-		
 	}
+	
+
 }

@@ -1,6 +1,7 @@
 package ar.edu.eventos
 
 import ar.edu.eventos.exceptions.BusinessException
+import ar.edu.main.ServicioInvitacionesAsincronico
 import ar.edu.usuarios.Usuario
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
@@ -102,5 +103,8 @@ class EventoCerrado extends Evento {
 		super.cancelarEvento
 		this.notificarConfirmados()
 	}
-
+   def ejecucionesDeInvitacionesAsincronicas(ServicioInvitacionesAsincronico unServicio){
+   	unServicio.ejecucionInvitacionesAsincronicas
+   }
+   
 }

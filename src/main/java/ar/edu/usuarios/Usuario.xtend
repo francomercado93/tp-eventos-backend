@@ -1,3 +1,4 @@
+
 package ar.edu.usuarios
 
 import ar.edu.eventos.Artista
@@ -5,6 +6,7 @@ import ar.edu.eventos.Evento
 import ar.edu.eventos.EventoAbierto
 import ar.edu.eventos.EventoCerrado
 import ar.edu.eventos.exceptions.BusinessException
+import ar.edu.main.ServicioInvitacionesAsincronico
 import ar.edu.notificaciones.Notificacion
 import java.time.Duration
 import java.time.LocalDate
@@ -41,6 +43,11 @@ class Usuario {
 	List<Notificacion> tiposNotificaciones = newArrayList
 	MailService servicioMail
 	List<Artista> artistasFavoritos = newArrayList
+	Set<Usuario> invAceptado = newHashSet
+	Set<Usuario> invRechazado = newHashSet
+	EventoCerrado auxEvento
+	int auxInvitados
+	Usuario clon
 	
 	def setDireccion(String calle, int numero, String localidad, String provincia, Point punto){
 		direccion = new Direccion(calle, numero, localidad, provincia, punto)
@@ -247,5 +254,40 @@ class Usuario {
 	def borrarArtistaFavorito(Artista artista){
 		artistasFavoritos.remove(artista)
 	}
+	def confirmacionAsincronica (ServicioInvitacionesAsincronico unServicio,EventoCerrado unEvento, Integer invitados){
+	 auxEvento=unEvento
+	 auxInvitados=invitados
+	 clon=this.clone as Usuario
+	 invAceptado.add(clon)
+	 unServicio.usuariosAProcesar.add(this) 
+	}
+	
+	
+	
+	def rechazoAsincronica (ServicioInvitacionesAsincronico unServicio,EventoCerrado unEvento){
+	 auxEvento=unEvento
+	 clon=this.clone as Usuario
+	 invRechazado.add(clon)
+	 unServicio.usuariosAProcesar.add(this) 
+	}
+	
+	def procesarAceptados(){
+		invAceptado.forEach[usr|usr.confirmarInvitacion(usr.auxEvento,usr.auxInvitados)]
+	}
+	
+	def procesarRechazados(){
+		invRechazado.forEach[usr|usr.rechazarInvitacion(usr.auxEvento)]
+	}
+	
+	def cambiarDesicionAceptado(ServicioInvitacionesAsincronico unServicio,EventoCerrado unEvento){
+		unServicio.cambiarDesicionAceptado(this,unEvento)
+	}
+	
+	def cambiarDesicionRechazado(ServicioInvitacionesAsincronico unServicio,EventoCerrado unEvento){
+		unServicio.cambiarDesicionRechazado(this,unEvento)
+	}
 	
 }
+
+	
+	
