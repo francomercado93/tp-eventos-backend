@@ -344,28 +344,28 @@ class TestUsuarios extends JuegoDatosTest {
 	def void seConcretaLainvitacionAlEjecutarOrdenes(){
 		gaston.crearEvento(cumple)
 		gaston.invitarUsuario(carla, cumple, 2)
-		carla.confirmarInvitacion(cumple,2)	
-		Assert.assertEquals(0,cumple.invitadosConfirmados.size,0)
-		cumple.ejecutarOrdenesDeInvitacion()
+        carla.confirmacionAsincronica (servAsincronico,cumple, 2)		
+        Assert.assertEquals(0,cumple.invitadosConfirmados.size,0)
+		cumple.ejecucionesDeInvitacionesAsincronicas(servAsincronico)
 		Assert.assertEquals(1,cumple.invitadosConfirmados.size,0)
 		}
 	@Test
 	def void usuarioCambiaDesicionAceptadaAntesEjecutarOrden(){
 		gaston.crearEvento(cumple)
 		gaston.invitarUsuario(carla, cumple, 2)
-		carla.confirmarInvitacion(cumple,2)
-		carla.cambiarDesicionDeUnAceptado(cumple)
-		cumple.ejecutarOrdenesDeInvitacion()
+		carla.confirmacionAsincronica (servAsincronico,cumple, 2)	
+		carla.cambiarDesicionAceptado(servAsincronico,cumple)
+		cumple.ejecucionesDeInvitacionesAsincronicas(servAsincronico)
 		Assert.assertEquals(0,cumple.invitadosConfirmados.size,0)
 	}
 	@Test
 		def void usuarioCambiaDesicionaRechazadaAntesEjecutarOrden(){
 		gaston.crearEvento(cumple)
 		gaston.invitarUsuario(carla, cumple, 2)
-		carla.confirmarInvitacion(cumple,2)
+		carla.rechazoAsincronica(servAsincronico,cumple)
 		carla.rechazarInvitacion(cumple)
-		carla.cambiarDesicionDeUnRechazado(cumple)
-		cumple.ejecutarOrdenesDeInvitacion()
+		carla.cambiarDesicionRechazado(servAsincronico,cumple)
+		cumple.ejecucionesDeInvitacionesAsincronicas(servAsincronico)
 		Assert.assertEquals(1,cumple.invitadosConfirmados.size,0)
 	}
 	

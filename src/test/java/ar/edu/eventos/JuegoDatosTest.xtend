@@ -1,5 +1,6 @@
 package ar.edu.eventos
 
+import ar.edu.main.ServicioInvitacionesAsincronico
 import ar.edu.repositorios.RepositorioUsuarios
 import ar.edu.servicios.Servicio
 import ar.edu.servicios.ServicioMultiple
@@ -41,6 +42,7 @@ abstract class JuegoDatosTest {
 	Locacion hipodromoPalermo
 	LocalDateTime inicioLolla = LocalDateTime.of(2018, 03, 27, 18, 00)
 	LocalDateTime finLolla = LocalDateTime.of(2018, 03, 28, 01, 00)
+	ServicioInvitacionesAsincronico servAsincronico= new ServicioInvitacionesAsincronico
 	// LocalDateTime inicioSound = LocalDateTime.of(2018, 04, 14, 18, 00)
 	// LocalDateTime finSound = LocalDateTime.of(2018, 04, 14, 23, 30)
 	Point puntoPrueba = new Point(-34.577908, -58.526486)
