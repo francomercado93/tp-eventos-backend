@@ -1,8 +1,8 @@
 package ar.edu.eventos
 
+import ar.edu.conversionActualizacion.ConversionJson
+import ar.edu.conversionActualizacion.StubUpdateService
 import ar.edu.eventos.exceptions.BusinessException
-import ar.edu.main.ConversionJson
-import ar.edu.main.StubUpdateService
 import ar.edu.repositorios.RepositorioLocacion
 import ar.edu.repositorios.RepositorioServicios
 import ar.edu.repositorios.RepositorioUsuarios
@@ -308,6 +308,7 @@ class TestRepositorios extends JuegoDatosTest{
 	@Test
 	def void pruebaUpdateAllUsuarios() {
 		var repo = new RepositorioUsuarios()
+		repo.updateService = new StubUpdateService
 		repo.create(agustin)
 		repo.create(agustina)
 		repo.create(lucas)
@@ -323,6 +324,7 @@ class TestRepositorios extends JuegoDatosTest{
 	@Test
 	def void pruebaUpdateAllServicios() {
 		var repo = new RepositorioServicios()
+		repo.updateService = new StubUpdateService
 		repo.create(animacionMago)
 		repo.create(cateringFoodParty)
 		repo.create(candyBarWillyWonka)
@@ -341,6 +343,7 @@ class TestRepositorios extends JuegoDatosTest{
 	@Test
 	def void pruebaUpdateAllLocaciones() {
 		var repo = new RepositorioLocacion()
+		repo.updateService = new StubUpdateService
 		repo.create(tecnopolis)
 		repo.create(hipodromo)
 		repo.create(hipodromoPalermo)

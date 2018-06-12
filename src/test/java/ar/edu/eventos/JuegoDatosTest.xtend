@@ -1,5 +1,6 @@
 package ar.edu.eventos
 
+import ar.edu.conversionActualizacion.StubUpdateService
 import ar.edu.repositorios.RepositorioUsuarios
 import ar.edu.servicios.Servicio
 import ar.edu.servicios.ServicioMultiple
@@ -480,7 +481,7 @@ abstract class JuegoDatosTest {
 			agregarSubservicio(candyBarWillyWonka)
 		]
 		repoUsuariosTest = new RepositorioUsuarios() => [
-			
+			updateService = new StubUpdateService
 			create(juan)
 			create(martin)
 			create(maxi)

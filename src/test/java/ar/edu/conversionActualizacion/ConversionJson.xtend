@@ -1,6 +1,7 @@
-package ar.edu.main
+package ar.edu.conversionActualizacion
 
 import ar.edu.eventos.Locacion
+import ar.edu.servicios.Servicio
 import ar.edu.servicios.TarifaFija
 import ar.edu.servicios.TarifaPersona
 import ar.edu.servicios.TarifaPorHora
@@ -14,7 +15,6 @@ import java.time.format.DateTimeFormatter
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.geodds.Point
-import ar.edu.servicios.Servicio
 
 @Accessors
 class ConversionJson {
