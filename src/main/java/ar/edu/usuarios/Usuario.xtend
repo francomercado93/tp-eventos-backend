@@ -22,7 +22,7 @@ import org.uqbar.mailService.Mail
 import org.uqbar.mailService.MailService
 
 @Accessors
-class Usuario {
+class Usuario implements Cloneable{
 	int id = -1
 	 
 	String nombreUsuario
