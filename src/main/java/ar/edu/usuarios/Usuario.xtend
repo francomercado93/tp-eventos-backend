@@ -201,7 +201,7 @@ class Usuario {
 	def agregarAmigo(Usuario unAmigo) {
 		amigos.add(unAmigo)
 	}
-	
+	//Strategie antisocial o social, sacar boolean
 	def rechazarPendientes() {
 		if(esAntisocial)
 			this.antisocialRechazarPendientes
