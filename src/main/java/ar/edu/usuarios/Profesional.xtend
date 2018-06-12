@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
 @Accessors
-class Profesional implements TipoUsuario,Cloneable{
+class Profesional implements TipoUsuario{
 	//NUEVO////
 	Profesional clonado
 	Usuario auxUsr
@@ -38,32 +38,4 @@ class Profesional implements TipoUsuario,Cloneable{
 		true
 	}
 	
-	//NUEVO
-	override aceptarInvitacion(Usuario unUsuario,EventoCerrado unEvento,Integer invitados){
-		auxUsr=unUsuario
-		auxEvento=unEvento
-		auxInvitados=invitados
-		clonado=this.clone as Profesional
-		unUsuario.agregarInvitacionAceptada(clonado)
-		unEvento.agregarUsuarioAconfirmar(clonado)
-	}
-	
-	override rechazarInvitacion(Usuario unUsuario,EventoCerrado unEvento){
-		auxUsr=unUsuario
-		auxEvento=unEvento
-	    clonado = this.clone as Profesional
-		unUsuario.agregarInvitacionRechazada(clonado)
-		unEvento.agregarUsuariosArechazar(clonado)
-		}
-		
-	def procesarInvitacionAceptada(){
-		var unaInvitacion = auxUsr.eventoInvitacion(auxEvento)			
-		if(unaInvitacion !== null)
-		unaInvitacion.confirmar(auxInvitados)
-		}	
-	
-	def procesarInvitacionRechazada(){
-		var unaInvitacion = auxUsr.eventoInvitacion(auxEvento)		
-		if(unaInvitacion !== null)
-			unaInvitacion.rechazar()
-	}}
+}

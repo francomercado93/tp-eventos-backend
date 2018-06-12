@@ -37,11 +37,5 @@ class Amateur implements TipoUsuario {
 		unEvento.asistentes.size() < this.cantidadMaximaInvitaciones		
 	}
 	
-	override aceptarInvitacion(Usuario unUsuario,EventoCerrado unEvento,Integer invitados){
-		
-	}
-	
-	override rechazarInvitacion(Usuario unUsuario,EventoCerrado unEvento){
-		
-	}	
+
 }

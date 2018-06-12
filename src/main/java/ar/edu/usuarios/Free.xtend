@@ -39,13 +39,6 @@ class Free implements TipoUsuario {
 		(unEvento.cantidadAsistentesPosibles + cantidadAcompaniantesMaxima + 1 <= this.cantidadMaximaPersonasEvento) // Hasta 50 personas en total
 	}
 	
-	override aceptarInvitacion(Usuario unUsuario,EventoCerrado unEvento,Integer invitados){
-		
-	}
-	
-	override rechazarInvitacion(Usuario unUsuario,EventoCerrado unEvento){
-		
-	}
 
 /*override organizarEventoAbierto(EventoAbierto abierto){
  * 	println("Usuario free no puede organizar evento abierto")
