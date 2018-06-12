@@ -1,6 +1,5 @@
 package ar.edu.eventos
 
-import ar.edu.eventos.exceptions.BusinessException
 import ar.edu.usuarios.Usuario
 import org.eclipse.xtend.lib.annotations.Accessors
 
@@ -13,13 +12,6 @@ class EventoAbierto extends Evento {
 		
 	override capacidadMaxima() {
 		Math.round(lugar.superficie / this.espacioNecesarioPorPersona) // mostraba 5.99 y no 6
-	}
-
-	def void usuarioCompraEntrada(Usuario unUsuario) {
-		if (this.cumpleCondiciones(unUsuario))
-			this.agregarUsuarioListaAsistentes(unUsuario)
-		else
-			throw new BusinessException("Error: no se puede comprar entrada")
 	}
 
 	override boolean cumpleCondiciones(Usuario unUsuario) {

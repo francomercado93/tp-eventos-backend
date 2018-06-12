@@ -142,11 +142,19 @@ class Usuario {
 	
 
 	def comprarEntrada(EventoAbierto unEvento) {	
+		if(!unEvento.cumpleCondiciones(this)){
+			throw new BusinessException("Error: no se puede comprar entrada")
+		}
+		this.pagarConTarjeta(unEvento)
+		unEvento.agregarUsuarioListaAsistentes(this)
+		
+	}
+	
+	def String pagarConTarjeta(EventoAbierto unEvento) {
 		val CCResponse response = servicioTarjeta.pay(miTarjeta, unEvento.valorEntrada)
 		if(response.statusCode != 0) {
 			throw new BusinessException(response.statusMessage)
 		}
-		unEvento.usuarioCompraEntrada(this)
 		println(response.statusMessage)
 	}
 	
