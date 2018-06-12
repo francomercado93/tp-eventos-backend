@@ -10,7 +10,7 @@ class EventoAbierto extends Evento {
 	double espacioNecesarioPorPersona = 0.8
 	int edadMinima
 	double valorEntrada
-
+		
 	override capacidadMaxima() {
 		Math.round(lugar.superficie / this.espacioNecesarioPorPersona) // mostraba 5.99 y no 6
 	}
@@ -68,8 +68,7 @@ class EventoAbierto extends Evento {
 			0.8
 	}
 	
-	def agregarArtista(String artista){
-		artistas = newArrayList
+	def agregarArtista(Artista artista){
 		artistas.add(artista)
 	}
 	

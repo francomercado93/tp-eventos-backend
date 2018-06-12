@@ -8,6 +8,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 class NotificacionYMailContactosCercaEvento extends Notificacion {
 
 	List<Usuario> contactos = newArrayList
+	
 	override enviar(Usuario organizador) {
 		obtenerContactosOrganizador(organizador)
 		enviarNotificaciones(organizador)
@@ -24,11 +25,11 @@ class NotificacionYMailContactosCercaEvento extends Notificacion {
 	}
 
 	def void enviarMails(Usuario organizador) {
-		contactosQueVivenCerca(organizador).forEach(usuario|organizador.enviarMailA(usuario))
+		contactosQueVivenCerca(organizador).forEach(usuario|organizador.enviarMailA(usuario, ""))
 	}
 
 	def List<Usuario> contactosQueVivenCerca(Usuario organizador) {
-		usuariosQueVivenCerca(organizador.ultimoEventoOrganizado, contactos)
+		usuariosQueVivenCerca(organizador.ultimoEventoOrganizado,  contactos)
 	}
 
 }

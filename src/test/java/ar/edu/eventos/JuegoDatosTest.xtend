@@ -18,6 +18,7 @@ import org.uqbar.ccService.CCResponse
 import org.uqbar.ccService.CreditCard
 import org.uqbar.ccService.CreditCardService
 import org.uqbar.geodds.Point
+import org.uqbar.mailService.MailService
 
 import static org.mockito.Mockito.*
 
@@ -70,6 +71,18 @@ abstract class JuegoDatosTest {
 	ServicioMultiple servicioLunchMario
 	ServicioMultiple animacionYCateringManolo
 	RepositorioUsuarios repoUsuariosTest
+	MailService mockedServicioMail
+	Artista rhcp
+	Artista royalBlood
+	Artista theKillers
+	Artista lanaDelRey
+	Artista pearlJam
+	Artista camilaCabello
+	Artista damasGratis
+	Artista marilinaBertoldi
+	Artista metallica
+	Artista arcticMonkeys
+	Artista coldplay
 	
 	@Before
 	def void init() {
@@ -96,7 +109,22 @@ abstract class JuegoDatosTest {
 			puntoGeografico = new Point(-34.567684, -58.429661)
 			superficie = 4.8d
 		]
-
+		
+		//====ARTISTAS=====
+		
+		 rhcp = new Artista("Red hot chilli peppers")
+		 royalBlood = new Artista("Royal blood")
+		 theKillers = new Artista("The killers")
+		 lanaDelRey = new Artista( "Lana del Rey")
+		 pearlJam = new Artista("Pearl jam")
+		 camilaCabello = new Artista("Camila Cabello")
+		 damasGratis = new Artista("Damas gratis")
+		 marilinaBertoldi = new Artista( "Marilina Bertoldi")
+		//Artistas que no forman parte del festival		
+		 metallica = new Artista("Metallica")
+		 arcticMonkeys = new Artista("Arctic Monkeys")
+		 coldplay = new Artista("Coldplay")
+		 
 		// EVENTOS ABIERTOS
 		/*soundhearts = new EventoAbierto() => [
 		 * 	nombreEvento = "Soundhearts"
@@ -107,6 +135,7 @@ abstract class JuegoDatosTest {
 		 * 	valorEntrada = 0
 
 		 ]*/
+		 
 		lollapalooza = new EventoAbierto() => [
 			nombreEvento = "lollapalooza"
 			inicioEvento = inicioLolla
@@ -115,6 +144,14 @@ abstract class JuegoDatosTest {
 			fechaMaximaConfirmacion = LocalDateTime.of(2018, 03, 15, 23, 59)
 			edadMinima = 18
 			valorEntrada = 500
+			agregarArtista(rhcp)
+			agregarArtista(royalBlood)
+			agregarArtista(theKillers)
+			agregarArtista(lanaDelRey)
+			agregarArtista(pearlJam)
+			agregarArtista(camilaCabello)
+			agregarArtista(damasGratis)
+			agregarArtista(marilinaBertoldi)
 		]
 
 		cumple = new EventoCerrado() => [
@@ -143,6 +180,10 @@ abstract class JuegoDatosTest {
 			setDireccion("Quintana", 2551, "San Martin", "Buenos Aires", new Point(-34.578651, -58.549614))
 			fechaHoraActual = LocalDateTime.of(2018, 03, 15, 22, 00)
 			fechaNacimiento = LocalDate.of(2000, 01, 02)
+			agregarArtistaFavorito(rhcp)
+			agregarArtistaFavorito(royalBlood)
+			agregarArtistaFavorito(metallica)
+			agregarArtistaFavorito(arcticMonkeys)
 			
 		]
 		agustina = new Usuario() => [
@@ -153,6 +194,8 @@ abstract class JuegoDatosTest {
 			fechaHoraActual = LocalDateTime.of(2018, 03, 15, 22, 00)
 			fechaNacimiento = LocalDate.of(2000, 01, 02)
 			radioCercania = 30
+			agregarArtistaFavorito(lanaDelRey)
+			agregarArtistaFavorito(coldplay)
 			
 		]
 		juan = new Usuario() => [
@@ -164,6 +207,7 @@ abstract class JuegoDatosTest {
 			fechaNacimiento = LocalDate.of(2000, 01, 02)
 			miTarjeta = new CreditCard
 			servicioTarjeta = mockearCreditCardServicePagoExitoso(miTarjeta, lollapalooza.valorEntrada)
+			agregarArtistaFavorito(metallica)
 		]
 		martin = new Usuario() => [
 			nombreUsuario = "martin"
@@ -211,6 +255,7 @@ abstract class JuegoDatosTest {
 			miTarjeta = new CreditCard
 			servicioTarjeta = mockearCreditCardServicePagoExitoso(miTarjeta, lollapalooza.valorEntrada)
 			comprarEntrada(lollapalooza)
+			agregarArtistaFavorito(damasGratis)
 		]
 		lucas = new Usuario() => [
 			nombreUsuario = "Lucas41"
@@ -452,6 +497,8 @@ abstract class JuegoDatosTest {
 			create(agustin) //carla es amiga		//es amigo de carla
 			create(agustina) //carla es amiga		 //es amigo de carla
 		]
+		
+		mockedServicioMail = mock(typeof(MailService))
 	}
 		
 	def CreditCardService mockearCreditCardServicePagoExitoso(CreditCard tarjeta, double valor) {
@@ -465,4 +512,5 @@ abstract class JuegoDatosTest {
 		when(servicioTarjeta.pay(tarjeta, valor)).thenReturn(new CCResponse()=>[statusCode = 2 statusMessage = "Pago rechazado"])
 		return servicioTarjeta
 	}
+	
 }

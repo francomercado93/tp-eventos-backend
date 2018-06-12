@@ -1,6 +1,6 @@
 package ar.edu.notificaciones
 
-import ar.edu.eventos.Evento
+import ar.edu.eventos.Artista
 import ar.edu.usuarios.Usuario
 import java.util.List
 
@@ -8,14 +8,18 @@ class MailFansArtista extends Notificacion{
 	
 	override enviar(Usuario organizador){
 		val nuevoEvento = organizador.ultimoEventoOrganizado
-		nuevoEvento.artistas.forEach(artista | notificarFans(artista, nuevoEvento))
+		nuevoEvento.artistas.forEach(artista | this.notificarFans(artista, organizador))
 	}
 	
-	def notificarFans(String artista, Evento nuevoEvento) {
-		usuariosQueSonFansDeArtista(artista).forEach(usr | usr.recibirNotificacionArtista(artista, nuevoEvento))
+	def notificarFans(Artista artista, Usuario organizador) {
+		usuariosQueSonFansDeArtista(artista).forEach(usr | organizador.enviarMailA(usr, this.mensajeArtista(artista)))
 	}
 	
-	def List<Usuario> usuariosQueSonFansDeArtista(String artista){
+	def String mensajeArtista(Artista artista){
+		"El artista " + artista.toString + "se presentara en este evento"
+	}
+	
+	def List<Usuario> usuariosQueSonFansDeArtista(Artista artista){
 		repoUsuarios.lista.filter(usr | usr.esFanDe(artista)).toList
 	}
 }

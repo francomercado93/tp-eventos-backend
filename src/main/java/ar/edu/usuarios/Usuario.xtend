@@ -1,5 +1,6 @@
 package ar.edu.usuarios
 
+import ar.edu.eventos.Artista
 import ar.edu.eventos.Evento
 import ar.edu.eventos.EventoAbierto
 import ar.edu.eventos.EventoCerrado
@@ -39,7 +40,7 @@ class Usuario {
 	CreditCardService servicioTarjeta
 	List<Notificacion> tiposNotificaciones = newArrayList
 	MailService servicioMail
-	List<String> listaArtistasFan
+	List<Artista> artistasFavoritos = newArrayList
 	
 	def setDireccion(String calle, int numero, String localidad, String provincia, Point punto){
 		direccion = new Direccion(calle, numero, localidad, provincia, punto)
@@ -249,24 +250,29 @@ class Usuario {
 	}
 	
 	def ultimoEventoOrganizado() {
-		eventosOrganizados.last
+		eventosOrganizados.last 
 	}
 	
-	def enviarMailA(Usuario contacto){
+	def enviarMailA(Usuario contacto, String mensaje){
 		servicioMail.sendMail(new Mail =>[
 			to = contacto.mail
 			from = this.mail
 			subject = "Nuevo evento cerca"
-			text = "El usuario "+contacto.nombreUsuario+"creo el evento "+this.ultimoEventoOrganizado()
+			text = "El usuario "+ contacto.nombreUsuario +"creo el evento " 
+			+ this.ultimoEventoOrganizado() + mensaje
 		])
 	}
 	
-	def esFanDe(String artista) {
-		listaArtistasFan.contains(artista)
+	def esFanDe(Artista artista) {
+		artistasFavoritos.contains(artista)
 	}
 	
-	def recibirNotificacionArtista(String artista,  Evento evento) {
-		println("El artista "+artista+"se presentara en el evento "+evento.nombreEvento )
+	def agregarArtistaFavorito(Artista artista){
+		artistasFavoritos.add(artista)
+	}
+	
+	def borrarArtistaFavorito(Artista artista){
+		artistasFavoritos.remove(artista)
 	}
 	
 }

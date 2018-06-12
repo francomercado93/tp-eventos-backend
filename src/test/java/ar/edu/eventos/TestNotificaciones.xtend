@@ -5,7 +5,11 @@ import ar.edu.notificaciones.NotificacionUsuarioQueVivenCerca
 import ar.edu.notificaciones.NotificacionUsuariosAmigosOrganizador
 import ar.edu.notificaciones.NotificacionYMailContactosCercaEvento
 import org.junit.Test
-import org.uqbar.mailService.MailService
+import org.uqbar.mailService.Mail
+
+import static org.mockito.ArgumentMatchers.*
+import static org.mockito.Mockito.*
+import ar.edu.notificaciones.MailFansArtista
 
 class TestNotificaciones extends JuegoDatosTest {
 
@@ -26,11 +30,12 @@ class TestNotificaciones extends JuegoDatosTest {
 	
 	@Test
 	def void pruebaNotificacionYMailContactosCercaEvento(){
-		carla.servicioMail = new MailService		//Falta envio y recepcion del mail mock?
+		carla.servicioMail = mockedServicioMail		
 		var notificacion = new NotificacionYMailContactosCercaEvento
 		notificacion.repoUsuarios = repoUsuariosTest
 		carla.agregarTipoNotificacion(notificacion)
-		carla.crearEvento(lollapalooza)
+		carla.crearEvento(lollapalooza) 
+		verify(mockedServicioMail, times(3)).sendMail(any(Mail))
 
 	}
 	
@@ -39,8 +44,16 @@ class TestNotificaciones extends JuegoDatosTest {
 		var notificacion = new NotificacionUsuarioQueVivenCerca
 		notificacion.repoUsuarios = repoUsuariosTest
 		carla.agregarTipoNotificacion(notificacion)
-		carla.crearEvento(lollapalooza)
-		
+		carla.crearEvento(lollapalooza)	
 	}
 	
+	@Test
+	def void pruebaMailUsuariosFanDeArtistasDeUnEvento(){
+		carla.servicioMail = mockedServicioMail		
+		var notificacion = new MailFansArtista
+		notificacion.repoUsuarios = repoUsuariosTest
+		carla.agregarTipoNotificacion(notificacion)
+		carla.crearEvento(lollapalooza) 
+		verify(mockedServicioMail, times(4)).sendMail(any(Mail))
+	}	
 }
