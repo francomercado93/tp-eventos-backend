@@ -3,6 +3,9 @@ package ar.edu.usuarios
 import ar.edu.eventos.Evento
 import ar.edu.eventos.EventoCerrado
 import java.time.LocalDateTime
+/*
+ * Class amateur
+ */
 
 class Amateur implements TipoUsuario {
 	
