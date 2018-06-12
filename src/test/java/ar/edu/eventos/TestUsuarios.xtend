@@ -1,6 +1,8 @@
 package ar.edu.eventos
 
 import ar.edu.eventos.exceptions.BusinessException
+import ar.edu.usuarios.Antisocial
+import ar.edu.usuarios.Sociable
 import ar.edu.usuarios.Usuario
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -207,7 +209,7 @@ class TestUsuarios extends JuegoDatosTest {
 	@Test
 	def void usuarioAntisocialRechazaInvitacionPendienteSiSeEncuentraFueraDeSuRadioDeCercania() {
 		lucas.radioCercania = 5
-		lucas.esAntisocial = true
+		lucas.tipoPersonalidad = new Antisocial()
 		beatriz.crearEvento(casamiento)
 		beatriz.invitarUsuario(lucas, casamiento, 3)
 		lucas.rechazarPendientes() // cuando se rechaza la invitacion, se lo saca de la
@@ -217,7 +219,7 @@ class TestUsuarios extends JuegoDatosTest {
 	@Test
 	def void usuarioAntisocialRechazaInvitacionPendienteSiNoAsistenAlMenosDosAmigos() {
 		lucas.radioCercania = 90
-		lucas.esAntisocial = true
+		lucas.tipoPersonalidad = new Antisocial()
 		lucas.agregarAmigo(miriam) // asiste un amigo
 		beatriz.crearEvento(casamiento)
 		beatriz.invitarUsuario(lucas, casamiento, 3)
@@ -230,7 +232,7 @@ class TestUsuarios extends JuegoDatosTest {
 	@Test
 	def void noAntisocialRechazaPendienteSiSeEncuentraFueraDeSuRadioDeCercaniaYNoAsisteNingunAmigo() {
 		lucas.radioCercania = 100
-		lucas.esAntisocial = false
+		lucas.tipoPersonalidad = new Sociable()
 		lucas.agregarAmigo(miriam) // lucas tiene amigos
 		lucas.agregarAmigo(juan) // juan no es invitado
 		beatriz.crearEvento(casamiento)

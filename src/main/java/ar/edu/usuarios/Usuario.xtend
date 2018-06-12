@@ -28,7 +28,7 @@ class Usuario {
 	String mail
 	LocalDate fechaNacimiento
 	Direccion direccion
-	boolean esAntisocial
+	TipoPersonalidad tipoPersonalidad
 	double radioCercania
 	Set<Usuario> amigos = newHashSet
 	LocalDateTime fechaHoraActual
@@ -201,44 +201,9 @@ class Usuario {
 	def agregarAmigo(Usuario unAmigo) {
 		amigos.add(unAmigo)
 	}
-	//Strategie antisocial o social, sacar boolean
+	//Strategy antisocial o social, sacar boolean
 	def rechazarPendientes() {
-		if(esAntisocial)
-			this.antisocialRechazarPendientes
-		else
-			this.noAntisocialRechazarPendientes
-	}
-	
-	def noAntisocialRechazarPendientes() {
-		this.pendientesParaRechazarQueCumplenCondicionNoAntisocial.forEach[invitacion | this.rechazarInvitacion(invitacion.evento)]
-	}
-	
-	def pendientesParaRechazarQueCumplenCondicionNoAntisocial() {
-		invitaciones.filter[invitacion| this.cumpleCondicionesNoAntisocial(invitacion.evento)]
-	}
-	
-	def boolean cumpleCondicionesNoAntisocial(EventoCerrado unEvento){
-		!this.eventoEstaCerca(unEvento) || this.noAsistenAmigos(unEvento)
-	}
-	
-	def boolean noAsistenAmigos(EventoCerrado invitacion) {
-		this.cantidadAmigosConfirmadosEvento(invitacion) == 0
-	}
-	
-	def antisocialRechazarPendientes() {
-		this.pendientesParaRechazarQueCumplenCondicionAntisocial.forEach[invitacion | this.rechazarInvitacion(invitacion.evento)]
-	}
-	
-	def pendientesParaRechazarQueCumplenCondicionAntisocial() {
-		invitaciones.filter[invitacion| this.cumpleCondicionesAntisocial(invitacion.evento)]
-	}
-	
-	def boolean cumpleCondicionesAntisocial(EventoCerrado unEvento) {
-		!this.eventoEstaCerca(unEvento) || this.asistenAlMenosDosAmigos(unEvento)
-	}
-
-	def boolean asistenAlMenosDosAmigos(EventoCerrado invitacion) {
-		this.cantidadAmigosConfirmadosEvento(invitacion) <= 2
+		tipoPersonalidad.rechazarPendientes(this)
 	}
 	
 	def notificacionEventoCancelado() {
