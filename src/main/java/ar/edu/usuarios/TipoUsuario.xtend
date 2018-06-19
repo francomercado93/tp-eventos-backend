@@ -17,7 +17,5 @@ interface TipoUsuario {
 	def void postergarEvento(Evento unEvento, LocalDateTime nuevaFechaInicio)
 	
 	def boolean puedeInvitarUsuario(EventoCerrado unEvento,Integer cantidadAcompaniantesMaxima)
-		
 
-	
 }

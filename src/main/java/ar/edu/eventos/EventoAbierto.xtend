@@ -1,5 +1,6 @@
 package ar.edu.eventos
 
+import ar.edu.eventos.exceptions.BusinessException
 import ar.edu.usuarios.Usuario
 import org.eclipse.xtend.lib.annotations.Accessors
 
@@ -75,4 +76,12 @@ class EventoAbierto extends Evento {
 	override tipoUsuarioPuedeOrganizar(){
 		false
 	}
+	
+	def usuarioDevuelveEntrada(Usuario usuario) {
+		if(!this.usuarioPuedeDevolverEntrada(usuario)){
+			throw new BusinessException("Error: usuario no puede devolver entrada")
+		}
+		this.devolverDinero(usuario)
+		this.removerUsuario(usuario)
+	}	
 }

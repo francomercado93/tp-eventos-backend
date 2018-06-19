@@ -180,14 +180,9 @@ class Usuario implements Cloneable{
 	}
 	
 	def devolverEntrada(EventoAbierto unEvento) {
-		if(unEvento.usuarioPuedeDevolverEntrada(this)){
-			unEvento.devolverDinero(this)
-			unEvento.removerUsuario(this)
-		}
-		else
-			throw new BusinessException("Error: usuario no puede devolver entrada")
+		unEvento.usuarioDevuelveEntrada(this)
 	}
-
+	
 	def aceptarInvitacionesPendientes() {
 		aceptacionMasiva.procesarInvitacionesPendientes(invitaciones)	
 	}
