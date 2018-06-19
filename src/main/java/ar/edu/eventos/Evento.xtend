@@ -13,17 +13,17 @@ import org.uqbar.geodds.Point
 @Accessors
 abstract class Evento {
 
-	Usuario organizador
+	Usuario organizador		//doble referencia, asociacion
 	String nombreEvento
 	LocalDateTime inicioEvento
 	LocalDateTime finEvento
 	Locacion lugar
 	LocalDateTime fechaMaximaConfirmacion
 	LocalDateTime fechaCreacion
-	Set<Servicio> serviciosContratados = newHashSet
-	List<Usuario> asistentes = newArrayList
 	boolean estaCancelado = false
 	boolean estaPostergado = false
+	Set<Servicio> serviciosContratados = newHashSet
+	List<Usuario> asistentes = newArrayList
 	List<Artista> artistas = newArrayList 	//Solo los eventos abiertos pueden agregar artistas
 	
 	def double porcentajeExito() {
@@ -153,4 +153,9 @@ abstract class Evento {
 	def boolean estaInvitado(Usuario unUsuario) {
 		asistentes.contains(unUsuario)
 	}
+	
+	def boolean tipoUsuarioPuedeOrganizar(){
+		true
+	}
+	
 }

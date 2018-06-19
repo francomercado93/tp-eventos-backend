@@ -28,6 +28,7 @@ class Profesional implements TipoUsuario{
 	override postergarEvento(Evento unEvento, LocalDateTime nuevaFechaInicio){
 		unEvento.postergarEvento(nuevaFechaInicio)
 	}
+	
 	override puedeInvitarUsuario(EventoCerrado unEvento, Integer cantidadAcompaniantesMaxima){
 		true
 	}

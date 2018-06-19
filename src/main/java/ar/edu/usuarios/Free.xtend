@@ -5,6 +5,7 @@ import ar.edu.eventos.EventoCerrado
 
 import java.time.LocalDateTime
 import org.eclipse.xtend.lib.annotations.Accessors
+import ar.edu.eventos.exceptions.BusinessException
 
 @Accessors
 class Free implements TipoUsuario {
@@ -22,26 +23,20 @@ class Free implements TipoUsuario {
 	}
 
 	override puedoOrganizarEvento(Usuario unUsuario, Evento evento) {
-		!evento.class.equals(ar.edu.eventos.EventoAbierto) && 
-			(unUsuario.cantidadEventosOrganizadosMes() < this.maximaCantidadEventosPorMes) &&
-				(unUsuario.cantidadEventosSimultaneos() == this.maximaCantidadEventosSimultaneos)
+		evento.tipoUsuarioPuedeOrganizar() && (unUsuario.cantidadEventosOrganizadosMes() < this.maximaCantidadEventosPorMes) &&
+			(unUsuario.cantidadEventosSimultaneos() == this.maximaCantidadEventosSimultaneos)
 	}
 
 	override cancelarEvento(Evento unEvento) {
-		println("Error: usuario free no puede cancelar eventos.")
+		throw new BusinessException("Error: usuario free no puede cancelar eventos.")
 	}
 
 	override postergarEvento(Evento unEvento, LocalDateTime nuevaFechaInicio) {
-		println("Error: usuario free no puede postergar eventos.")
+		throw new BusinessException("Error: usuario free no puede postergar eventos.")
 	}
 
 	override puedeInvitarUsuario(EventoCerrado unEvento, Integer cantidadAcompaniantesMaxima) {
 		(unEvento.cantidadAsistentesPosibles + cantidadAcompaniantesMaxima + 1 <= this.cantidadMaximaPersonasEvento) // Hasta 50 personas en total
 	}
 	
-
-/*override organizarEventoAbierto(EventoAbierto abierto){
- * 	println("Usuario free no puede organizar evento abierto")
- * }
- */
 }

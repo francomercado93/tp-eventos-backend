@@ -1,14 +1,27 @@
 package ar.edu.usuarios
 
-import ar.edu.eventos.EventoCerrado
 import java.util.Set
 
 interface TipoPersonalidad {
 	
-	def void rechazarPendientes(Usuario usuario)
+	def void rechazarPendientes(Set<Invitacion> invitaciones)
 	
-	def Set<Invitacion> invitacionesPendientesParaRechazarQueCumplenCondiciones(Usuario usuario)
+}
+
+class Antisocial implements TipoPersonalidad{
 	
-	def boolean cumpleCondiciones(EventoCerrado unEvento, Usuario usuario)
+	RechazoMasivoAntisocial procesoRechazoMasivo = new RechazoMasivoAntisocial
 	
+	override rechazarPendientes(Set<Invitacion> invitaciones){
+		procesoRechazoMasivo.procesarInvitacionesPendientes(invitaciones)
+	}
+}
+
+class Sociable implements TipoPersonalidad{
+	
+	RechazoMasivoSociable procesoRechazoMasivo = new RechazoMasivoSociable
+	
+	override rechazarPendientes(Set<Invitacion> invitaciones){
+		procesoRechazoMasivo.procesarInvitacionesPendientes(invitaciones)
+	}
 }

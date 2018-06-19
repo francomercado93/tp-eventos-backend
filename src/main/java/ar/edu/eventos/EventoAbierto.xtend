@@ -17,6 +17,10 @@ class EventoAbierto extends Evento {
 	override boolean cumpleCondiciones(Usuario unUsuario) {
 		(this.superaEdadMin(unUsuario) && this.cantidadDisponibles > 0 && this.usuarioEstaATiempo(unUsuario))
 	}
+	
+	def boolean usuarioPuedeDevolverEntrada(Usuario usuario) {
+		this.estaInvitado(usuario) && this.diasfechaMaximaConfirmacion(usuario) > 0
+	}
 
 	def boolean superaEdadMin(Usuario unUsuario) {
 		unUsuario.edad >= this.edadMinima
@@ -66,5 +70,9 @@ class EventoAbierto extends Evento {
 	
 	def eliminarArtista(String artista){
 		artistas.remove(artista)
+	}
+	
+	override tipoUsuarioPuedeOrganizar(){
+		false
 	}
 }

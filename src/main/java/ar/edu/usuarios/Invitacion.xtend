@@ -18,10 +18,6 @@ class Invitacion {
 		this.cantidadAcompaniantesMaxima = unaCantidadAcompaniantesMaxima
 		this.evento = unEvento
 	}
-	def void usuarioRecibeInvitacion(){
-		invitado.agregarInvitacionLista(this)
-		evento.agregarUsuarioListaAsistentes(invitado)
-	}
 	
 	def void confirmar(Integer cantidadAcompaniantesInvitado){
 			cantidadAcompaniantesConfirmados = cantidadAcompaniantesInvitado	//guardo la cantidad en una variable de invitacion
@@ -36,6 +32,10 @@ class Invitacion {
 	def void rechazar(){
 		//estaRechazado = true
 		evento.usuarioRechazaInvitacion(invitado)
-		
+	}
+	
+	def String recibirNotificacionNuevaInvitacion() {
+		evento.agregarUsuarioListaAsistentes(invitado)
+		println(invitado.nombreUsuario + " tiene una nueva invitacion para el evento " + evento.nombreEvento)
 	}
 }

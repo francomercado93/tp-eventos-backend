@@ -1,3 +1,4 @@
+
 package ar.edu.eventos
 
 import ar.edu.eventos.exceptions.BusinessException
@@ -136,7 +137,7 @@ class TestUsuarios extends JuegoDatosTest {
 		lucas.agregarAmigo(beatriz)
 		beatriz.crearEvento(casamiento)
 		beatriz.invitarUsuario(lucas, casamiento, 3)
-		lucas.aceptarPendientes()
+		lucas.aceptarInvitacionesPendientes()
 		Assert.assertTrue(casamiento.estaConfirmado(lucas))
 	}
 
@@ -144,7 +145,7 @@ class TestUsuarios extends JuegoDatosTest {
 	def void unaUsuarioNoAceptaUnaInvitacionPendienteSiElOrganizadorNoEsSuAmigo() {
 		beatriz.crearEvento(casamiento)
 		beatriz.invitarUsuario(lucas, casamiento, 3)
-		lucas.aceptarPendientes()
+		lucas.aceptarInvitacionesPendientes()
 		Assert.assertFalse(casamiento.estaConfirmado(lucas))
 	}
 
@@ -165,7 +166,7 @@ class TestUsuarios extends JuegoDatosTest {
 		beatriz.invitarUsuario(miriam, casamiento, 3)
 		miriam.confirmarInvitacion(casamiento, 3)
 		beatriz.invitarUsuario(lucas, casamiento, 3)
-		lucas.aceptarPendientes()
+		lucas.aceptarInvitacionesPendientes()
 		Assert.assertTrue(casamiento.estaConfirmado(lucas))
 	}
 
@@ -183,7 +184,7 @@ class TestUsuarios extends JuegoDatosTest {
 		beatriz.invitarUsuario(miriam, casamiento, 3)
 		miriam.confirmarInvitacion(casamiento, 3)
 		beatriz.invitarUsuario(lucas, casamiento, 3)
-		lucas.aceptarPendientes()
+		lucas.aceptarInvitacionesPendientes()
 		Assert.assertFalse(casamiento.estaConfirmado(lucas))
 	}
 
@@ -192,7 +193,7 @@ class TestUsuarios extends JuegoDatosTest {
 		beatriz.crearEvento(casamiento)
 		beatriz.invitarUsuario(lucas, casamiento, 3)
 		lucas.radioCercania = 10
-		lucas.aceptarPendientes()
+		lucas.aceptarInvitacionesPendientes()
 		println(casamiento.distancia(lucas.direccion.coordenadas))
 		Assert.assertTrue(casamiento.estaConfirmado(lucas))
 	}
@@ -202,7 +203,7 @@ class TestUsuarios extends JuegoDatosTest {
 		lucas.radioCercania = 5
 		beatriz.crearEvento(casamiento)
 		beatriz.invitarUsuario(lucas, casamiento, 3)
-		lucas.aceptarPendientes()
+		lucas.aceptarInvitacionesPendientes()
 		Assert.assertFalse(casamiento.estaConfirmado(lucas))
 	}
 
@@ -257,6 +258,18 @@ class TestUsuarios extends JuegoDatosTest {
 		free1.crearEvento(casamiento)
 		free1.fechaHoraActual = LocalDateTime.of(2018, 05, 28, 22, 00) // free quiere crear un 
 		free1.crearEvento(cumple) // evento mientras sucede otro
+	}
+	
+	@Test(expected=typeof(BusinessException))
+	def void organizadorFreeNoPuedeCancelarEventos() {
+		free1.crearEvento(casamiento)
+		free1.cancelarEvento(casamiento) 
+	}
+	
+	@Test(expected=typeof(BusinessException))
+	def void organizadorFreeNoPuedePostergarEventos() {
+		free1.crearEvento(casamiento)
+		free1.postergarEvento(casamiento, LocalDateTime.of(2018, 11, 03, 17, 30)) 
 	}
 
 	@Test

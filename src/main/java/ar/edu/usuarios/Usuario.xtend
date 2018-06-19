@@ -49,39 +49,73 @@ class Usuario implements Cloneable{
 	int auxInvitados
 	Usuario clon
 	
+	AceptacionMasiva aceptacionMasiva = new AceptacionMasiva
+	
 	def setDireccion(String calle, int numero, String localidad, String provincia, Point punto){
 		direccion = new Direccion(calle, numero, localidad, provincia, punto)
 	}
 	
-	def edad(){		//cambiar variable edad por metodo edad en tests
+	def getEdad(){		
 		Duration.between(LocalDateTime.of(fechaNacimiento, fechaHoraActual.toLocalTime), fechaHoraActual).getSeconds() / 31536000
 	}
 	
 	// Organizador
-	def cambiarTipo(TipoUsuario unTipoUsuario){
+	def cambiarTipoUsuario(TipoUsuario unTipoUsuario){
 		tipoUsuario = unTipoUsuario
 	}
 	
-	//Solo puede realizar invitaciones si la cantidad acompaniantes de la nueva invitacion + la cantidad de posibles asistentes no supera 
-	//capacidad maxima, de esta forma el usuario puede confirmar siempre y cuando este a tiempo
+	/*Solo puede realizar invitaciones si la cantidad de acompaniantes de la nueva invitacion + la cantidad de posibles asistentes no supera 
+	capacidad maxima, de esta forma EL USUARIO PUEDE CONFIRMAR SIEMPRE y cuando este a tiempo*/
 	def invitarUsuario(Usuario invitado, EventoCerrado unEvento, Integer cantidadAcompaniantesMaxima) {		
-		if(checkCondicionesParaInvitar(unEvento, cantidadAcompaniantesMaxima))	//Se chequea las condiciones de cada tipoUsuario
+		if(puedeInvitarUsuario(unEvento, cantidadAcompaniantesMaxima))	//Se chequea las condiciones de cada tipoUsuario
 			this.realizarInvitacion(invitado, unEvento, cantidadAcompaniantesMaxima)
 		else
 			throw new BusinessException("No se puede realizar invitacion, el evento llego a su maxima capacidad o alcanzo 
 				la cantidad maxima de invitaciones/invitados")
 	}
 	
-	def boolean checkCondicionesParaInvitar(EventoCerrado unEvento, Integer cantidadAcompaniantesMaxima) {
-		eventosOrganizados.contains(unEvento) && unEvento.chequearCapacidad(cantidadAcompaniantesMaxima) 
+	def boolean puedeInvitarUsuario(EventoCerrado unEvento, Integer cantidadAcompaniantesMaxima) {
+		this.esOrganizadorEvento(unEvento) && unEvento.chequearCapacidad(cantidadAcompaniantesMaxima) 
 		&& tipoUsuario.puedeInvitarUsuario(unEvento, cantidadAcompaniantesMaxima)
+	}
+	
+	def boolean esOrganizadorEvento(EventoCerrado unEvento) {
+		eventosOrganizados.contains(unEvento)
 	}
 	
 	def realizarInvitacion(Usuario invitado, EventoCerrado unEvento, Integer cantidadAcompaniantesMaxima) {
 		var unaInvitacion = new Invitacion(invitado, unEvento, cantidadAcompaniantesMaxima)				
-		unaInvitacion.usuarioRecibeInvitacion()
+		invitado.recibirInvitacion(unaInvitacion)
 	}
-	// EN tipo free => !unEvento.class.toString.equals("ar.edu.eventos.EventoAbierto") && !tipoUsuario.toString.equals("ar.edu.usuarios.Free@707f7052")
+	
+	//Usuario evento cerrado
+
+	def recibirInvitacion(Invitacion unaInvitacion){
+		invitaciones.add(unaInvitacion)
+		unaInvitacion.recibirNotificacionNuevaInvitacion()
+	}
+	
+	//Se recibe unEvento que funciona como una clave y luego se obtiene la invitacion
+	def confirmarInvitacion(EventoCerrado unEvento, Integer cantidadAcompaniantesConfirmados) {	//la cantidad de acompaniantes
+		var unaInvitacion = this.getEventoDeInvitacion(unEvento)		
+		if(unaInvitacion === null){
+			throw new BusinessException("No estas invitado a este evento")
+		}
+		unaInvitacion.confirmar(cantidadAcompaniantesConfirmados)
+	}
+	
+	def rechazarInvitacion(EventoCerrado unEvento) {
+		var unaInvitacion = this.getEventoDeInvitacion(unEvento)		
+		if(unaInvitacion === null){
+			throw new BusinessException("No estas invitado a este evento")
+		}
+		unaInvitacion.rechazar()
+	}
+	
+	def getEventoDeInvitacion(EventoCerrado unEvento ){
+		invitaciones.findFirst(invitacion | invitacion.evento == unEvento)//obtengo la invitacion con el evento
+	}
+	
 	def crearEvento(Evento unEvento){		
 		if(!this.puedoCrearEvento(unEvento)){		
 			throw new BusinessException("Error no se puede crear evento")
@@ -123,31 +157,9 @@ class Usuario implements Cloneable{
 		eventosOrganizados.filter[evento | evento.fechaCreacion.month == this.fechaHoraActual.month 
 			|| evento.finEvento.month == this.fechaHoraActual.month].size
 	}
-//Usuario evento cerrado
-
-	def agregarInvitacionLista(Invitacion unaInvitacion){
-		invitaciones.add(unaInvitacion)
-		println(this.nombreUsuario + " tiene una nueva invitacion para el evento " + unaInvitacion.evento.nombreEvento)
-	}
 	
-	//Se recibe unEvento que funciona como una clave y luego se obtiene la invitacion
-	def confirmarInvitacion(EventoCerrado unEvento, Integer cantidadAcompaniantesConfirmados) {	//la cantidad de acompaniantes
-		var unaInvitacion = this.eventoInvitacion(unEvento)			//se la define cuando esta por confirmar
-		if(unaInvitacion !== null)
-			unaInvitacion.confirmar(cantidadAcompaniantesConfirmados)
-	}
+//EVENTOS ABIERTOS
 	
-	def rechazarInvitacion(EventoCerrado unEvento) {
-		var unaInvitacion = this.eventoInvitacion(unEvento)		
-		if(unaInvitacion !== null)
-			unaInvitacion.rechazar()
-	}
-	
-	def eventoInvitacion(EventoCerrado unEvento ){
-		invitaciones.findFirst(invitacion | invitacion.evento == unEvento)//obtengo la invitacion con el evento
-	}
-	
-
 	def comprarEntrada(EventoAbierto unEvento) {	
 		if(!unEvento.cumpleCondiciones(this)){
 			throw new BusinessException("Error: no se puede comprar entrada")
@@ -166,51 +178,36 @@ class Usuario implements Cloneable{
 	}
 	
 	def devolverEntrada(EventoAbierto unEvento) {
-		if(unEvento.estaInvitado(this) && unEvento.diasfechaMaximaConfirmacion(this) > 0){
+		if(unEvento.usuarioPuedeDevolverEntrada(this)){
 			unEvento.devolverDinero(this)
 			unEvento.removerUsuario(this)
 		}
 		else
 			throw new BusinessException("Error: usuario no puede devolver entrada")
 	}
-	
-	
-	def aceptarPendientes() {
-		this.filtrarInvitacionesCumplenCondicionesPendientes.forEach [ invitacion |
-			this.confirmarInvitacion(invitacion.evento, invitacion.cantidadAcompaniantesMaxima)]
-	}
 
-	def filtrarInvitacionesCumplenCondicionesPendientes() {
-		invitaciones.filter[invitacion|this.cumpleCondicionPendientes(invitacion.evento)]
-	}
-
-	def boolean cumpleCondicionPendientes(EventoCerrado unEvento) {
-		(this.organizadorEsAmigo(unEvento.organizador)) || this.asistenMasDeCuatroAmigos(unEvento) ||
-			this.eventoEstaCerca(unEvento)
-	}
-
-	def boolean eventoEstaCerca(Evento evento) {
-		evento.distancia(direccion.coordenadas) <= radioCercania
-	}
-
-	def boolean asistenMasDeCuatroAmigos(EventoCerrado invitacion) {
-		this.cantidadAmigosConfirmadosEvento(invitacion) >= 4
-	}
-
-	def cantidadAmigosConfirmadosEvento(EventoCerrado invitacion) {
-		amigos.filter(amigo|invitacion.estaConfirmado(amigo)).size
-	}
-
-	def boolean organizadorEsAmigo(Usuario organizador) {
-		amigos.contains(organizador)
+	def aceptarInvitacionesPendientes() {
+		aceptacionMasiva.procesarInvitacionesPendientes(invitaciones)	
 	}
 
 	def agregarAmigo(Usuario unAmigo) {
 		amigos.add(unAmigo)
 	}
-	//Strategy antisocial o social, sacar boolean
+	
 	def rechazarPendientes() {
-		tipoPersonalidad.rechazarPendientes(this)
+		tipoPersonalidad.rechazarPendientes(invitaciones)
+	}
+	
+	def boolean eventoEstaCerca(Evento evento) {
+		evento.distancia(direccion.coordenadas) <= radioCercania
+	}
+	
+	def boolean organizadorEsAmigo(Usuario organizador) {
+		amigos.contains(organizador)
+	}
+	
+	def cantidadAmigosConfirmadosEvento(EventoCerrado evento) {
+		this.amigos.filter(amigo|evento.estaConfirmado(amigo)).size
 	}
 	
 	def notificacionEventoCancelado() {
@@ -254,21 +251,20 @@ class Usuario implements Cloneable{
 	def borrarArtistaFavorito(Artista artista){
 		artistasFavoritos.remove(artista)
 	}
+	
 	def confirmacionAsincronica (ServicioInvitacionesAsincronico unServicio,EventoCerrado unEvento, Integer invitados){
-	 auxEvento=unEvento
-	 auxInvitados=invitados
-	 clon=this.clone as Usuario
-	 invAceptado.add(clon)
-	 unServicio.usuariosAProcesar.add(this) 
+		auxEvento=unEvento
+		auxInvitados=invitados
+		clon=this.clone as Usuario
+		invAceptado.add(clon)
+		unServicio.usuariosAProcesar.add(this) 
 	}
 	
-	
-	
 	def rechazoAsincronica (ServicioInvitacionesAsincronico unServicio,EventoCerrado unEvento){
-	 auxEvento=unEvento
-	 clon=this.clone as Usuario
-	 invRechazado.add(clon)
-	 unServicio.usuariosAProcesar.add(this) 
+		auxEvento=unEvento
+		clon=this.clone as Usuario
+		invRechazado.add(clon)
+		unServicio.usuariosAProcesar.add(this) 
 	}
 	
 	def procesarAceptados(){
@@ -288,6 +284,3 @@ class Usuario implements Cloneable{
 	}
 	
 }
-
-	
-	

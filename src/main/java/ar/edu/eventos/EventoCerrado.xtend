@@ -34,7 +34,7 @@ class EventoCerrado extends Evento {
 	
 	
 	def cantidadAcompaniantesPendientes(){	//Obtiene la cantidad maxima de acompaniantes de las invitaciones para este evento
-		asistentes.fold(0, [ acum, usuario | acum + usuario.eventoInvitacion(this).cantidadAcompaniantesMaxima ])
+		asistentes.fold(0, [ acum, usuario | acum + usuario.getEventoDeInvitacion(this).cantidadAcompaniantesMaxima ])
 	}
 	
 	override cantidadAsistentesPosibles() { // o Total
@@ -47,7 +47,7 @@ class EventoCerrado extends Evento {
 	}
 	
 	def cantidadAcompaniantesConfirmados(){
-		invitadosConfirmados.fold(0, [ acum, usuario | acum + usuario.eventoInvitacion(this).cantidadAcompaniantesConfirmados ])
+		invitadosConfirmados.fold(0, [ acum, usuario | acum + usuario.getEventoDeInvitacion(this).cantidadAcompaniantesConfirmados ])
 	}
 	
 	def cantidadInvitacionesConfirmadas(){
