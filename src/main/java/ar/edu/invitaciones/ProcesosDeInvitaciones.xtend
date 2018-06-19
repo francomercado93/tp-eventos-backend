@@ -1,6 +1,7 @@
-package ar.edu.usuarios
+package ar.edu.invitaciones
 
 import ar.edu.eventos.EventoCerrado
+import ar.edu.usuarios.Usuario
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
 

@@ -1,4 +1,4 @@
-package ar.edu.usuarios
+package ar.edu.invitaciones
 
 import java.util.Set
 

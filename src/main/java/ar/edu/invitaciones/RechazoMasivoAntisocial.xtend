@@ -1,8 +1,8 @@
-package ar.edu.usuarios
+package ar.edu.invitaciones
 
 import java.util.Set
 
-class RechazoMasivoSociable extends ProcesosDeInvitaciones {
+class RechazoMasivoAntisocial extends ProcesosDeInvitaciones {
 
 	override procesarInvitacionesPendientes(Set<Invitacion> invitaciones) {
 		this.getInvitacionesCumplenCondicionesPendientes(invitaciones).forEach[invitacion|invitacion.rechazar()]
@@ -14,7 +14,6 @@ class RechazoMasivoSociable extends ProcesosDeInvitaciones {
 	}
 
 	override asistenCantidadMinimaAmigos() {
-		usr.cantidadAmigosConfirmadosEvento(evento) == 0
+		usr.cantidadAmigosConfirmadosEvento(evento) <= 2
 	}
-
 }

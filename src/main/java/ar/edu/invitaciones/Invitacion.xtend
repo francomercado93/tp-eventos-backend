@@ -1,7 +1,8 @@
-package ar.edu.usuarios
+package ar.edu.invitaciones
 
 import ar.edu.eventos.EventoCerrado
 import ar.edu.eventos.exceptions.BusinessException
+import ar.edu.usuarios.Usuario
 import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors

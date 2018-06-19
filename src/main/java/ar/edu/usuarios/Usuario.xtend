@@ -6,6 +6,8 @@ import ar.edu.eventos.Evento
 import ar.edu.eventos.EventoAbierto
 import ar.edu.eventos.EventoCerrado
 import ar.edu.eventos.exceptions.BusinessException
+import ar.edu.invitaciones.AceptacionMasiva
+import ar.edu.invitaciones.Invitacion
 import ar.edu.main.ServicioInvitacionesAsincronico
 import ar.edu.notificaciones.Notificacion
 import java.time.Duration
