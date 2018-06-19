@@ -21,6 +21,7 @@ class Profesional implements TipoUsuario{
 			(unUsuario.cantidadEventosSimultaneos() < this.maximaCantidadEventosSimultaneos)
 	}
 	
+	// comentario
 	override cancelarEvento(Evento unEvento){
 		unEvento.cancelarEvento()
 	}
