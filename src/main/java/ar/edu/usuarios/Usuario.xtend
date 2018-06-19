@@ -280,4 +280,8 @@ class Usuario implements Cloneable{
 		unServicio.cambiarDesicionRechazado(this,unEvento)
 	}
 	
+	def sumarSaldoAFavor(EventoAbierto evento) {
+		saldoAFavor +=  evento.valorEntrada * evento.porcentajeADevolver(this)
+	}
+	
 }

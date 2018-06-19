@@ -53,7 +53,7 @@ class EventoAbierto extends Evento {
 	}
 
 	def devolverDinero(Usuario unUsuario) {
-		unUsuario.saldoAFavor = valorEntrada * this.porcentajeADevolver(unUsuario)
+		unUsuario.sumarSaldoAFavor(this)
 	}
 
 	def double porcentajeADevolver(Usuario unUsuario) {
