@@ -12,7 +12,7 @@ abstract class Repositorio<T> {
 	List<T> lista = newArrayList
 	UpdateService updateService 
 	ConversionJson conversion = new ConversionJson
-
+	
 	def void create(T elemento) {
 		lista.add(elemento)
 	}

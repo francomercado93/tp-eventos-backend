@@ -160,6 +160,10 @@ class Usuario implements Cloneable{
 			|| evento.finEvento.month == this.fechaHoraActual.month].size
 	}
 	
+	def cantidadTotalEventosOrganizados() {
+		eventosOrganizados.size
+	}
+	
 //EVENTOS ABIERTOS
 	
 	def comprarEntrada(EventoAbierto unEvento) {	

@@ -4,7 +4,19 @@ import ar.edu.eventos.exceptions.BusinessException
 import ar.edu.usuarios.Usuario
 
 class RepositorioUsuarios extends Repositorio<Usuario> {
+	
+	//PROVISORIO
+	static RepositorioUsuarios instance
 
+	static def getInstance() {
+		if (instance === null) {
+			instance = new RepositorioUsuarios()
+		}
+		instance
+	}
+	
+	//==========================================
+	
 	override create(Usuario usuario) {
 		if(!lista.exists[ usr | usr.nombreUsuario.equals(usuario.nombreUsuario) ]){ //con list
 			this.validarCampos(usuario)
