@@ -28,7 +28,7 @@ class EventoCerrado extends Evento {
 		this.cantidadTotalInvitaciones  * this.porcentajeExito
 	}
 	
-	def cantidadTotalInvitaciones(){
+	override cantidadTotalInvitaciones(){
 		asistentes.size() + this.cantidadInvitacionesConfirmadas
 	}
 	
@@ -38,12 +38,15 @@ class EventoCerrado extends Evento {
 	}
 	
 	override cantidadAsistentesPosibles() { // o Total
-		asistentes.size() +  this.cantidadAcompaniantesPendientes + this.cantidadAsistentesConfirmados()
+		this.cantidadInvitacionesPendientes() +  this.cantidadAcompaniantesPendientes + this.cantidadAsistentesConfirmados()
 	}
-
-
+	
+	def cantidadInvitacionesPendientes() {
+		asistentes.size()
+	}
+	
 	def cantidadAsistentesConfirmados() {
-		invitadosConfirmados.size + this.cantidadAcompaniantesConfirmados
+		this.cantidadInvitacionesConfirmadas + this.cantidadAcompaniantesConfirmados
 	}
 	
 	def cantidadAcompaniantesConfirmados(){

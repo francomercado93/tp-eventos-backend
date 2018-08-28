@@ -83,5 +83,9 @@ class EventoAbierto extends Evento {
 		}
 		this.devolverDinero(usuario)
 		this.removerUsuario(usuario)
+	}
+	
+	override cantidadEntradasVendidas(){
+		super.cantidadAsistentesPosibles()
 	}	
 }

@@ -45,6 +45,9 @@ class Usuario implements Cloneable{
 	List<Notificacion> tiposNotificaciones = newArrayList
 	MailService servicioMail
 	List<Artista> artistasFavoritos = newArrayList
+	int cantidadEntradasCompradas
+	int cantidadInvitacionesConfirmadas
+	//revisar
 	Set<Usuario> invAceptado = newHashSet
 	Set<Usuario> invRechazado = newHashSet
 	EventoCerrado auxEvento
@@ -52,6 +55,7 @@ class Usuario implements Cloneable{
 	Usuario clon
 	
 	AceptacionMasiva aceptacionMasiva = new AceptacionMasiva
+	
 	
 	def setDireccion(String calle, int numero, String localidad, String provincia, Point punto){
 		direccion = new Direccion(calle, numero, localidad, provincia, punto)
@@ -104,6 +108,7 @@ class Usuario implements Cloneable{
 			throw new BusinessException("No estas invitado a este evento")
 		}
 		unaInvitacion.confirmar(cantidadAcompaniantesConfirmados)
+		cantidadInvitacionesConfirmadas++
 	}
 	
 	def rechazarInvitacion(EventoCerrado unEvento) {
@@ -164,6 +169,13 @@ class Usuario implements Cloneable{
 		eventosOrganizados.size
 	}
 	
+	def cantidadEventosExitosos() {
+		eventosOrganizados.filter(event | event.esExitoso()).size
+	}
+	
+	def cantidadEventosFracasados() {
+		eventosOrganizados.filter(event | event.esFracaso()).size		
+	}
 //EVENTOS ABIERTOS
 	
 	def comprarEntrada(EventoAbierto unEvento) {	
@@ -172,6 +184,7 @@ class Usuario implements Cloneable{
 		}
 		this.pagarConTarjeta(unEvento)
 		unEvento.agregarUsuarioListaAsistentes(this)
+		cantidadEntradasCompradas++
 		
 	}
 	
@@ -252,7 +265,7 @@ class Usuario implements Cloneable{
 	def borrarArtistaFavorito(Artista artista){
 		artistasFavoritos.remove(artista)
 	}
-	
+	//revisar
 	def confirmacionAsincronica (ServicioInvitacionesAsincronico unServicio,EventoCerrado unEvento, Integer invitados){
 		auxEvento=unEvento
 		auxInvitados=invitados
@@ -287,5 +300,20 @@ class Usuario implements Cloneable{
 	def sumarSaldoAFavor(EventoAbierto evento) {
 		saldoAFavor +=  evento.valorEntrada * evento.porcentajeADevolver(this)
 	}
+	
+	def cantidadEntradasVendidas() {
+		eventosOrganizados.fold(0d, [acum, evento |acum + evento.cantidadEntradasVendidas()])
+	}
+	
+	def cantidadInvitacionesEnviadas() {
+		eventosOrganizados.fold(0d, [acum, evento |acum + evento.cantidadTotalInvitaciones()])
+	}
+	
+	def cantidadActividad() {
+		this.cantidadTotalEventosOrganizados + cantidadEntradasCompradas +cantidadInvitacionesConfirmadas
+	}
+	
+	
+	
 	
 }

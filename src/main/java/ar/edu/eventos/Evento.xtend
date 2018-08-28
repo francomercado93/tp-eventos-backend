@@ -158,4 +158,11 @@ abstract class Evento {
 		true
 	}
 	
+	def double cantidadEntradasVendidas(){
+		0d
+	}
+	
+	def cantidadTotalInvitaciones(){
+		0
+	}
 }

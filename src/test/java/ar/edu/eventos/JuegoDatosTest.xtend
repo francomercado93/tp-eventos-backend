@@ -1,9 +1,8 @@
 package ar.edu.eventos
 
-
-import ar.edu.conversionActualizacion.StubUpdateService
 import ar.edu.main.ServicioInvitacionesAsincronico
 import ar.edu.repositorios.RepositorioUsuarios
+import ar.edu.repositorios.StubUpdateService
 import ar.edu.servicios.Servicio
 import ar.edu.servicios.ServicioMultiple
 import ar.edu.servicios.TarifaFija

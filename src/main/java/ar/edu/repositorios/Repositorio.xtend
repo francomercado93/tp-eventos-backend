@@ -11,7 +11,12 @@ abstract class Repositorio<T> {
 	int id = 0
 	List<T> lista = newArrayList
 	UpdateService updateService 
-	ConversionJson conversion = new ConversionJson
+	ConversionJson conversion 
+	
+	new(){
+		conversion = new ConversionJson
+		updateService = new StubUpdateService//borrar
+	}
 	
 	def void create(T elemento) {
 		lista.add(elemento)
