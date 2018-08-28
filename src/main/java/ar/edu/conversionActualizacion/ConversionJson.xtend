@@ -12,6 +12,7 @@ import com.eclipsesource.json.JsonObject
 import com.eclipsesource.json.JsonValue
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.HashSet
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.geodds.Point
@@ -19,9 +20,9 @@ import org.uqbar.geodds.Point
 @Accessors
 class ConversionJson {
 
-	Set<Usuario> usuarios = newHashSet // lista actualizada de usuarios recibidos, hacer actualizacion repo recorriendo la lista
-	Set<Locacion> locaciones = newHashSet // lista actualizada de locaciones recibidos
-	Set<Servicio> servicios = newHashSet
+	Set<Usuario> usuarios =new HashSet<Usuario>() // lista actualizada de usuarios recibidos, hacer actualizacion repo recorriendo la lista
+	Set<Locacion> locaciones = new HashSet <Locacion>() // lista actualizada de locaciones recibidos
+	Set<Servicio> servicios = new HashSet <Servicio>()
 
 	def conversionJsonAUsuarios(String usuarios) {
 		var listUsers = Json.parse(usuarios).asArray()

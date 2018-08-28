@@ -2,6 +2,10 @@ package ar.edu.repositorios
 
 import ar.edu.eventos.exceptions.BusinessException
 import ar.edu.usuarios.Usuario
+import org.eclipse.xtend.lib.annotations.Accessors
+import org.uqbar.commons.model.annotations.Observable
+
+
 
 class RepositorioUsuarios extends Repositorio<Usuario> {
 	
@@ -38,7 +42,7 @@ class RepositorioUsuarios extends Repositorio<Usuario> {
 
 	override update(Usuario usrActualizado) {
 		if (search(usrActualizado.nombreUsuario).isEmpty)
-			throw new BusinessException("No se encontro el usuario " + usrActualizado.nombreUsuario)
+		throw new BusinessException("No se encontro el usuario " + usrActualizado.nombreUsuario)
 		this.validarCampos(usrActualizado)		//El usuario actualizado tiene que ser valido
 		this.actualizarElemento(usrActualizado)
 	}

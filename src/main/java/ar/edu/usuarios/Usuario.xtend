@@ -13,16 +13,20 @@ import ar.edu.notificaciones.Notificacion
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.ArrayList
+import java.util.HashSet
 import java.util.List
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.ccService.CCResponse
 import org.uqbar.ccService.CreditCard
 import org.uqbar.ccService.CreditCardService
+import org.uqbar.commons.model.annotations.Observable
 import org.uqbar.geodds.Point
 import org.uqbar.mailService.Mail
 import org.uqbar.mailService.MailService
 
+@Observable
 @Accessors
 class Usuario implements Cloneable{
 	int id = -1
@@ -34,19 +38,19 @@ class Usuario implements Cloneable{
 	Direccion direccion
 	TipoPersonalidad tipoPersonalidad
 	double radioCercania
-	Set<Usuario> amigos = newHashSet
+	Set<Usuario> amigos = new HashSet<Usuario>()
 	LocalDateTime fechaHoraActual
 	TipoUsuario tipoUsuario;
 	double saldoAFavor = 0
-	List<Evento> eventosOrganizados = newArrayList
-	Set<Invitacion> invitaciones = newHashSet
+	List<Evento> eventosOrganizados = new ArrayList<Evento>()
+	Set<Invitacion> invitaciones = new HashSet<Invitacion>()
 	CreditCard miTarjeta
 	CreditCardService servicioTarjeta
-	List<Notificacion> tiposNotificaciones = newArrayList
+	List<Notificacion> tiposNotificaciones = new ArrayList<Notificacion>()
 	MailService servicioMail
-	List<Artista> artistasFavoritos = newArrayList
-	Set<Usuario> invAceptado = newHashSet
-	Set<Usuario> invRechazado = newHashSet
+	List<Artista> artistasFavoritos = new ArrayList<Artista>()
+	Set<Usuario> invAceptado = new HashSet<Usuario>()
+	Set<Usuario> invRechazado = new HashSet<Usuario>()
 	EventoCerrado auxEvento
 	int auxInvitados
 	Usuario clon
