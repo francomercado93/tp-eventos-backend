@@ -23,6 +23,7 @@ import org.uqbar.geodds.Point
 import org.uqbar.mailService.MailService
 
 import static org.mockito.Mockito.*
+import ar.edu.conversionActualizacion.ConversionJson
 
 @Accessors
 abstract class JuegoDatosTest {
@@ -484,6 +485,7 @@ abstract class JuegoDatosTest {
 		]
 		repoUsuariosTest = new RepositorioUsuarios() => [
 			updateService = new StubUpdateService
+			conversion = new ConversionJson
 			create(juan)
 			create(martin)
 			create(maxi)

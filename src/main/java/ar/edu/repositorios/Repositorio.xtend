@@ -1,6 +1,7 @@
 package ar.edu.repositorios
 
 import ar.edu.conversionActualizacion.ConversionJson
+import java.util.ArrayList
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.updateService.UpdateService
@@ -9,15 +10,10 @@ import org.uqbar.updateService.UpdateService
 abstract class Repositorio<T> {
 
 	int id = 0
-	List<T> lista = newArrayList
+	List<T> lista = new ArrayList<T>
 	UpdateService updateService 
 	ConversionJson conversion 
-	
-	new(){
-		conversion = new ConversionJson
-		updateService = new StubUpdateService//borrar
-	}
-	
+
 	def void create(T elemento) {
 		lista.add(elemento)
 	}

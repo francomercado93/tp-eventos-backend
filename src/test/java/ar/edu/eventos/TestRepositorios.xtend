@@ -309,6 +309,7 @@ class TestRepositorios extends JuegoDatosTest{
 	def void pruebaUpdateAllUsuarios() {
 		var repo = new RepositorioUsuarios()
 		repo.updateService = new StubUpdateService
+		repo.conversion = new ConversionJson
 		repo.create(agustin)
 		repo.create(agustina)
 		repo.create(lucas)
@@ -325,6 +326,7 @@ class TestRepositorios extends JuegoDatosTest{
 	def void pruebaUpdateAllServicios() {
 		var repo = new RepositorioServicios()
 		repo.updateService = new StubUpdateService
+		repo.conversion = new ConversionJson
 		repo.create(animacionMago)
 		repo.create(cateringFoodParty)
 		repo.create(candyBarWillyWonka)
@@ -344,6 +346,7 @@ class TestRepositorios extends JuegoDatosTest{
 	def void pruebaUpdateAllLocaciones() {
 		var repo = new RepositorioLocacion()
 		repo.updateService = new StubUpdateService
+		repo.conversion = new ConversionJson
 		repo.create(tecnopolis)
 		repo.create(hipodromo)
 		repo.create(hipodromoPalermo)

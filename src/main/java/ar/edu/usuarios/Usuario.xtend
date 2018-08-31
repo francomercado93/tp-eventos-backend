@@ -13,6 +13,8 @@ import ar.edu.notificaciones.Notificacion
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.ArrayList
+import java.util.HashSet
 import java.util.List
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
@@ -34,22 +36,22 @@ class Usuario implements Cloneable{
 	Direccion direccion
 	TipoPersonalidad tipoPersonalidad
 	double radioCercania
-	Set<Usuario> amigos = newHashSet
+	Set<Usuario> amigos = new HashSet<Usuario>
 	LocalDateTime fechaHoraActual
 	TipoUsuario tipoUsuario;
 	double saldoAFavor = 0
-	List<Evento> eventosOrganizados = newArrayList
-	Set<Invitacion> invitaciones = newHashSet
+	List<Evento> eventosOrganizados = new ArrayList<Evento>
+	Set<Invitacion> invitaciones = new HashSet<Invitacion>
 	CreditCard miTarjeta
 	CreditCardService servicioTarjeta
-	List<Notificacion> tiposNotificaciones = newArrayList
+	List<Notificacion> tiposNotificaciones = new ArrayList<Notificacion>
 	MailService servicioMail
-	List<Artista> artistasFavoritos = newArrayList
+	List<Artista> artistasFavoritos = new ArrayList<Artista>
 	int cantidadEntradasCompradas
 	int cantidadInvitacionesConfirmadas
 	//revisar
-	Set<Usuario> invAceptado = newHashSet
-	Set<Usuario> invRechazado = newHashSet
+	Set<Usuario> invAceptado = new HashSet<Usuario>
+	Set<Usuario> invRechazado = new HashSet<Usuario>
 	EventoCerrado auxEvento
 	int auxInvitados
 	Usuario clon
@@ -301,16 +303,12 @@ class Usuario implements Cloneable{
 		saldoAFavor +=  evento.valorEntrada * evento.porcentajeADevolver(this)
 	}
 	
-	def cantidadEntradasVendidas() {
-		eventosOrganizados.fold(0d, [acum, evento |acum + evento.cantidadEntradasVendidas()])
-	}
-	
-	def cantidadInvitacionesEnviadas() {
-		eventosOrganizados.fold(0d, [acum, evento |acum + evento.cantidadTotalInvitaciones()])
-	}
-	
 	def cantidadActividad() {
 		this.cantidadTotalEventosOrganizados + cantidadEntradasCompradas +cantidadInvitacionesConfirmadas
+	}
+	
+	def cantidadInvitaciones() {
+		invitaciones.size
 	}
 	
 	

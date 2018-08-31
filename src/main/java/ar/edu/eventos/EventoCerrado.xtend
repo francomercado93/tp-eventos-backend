@@ -3,13 +3,14 @@ package ar.edu.eventos
 import ar.edu.eventos.exceptions.BusinessException
 import ar.edu.main.ServicioInvitacionesAsincronico
 import ar.edu.usuarios.Usuario
+import java.util.HashSet
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors
 class EventoCerrado extends Evento {
 
-	Set<Usuario> invitadosConfirmados = newHashSet
+	Set<Usuario> invitadosConfirmados = new HashSet<Usuario>
 	Integer capacidadMaxima
 	
 	override porcentajeExito(){

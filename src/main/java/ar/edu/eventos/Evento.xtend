@@ -5,6 +5,8 @@ import ar.edu.servicios.Servicio
 import ar.edu.usuarios.Usuario
 import java.time.Duration
 import java.time.LocalDateTime
+import java.util.ArrayList
+import java.util.HashSet
 import java.util.List
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
@@ -22,9 +24,9 @@ abstract class Evento {
 	LocalDateTime fechaCreacion
 	boolean estaCancelado = false
 	boolean estaPostergado = false
-	Set<Servicio> serviciosContratados = newHashSet
-	List<Usuario> asistentes = newArrayList
-	List<Artista> artistas = newArrayList 	//Solo los eventos abiertos pueden agregar artistas
+	Set<Servicio> serviciosContratados = new HashSet<Servicio>
+	List<Usuario> asistentes = new ArrayList<Usuario>
+	List<Artista> artistas = new ArrayList<Artista> 	//Solo los eventos abiertos pueden agregar artistas
 	
 	def double porcentajeExito() {
 		0.9
