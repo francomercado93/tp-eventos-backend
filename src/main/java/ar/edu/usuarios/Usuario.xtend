@@ -21,10 +21,12 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.ccService.CCResponse
 import org.uqbar.ccService.CreditCard
 import org.uqbar.ccService.CreditCardService
+import org.uqbar.commons.model.annotations.Observable
 import org.uqbar.geodds.Point
 import org.uqbar.mailService.Mail
 import org.uqbar.mailService.MailService
 
+@Observable
 @Accessors
 class Usuario implements Cloneable{
 	int id = -1
