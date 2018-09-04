@@ -134,7 +134,7 @@ abstract class JuegoDatosTest {
 		 * 	nombreEvento = "Soundhearts"
 		 * 	inicioEvento = inicioSound
 		 * 	finEvento = finSound
-		 * 	lugar = tecnopolis
+		 * 	locacion = tecnopolis
 		 * 	edadMinima = 15
 		 * 	valorEntrada = 0
 
@@ -144,7 +144,7 @@ abstract class JuegoDatosTest {
 			nombreEvento = "lollapalooza"
 			inicioEvento = inicioLolla
 			finEvento = finLolla
-			lugar = hipodromo
+			locacion = hipodromo
 			fechaMaximaConfirmacion = LocalDateTime.of(2018, 03, 15, 23, 59)
 			edadMinima = 18
 			valorEntrada = 500
@@ -164,7 +164,7 @@ abstract class JuegoDatosTest {
 			inicioEvento = LocalDateTime.of(2018, 05, 30, 18, 30)
 			finEvento = LocalDateTime.of(2018, 05, 30, 23, 00)
 			fechaMaximaConfirmacion = LocalDateTime.of(2018, 05, 29, 21, 00)
-			lugar = salonFiesta
+			locacion = salonFiesta
 			capacidadMaxima = 20
 		]
 		minifiesta1 = new EventoCerrado() => [
@@ -172,7 +172,7 @@ abstract class JuegoDatosTest {
 			inicioEvento = LocalDateTime.of(2018, 05, 31, 14, 00)
 			finEvento = LocalDateTime.of(2018, 05, 31, 15, 00)
 			fechaMaximaConfirmacion = LocalDateTime.of(2018, 05, 31, 11, 30)
-			lugar = salonFiesta
+			locacion = salonFiesta
 			capacidadMaxima = 20
 		]
 		
@@ -306,7 +306,7 @@ abstract class JuegoDatosTest {
 			fechaMaximaConfirmacion = LocalDateTime.of(2018, 05, 25, 23, 59)
 			inicioEvento = LocalDateTime.of(2018, 05, 28, 21, 30)
 			finEvento = LocalDateTime.of(2018, 05, 29, 06, 00)
-			lugar = salonFiesta
+			locacion = salonFiesta
 
 		]
 
@@ -351,7 +351,7 @@ abstract class JuegoDatosTest {
 			inicioEvento = LocalDateTime.of(2018, 05, 31, 14, 00)
 			finEvento = LocalDateTime.of(2018, 05, 31, 15, 00)
 			fechaMaximaConfirmacion = LocalDateTime.of(2018, 05, 31, 11, 30)
-			lugar = salonFiesta
+			locacion = salonFiesta
 			capacidadMaxima = 20
 		]
 		even2 = new EventoCerrado() => [
@@ -359,7 +359,7 @@ abstract class JuegoDatosTest {
 			inicioEvento = LocalDateTime.of(2018, 05, 31, 14, 00)
 			finEvento = LocalDateTime.of(2018, 05, 31, 15, 00)
 			fechaMaximaConfirmacion = LocalDateTime.of(2018, 05, 31, 11, 30)
-			lugar = hipodromo
+			locacion = hipodromo
 			capacidadMaxima = 20
 		]
 		even3 = new EventoCerrado() => [
@@ -367,7 +367,7 @@ abstract class JuegoDatosTest {
 			inicioEvento = LocalDateTime.of(2018, 05, 31, 14, 00)
 			finEvento = LocalDateTime.of(2018, 05, 31, 15, 00)
 			fechaMaximaConfirmacion = LocalDateTime.of(2018, 05, 31, 11, 30)
-			lugar = tecnopolis
+			locacion = tecnopolis
 			capacidadMaxima = 20
 
 		]
@@ -376,7 +376,7 @@ abstract class JuegoDatosTest {
 			inicioEvento = LocalDateTime.of(2018, 05, 31, 14, 00)
 			finEvento = LocalDateTime.of(2018, 05, 31, 15, 00)
 			fechaMaximaConfirmacion = LocalDateTime.of(2018, 05, 31, 11, 30)
-			lugar = salonFiesta
+			locacion = salonFiesta
 			capacidadMaxima = 20
 
 		]
@@ -385,7 +385,7 @@ abstract class JuegoDatosTest {
 			inicioEvento = LocalDateTime.of(2018, 05, 31, 14, 00)
 			finEvento = LocalDateTime.of(2018, 05, 31, 15, 00)
 			fechaMaximaConfirmacion = LocalDateTime.of(2018, 05, 31, 11, 30)
-			lugar = salonFiesta
+			locacion = salonFiesta
 			capacidadMaxima = 20
 
 		]
@@ -394,7 +394,7 @@ abstract class JuegoDatosTest {
 			inicioEvento = LocalDateTime.of(2018, 05, 31, 14, 00)
 			finEvento = LocalDateTime.of(2018, 05, 31, 15, 00)
 			fechaMaximaConfirmacion = LocalDateTime.of(2018, 05, 31, 11, 30)
-			lugar = salonFiesta
+			locacion = salonFiesta
 			capacidadMaxima = 20
 
 		]

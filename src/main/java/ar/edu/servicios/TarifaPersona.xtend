@@ -31,4 +31,9 @@ class TarifaPersona extends TipoTarifa {
 		else
 			0
 	}
+	
+	override name() {
+		"TPP"
+	}
+	
 }

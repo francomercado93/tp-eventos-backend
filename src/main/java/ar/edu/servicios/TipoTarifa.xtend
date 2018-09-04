@@ -17,4 +17,7 @@ abstract class TipoTarifa {
 	def double tarifaMinima(Evento evento){
 		costoFijo
 	}
+	
+	def String name()
+		
 }

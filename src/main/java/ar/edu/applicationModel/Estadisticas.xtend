@@ -1,8 +1,9 @@
 package ar.edu.applicationModel
 
+import ar.edu.eventos.Evento
+import ar.edu.eventos.Locacion
 import ar.edu.repositorios.RepositorioUsuarios
 import ar.edu.usuarios.Usuario
-import java.util.ArrayList
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.commons.applicationContext.ApplicationContext
@@ -50,5 +51,16 @@ class Estadisticas {
 		usuarios.sortBy[usr | usr.cantidadActividad].take(5).toList	
 	}
 	
+	def getLocacionesMasPopulares() {
+		this.eventosOrganizados.map[locacion]
+	}
+	
+	def List<Evento> getEventosOrganizados() {
+		usuarios.map[eventosOrganizados].flatten().toList
+	}
+	
+	def getUltimosServiciosDadosDeAlta(){
+		this.eventosOrganizados.map[serviciosContratados].flatten().toSet
+	}
 
 }

@@ -21,6 +21,10 @@ class TarifaPorHora extends TipoTarifa {
 		evento.duracion * tarifaPorHora
 	}
 	
+	override name() {
+		"TPH"
+	}
+	
 
 	
 }

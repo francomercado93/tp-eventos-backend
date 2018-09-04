@@ -1,18 +1,22 @@
 package ar.edu.eventos
 
+
 import ar.edu.eventos.exceptions.BusinessException
 import ar.edu.usuarios.Usuario
 import org.eclipse.xtend.lib.annotations.Accessors
 
+
+
 @Accessors
 class EventoAbierto extends Evento {
 
-	double espacioNecesarioPorPersona = 0.8
 	int edadMinima
 	double valorEntrada
+	static final double ESPACIONECESARIOPERSONA = 0.8
 		
 	override capacidadMaxima() {
-		Math.round(lugar.superficie / this.espacioNecesarioPorPersona) // mostraba 5.99 y no 6
+		locacion.calcularCapacidad(ESPACIONECESARIOPERSONA)
+		locacion.capacidad
 	}
 
 	override boolean cumpleCondiciones(Usuario unUsuario) {

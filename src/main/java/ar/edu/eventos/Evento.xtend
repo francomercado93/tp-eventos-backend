@@ -10,16 +10,18 @@ import java.util.HashSet
 import java.util.List
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.uqbar.commons.model.annotations.Observable
 import org.uqbar.geodds.Point
 
 @Accessors
+@Observable
 abstract class Evento {
 
 	Usuario organizador		//doble referencia, asociacion
 	String nombreEvento
 	LocalDateTime inicioEvento
 	LocalDateTime finEvento
-	Locacion lugar
+	Locacion locacion
 	LocalDateTime fechaMaximaConfirmacion
 	LocalDateTime fechaCreacion
 	boolean estaCancelado = false
@@ -41,7 +43,7 @@ abstract class Evento {
 	}
 
 	def double distancia(Point unPunto) {
-		lugar.distancia(unPunto)
+		locacion.distancia(unPunto)
 	}
 
 	def contratarServicio(Servicio servicio) {
@@ -59,7 +61,7 @@ abstract class Evento {
 	def validarCampos() {
 		if (nombreEvento === null)
 			throw new BusinessException("Falta nombre")
-		if (lugar === null) {
+		if (locacion === null) {
 			throw new BusinessException("Falta maxima de confirmacion")
 		}
 		this.validarFechas

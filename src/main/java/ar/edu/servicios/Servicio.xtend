@@ -2,9 +2,11 @@ package ar.edu.servicios
 
 import ar.edu.eventos.Evento
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.uqbar.commons.model.annotations.Observable
 import org.uqbar.geodds.Point
 
 @Accessors
+@Observable
 class Servicio {
 
 	int id = -1
