@@ -1,12 +1,14 @@
 package ar.edu.repositorios
 
 import ar.edu.conversionActualizacion.ConversionJson
+import java.util.ArrayList
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.commons.model.annotations.Observable
+import org.uqbar.commons.model.annotations.Transactional
 import org.uqbar.updateService.UpdateService
-import java.util.ArrayList
 
+@Transactional
 @Observable
 @Accessors
 abstract class Repositorio<T> {

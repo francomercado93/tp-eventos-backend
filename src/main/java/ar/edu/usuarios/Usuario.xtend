@@ -22,7 +22,6 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.ccService.CCResponse
 import org.uqbar.ccService.CreditCard
 import org.uqbar.ccService.CreditCardService
-import org.uqbar.commons.model.Entity
 import org.uqbar.commons.model.annotations.Observable
 import org.uqbar.commons.model.annotations.Transactional
 import org.uqbar.geodds.Point
@@ -302,7 +301,7 @@ class Usuario /*extends Entity*/ implements Cloneable {
 	}
 	
 	def getTiposPosibles(){
-		#[new Free, new Amateur, new Profesional]
+		#[new Free, new Amateur,new Profesional]
 	}
 	
 }
