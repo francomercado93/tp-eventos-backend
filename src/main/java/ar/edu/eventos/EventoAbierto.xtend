@@ -12,7 +12,7 @@ class EventoAbierto extends Evento {
 	double valorEntrada
 		
 	override capacidadMaxima() {
-		Math.round(lugar.superficie / this.espacioNecesarioPorPersona) // mostraba 5.99 y no 6
+		Math.round(getLocacion.superficie / this.espacioNecesarioPorPersona) // mostraba 5.99 y no 6
 	}
 
 	override boolean cumpleCondiciones(Usuario unUsuario) {

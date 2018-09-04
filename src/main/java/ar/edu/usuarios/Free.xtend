@@ -11,8 +11,6 @@ import org.uqbar.commons.model.annotations.Observable
 @Accessors
 class Free implements TipoUsuario {
 
-String descripcion="Free"
-
 	override maximaCantidadEventosPorMes() {
 		3
 	}
@@ -42,8 +40,8 @@ String descripcion="Free"
 		(unEvento.cantidadAsistentesPosibles + cantidadAcompaniantesMaxima + 1 <= this.cantidadMaximaPersonasEvento) // Hasta 50 personas en total
 	}
 	
-	override mostrarDescripcion() {
-		descripcion
+	override getDescripcion() {
+		"Free"
 	}
 	
 }

@@ -10,10 +10,6 @@ import org.uqbar.commons.model.annotations.Observable
 @Accessors
 class Profesional implements TipoUsuario{
 
-String descripcion="Profesional"
-    
-
-
 	override maximaCantidadEventosPorMes(){
 		20
 	}
@@ -39,8 +35,8 @@ String descripcion="Profesional"
 		true
 	}
 	
-		override mostrarDescripcion() {
-		descripcion
+	override getDescripcion() {
+		"Profesional"
 	}
 	
 }

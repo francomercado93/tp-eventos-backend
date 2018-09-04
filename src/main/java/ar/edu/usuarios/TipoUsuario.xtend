@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 interface TipoUsuario {
 
 
-    def String mostrarDescripcion()
+    def String getDescripcion()
 
 	def Integer maximaCantidadEventosPorMes()
 	
@@ -20,5 +20,5 @@ interface TipoUsuario {
 	def void postergarEvento(Evento unEvento, LocalDateTime nuevaFechaInicio)
 	
 	def boolean puedeInvitarUsuario(EventoCerrado unEvento,Integer cantidadAcompaniantesMaxima)
-
+	
 }

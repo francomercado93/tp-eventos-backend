@@ -1,8 +1,8 @@
 package ar.edu.eventos
 
 import ar.edu.conversionActualizacion.ConversionJson
-import ar.edu.conversionActualizacion.StubUpdateService
 import ar.edu.eventos.exceptions.BusinessException
+import ar.edu.main.StubUpdateService
 import ar.edu.repositorios.RepositorioLocacion
 import ar.edu.repositorios.RepositorioServicios
 import ar.edu.repositorios.RepositorioUsuarios

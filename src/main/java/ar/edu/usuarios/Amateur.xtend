@@ -9,39 +9,37 @@ import org.uqbar.commons.model.annotations.Observable
 @Observable
 @Accessors
 class Amateur implements TipoUsuario {
-	
-	String descripcion="Amateur"
-	
-	override maximaCantidadEventosPorMes(){	//no se usa
+
+	override maximaCantidadEventosPorMes() { // no se usa
 		0
 	}
-	
-	override maximaCantidadEventosSimultaneos(){
+
+	override maximaCantidadEventosSimultaneos() {
 		5
 	}
-	
-	def Integer cantidadMaximaInvitaciones(){
+
+	def Integer cantidadMaximaInvitaciones() {
 		50
 	}
-	
-	override puedoOrganizarEvento(Usuario unUsuario, Evento evento){
-		unUsuario.cantidadEventosSimultaneos() < this.maximaCantidadEventosSimultaneos	
+
+	override puedoOrganizarEvento(Usuario unUsuario, Evento evento) {
+		unUsuario.cantidadEventosSimultaneos() < this.maximaCantidadEventosSimultaneos
 	}
-	
-	override cancelarEvento(Evento unEvento){
+
+	override cancelarEvento(Evento unEvento) {
 		unEvento.cancelarEvento()
 	}
 
-	override postergarEvento(Evento unEvento, LocalDateTime nuevaFechaInicio){
+	override postergarEvento(Evento unEvento, LocalDateTime nuevaFechaInicio) {
 		unEvento.postergarEvento(nuevaFechaInicio)
 	}
-	
-	override puedeInvitarUsuario(EventoCerrado unEvento, Integer cantidadAcompaniantesMaxima){
-		unEvento.asistentes.size() < this.cantidadMaximaInvitaciones		
+
+	override puedeInvitarUsuario(EventoCerrado unEvento, Integer cantidadAcompaniantesMaxima) {
+		unEvento.asistentes.size() < this.cantidadMaximaInvitaciones
 	}
-	
-		override mostrarDescripcion() {
-		descripcion
+
+	override getDescripcion() {
+		"Amateur"
 	}
 
 }

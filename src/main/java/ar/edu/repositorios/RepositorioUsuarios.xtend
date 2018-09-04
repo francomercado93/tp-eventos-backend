@@ -2,10 +2,6 @@ package ar.edu.repositorios
 
 import ar.edu.eventos.exceptions.BusinessException
 import ar.edu.usuarios.Usuario
-import org.eclipse.xtend.lib.annotations.Accessors
-import org.uqbar.commons.model.annotations.Observable
-
-
 
 class RepositorioUsuarios extends Repositorio<Usuario> {
 	

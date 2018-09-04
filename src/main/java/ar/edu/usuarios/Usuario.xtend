@@ -11,6 +11,7 @@ import ar.edu.invitaciones.Invitacion
 import ar.edu.main.ServicioInvitacionesAsincronico
 import ar.edu.notificaciones.Notificacion
 import java.time.Duration
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.ArrayList
 import java.util.Date
@@ -21,16 +22,18 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.ccService.CCResponse
 import org.uqbar.ccService.CreditCard
 import org.uqbar.ccService.CreditCardService
+import org.uqbar.commons.model.Entity
 import org.uqbar.commons.model.annotations.Observable
+import org.uqbar.commons.model.annotations.Transactional
 import org.uqbar.geodds.Point
 import org.uqbar.mailService.Mail
 import org.uqbar.mailService.MailService
-import java.time.LocalDate
 
-@Observable
 @Accessors
-class Usuario implements Cloneable{
-	int id = -1
+@Transactional
+@Observable
+class Usuario /*extends Entity*/ implements Cloneable { 
+	int id 
 	 
 	String nombreUsuario
 	String nombreApellido
@@ -56,6 +59,10 @@ class Usuario implements Cloneable{
 	EventoCerrado auxEvento
 	int auxInvitados
 	Usuario clon
+	
+	new(){
+		id = -1
+	}
 	
 	AceptacionMasiva aceptacionMasiva = new AceptacionMasiva
 	
@@ -292,6 +299,10 @@ class Usuario implements Cloneable{
 	
 	def sumarSaldoAFavor(EventoAbierto evento) {
 		saldoAFavor +=  evento.valorEntrada * evento.porcentajeADevolver(this)
+	}
+	
+	def getTiposPosibles(){
+		#[new Free, new Amateur, new Profesional]
 	}
 	
 }
