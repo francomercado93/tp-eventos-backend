@@ -10,9 +10,11 @@ import java.util.HashSet
 import java.util.List
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.uqbar.commons.model.annotations.Observable
 import org.uqbar.geodds.Point
 
 @Accessors
+@Observable
 abstract class Evento {
 
 	Usuario organizador		//doble referencia, asociacion
@@ -160,4 +162,11 @@ abstract class Evento {
 		true
 	}
 	
+	def double cantidadEntradasVendidas(){
+		0d
+	}
+	
+	def cantidadTotalInvitaciones(){
+		0
+	}
 }

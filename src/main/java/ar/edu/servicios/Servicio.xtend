@@ -24,8 +24,8 @@ class Servicio {
 	def costoTraslado(Evento evento) {
 		tarifaPorKilometro * evento.distancia(ubicacionServicio)
 	}
-	
-	def getTiposPosibles(){
-		#[new TarifaFija(5), new TarifaPersona(5, 5), new TarifaPorHora(5, 5) ]
-	}	
+
+	def getTiposPosibles() {
+		#[new TarifaFija(5), new TarifaPersona(5, 5), new TarifaPorHora(5, 5)]
+	}
 }

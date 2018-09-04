@@ -1,4 +1,5 @@
 
+
 package ar.edu.usuarios
 
 import ar.edu.eventos.Artista
@@ -58,6 +59,8 @@ class Usuario /*extends Entity*/ implements Cloneable {
 	EventoCerrado auxEvento
 	int auxInvitados
 	Usuario clon
+	int cantidadEntradasCompradas
+	int cantidadInvitacionesConfirmadas
 	
 	new(){
 		id = -1
@@ -303,5 +306,11 @@ class Usuario /*extends Entity*/ implements Cloneable {
 	def getTiposPosibles(){
 		#[new Free, new Amateur,new Profesional]
 	}
+		def cantidadActividad() {
+		this.cantidadTotalEventosOrganizados + cantidadEntradasCompradas +cantidadInvitacionesConfirmadas
+	}
 	
+	def cantidadInvitaciones() {
+		invitaciones.size
+	}
 }

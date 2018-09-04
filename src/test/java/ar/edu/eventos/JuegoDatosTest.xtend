@@ -1,3 +1,4 @@
+
 package ar.edu.eventos
 
 import ar.edu.main.ServicioInvitacionesAsincronico
@@ -515,5 +516,4 @@ abstract class JuegoDatosTest {
 		when(servicioTarjeta.pay(tarjeta, valor)).thenReturn(new CCResponse()=>[statusCode = 2 statusMessage = "Pago rechazado"])
 		return servicioTarjeta
 	}
-	
 }
