@@ -7,6 +7,7 @@ import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.commons.applicationContext.ApplicationContext
 import org.uqbar.commons.model.annotations.Observable
+import org.uqbar.commons.model.utils.ObservableUtils
 
 @Accessors
 @Observable
@@ -47,7 +48,9 @@ class Estadisticas {
 	}
 	
 	def List<Usuario> getUsuariosMasActivos(){
-		usuarios.sortBy[usr | usr.cantidadActividad].take(5).toList	
+		val list = usuarios.sortBy[usr | usr.cantidadActividad].take(5).toList	
+		//ObservableUtils.firePropertyChanged(Estadisticas, "usuarios")
+		list
 	}
 	
 	def getLocacionesMasPopulares() {

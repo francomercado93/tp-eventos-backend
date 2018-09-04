@@ -51,16 +51,18 @@ class RepositorioUsuarios extends Repositorio<Usuario> {
 			usrRepo.mail = usrActualizado.mail
 		if(!usrActualizado.fechaNacimiento.equals(usrRepo.fechaNacimiento))
 			usrRepo.fechaNacimiento = usrActualizado.fechaNacimiento
-		if(!usrActualizado.direccion.calle.equals(usrRepo.direccion.calle))
-			usrRepo.direccion.calle = usrActualizado.direccion.calle
-		if(!(usrActualizado.direccion.numero == (usrRepo.direccion.numero)))
-			usrRepo.direccion.numero = usrActualizado.direccion.numero
-		if(!usrActualizado.direccion.localidad.equals(usrRepo.direccion.localidad))
-			usrRepo.direccion.localidad = usrActualizado.direccion.localidad
-		if(!usrActualizado.direccion.provincia.equals(usrRepo.direccion.provincia))
-			usrRepo.direccion.provincia = usrActualizado.direccion.provincia
-		if(!usrActualizado.direccion.coordenadas.equals(usrRepo.direccion.coordenadas))
-			usrRepo.direccion.coordenadas = usrActualizado.direccion.coordenadas
+			
+	//SEPARAR ACTUALIZACION DE CAMPOOS(VERIFICAR CAMPOS NO NULOS)
+//		if(!usrActualizado.direccion.calle.equals(usrRepo.direccion.calle))
+//			usrRepo.direccion.calle = usrActualizado.direccion.calle
+//		if(!(usrActualizado.direccion.numero == (usrRepo.direccion.numero)))
+//			usrRepo.direccion.numero = usrActualizado.direccion.numero
+//		if(!usrActualizado.direccion.localidad.equals(usrRepo.direccion.localidad))
+//			usrRepo.direccion.localidad = usrActualizado.direccion.localidad
+//		if(!usrActualizado.direccion.provincia.equals(usrRepo.direccion.provincia))
+//			usrRepo.direccion.provincia = usrActualizado.direccion.provincia
+//		if(!usrActualizado.direccion.coordenadas.equals(usrRepo.direccion.coordenadas))
+//			usrRepo.direccion.coordenadas = usrActualizado.direccion.coordenadas
 	
 	}
 

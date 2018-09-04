@@ -12,7 +12,7 @@ import org.uqbar.commons.model.annotations.Observable
 @Observable
 class GestionUsuarios {
 
-	Usuario usuarioSeleccionado
+	Usuario usuarioSeleccionado //= new Usuario
 
 	def crear(Usuario unUsuario) {
 		repositorio.create(unUsuario)
@@ -23,7 +23,13 @@ class GestionUsuarios {
 	}
 
 	def actualizar() {
-		repositorio.update(usuarioSeleccionado)
+		try {
+			repositorio.update(usuarioSeleccionado)
+			println "update"
+		} catch (Exception e) {
+			println(e)
+			println "Error"
+		}
 	}
 
 	def updateMasivo() {

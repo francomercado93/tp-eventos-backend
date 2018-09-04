@@ -27,7 +27,7 @@ import org.uqbar.commons.model.annotations.Observable
 import org.uqbar.commons.model.annotations.Transactional
 import org.uqbar.geodds.Point
 import org.uqbar.mailService.Mail
-import org.uqbar.mailService.MailService
+import org.uqbar.mailService.MailServiceimport org.uqbar.commons.model.exceptions.UserException
 
 @Accessors
 @Transactional
@@ -65,6 +65,14 @@ class Usuario /*extends Entity*/ implements Cloneable {
 	new(){
 		id = -1
 	}
+	def void setNombreUsuario(String unNombreUsuario){
+		if( nombreUsuario !== null)	{
+			throw new UserException("Nombre no valido")
+		}
+		nombreUsuario = unNombreUsuario
+	
+	}
+
 	
 	AceptacionMasiva aceptacionMasiva = new AceptacionMasiva
 	
