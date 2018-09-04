@@ -38,7 +38,7 @@ class RepositorioUsuarios extends Repositorio<Usuario> {
 
 	override update(Usuario usrActualizado) {
 		if (search(usrActualizado.nombreUsuario).isEmpty)
-			throw new BusinessException("No se encontro el usuario " + usrActualizado.nombreUsuario)
+		throw new BusinessException("No se encontro el usuario " + usrActualizado.nombreUsuario)
 		this.validarCampos(usrActualizado)		//El usuario actualizado tiene que ser valido
 		this.actualizarElemento(usrActualizado)
 	}
@@ -70,7 +70,7 @@ class RepositorioUsuarios extends Repositorio<Usuario> {
 
 	override validarCampos(Usuario usuario) {
 		if(usuario.nombreUsuario === null || usuario.nombreApellido === null || usuario.mail === null ||
-			usuario.fechaNacimiento === null || usuario.direccion === null)
+			usuario.fechaNacimiento === null)
 			throw new BusinessException("Usuario no valido")
 	}
 	

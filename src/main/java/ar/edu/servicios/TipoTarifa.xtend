@@ -7,7 +7,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 abstract class TipoTarifa {
 
 	double costoFijo
-
+	
 	new(double unCostoFijo) {
 		costoFijo = unCostoFijo
 	}
@@ -17,4 +17,5 @@ abstract class TipoTarifa {
 	def double tarifaMinima(Evento evento){
 		costoFijo
 	}
+	def String getDescripcion()
 }

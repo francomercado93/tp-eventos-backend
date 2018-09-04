@@ -13,5 +13,9 @@ class TarifaFija extends TipoTarifa {
 	override costo(Evento evento) {
 		this.tarifaMinima(evento)
 	}
+	
+	override getDescripcion() {
+		"Tarifa fija"
+	}
 
 }

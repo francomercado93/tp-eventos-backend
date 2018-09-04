@@ -1,15 +1,20 @@
 package ar.edu.repositorios
 
 import ar.edu.conversionActualizacion.ConversionJson
+import java.util.ArrayList
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.uqbar.commons.model.annotations.Observable
+import org.uqbar.commons.model.annotations.Transactional
 import org.uqbar.updateService.UpdateService
 
+@Transactional
+@Observable
 @Accessors
 abstract class Repositorio<T> {
 
 	int id = 0
-	List<T> lista = newArrayList
+	List<T> lista = new ArrayList<T>()
 	UpdateService updateService 
 	ConversionJson conversion = new ConversionJson
 	
