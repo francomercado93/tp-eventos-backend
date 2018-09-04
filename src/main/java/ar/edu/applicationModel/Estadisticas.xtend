@@ -1,7 +1,6 @@
 package ar.edu.applicationModel
 
 import ar.edu.eventos.Evento
-import ar.edu.eventos.Locacion
 import ar.edu.repositorios.RepositorioUsuarios
 import ar.edu.usuarios.Usuario
 import java.util.List
@@ -24,7 +23,7 @@ class Estadisticas {
 	}	
 	
 	def getCantidadTotalEventosOrganizados() {
-		usuarios.fold(0d, [acum, usr|acum + usr.cantidadTotalEventosOrganizados()])
+		this.eventosOrganizados.size
 	}
 
 	def getCantidadEventosUltimoMes() {
@@ -32,11 +31,11 @@ class Estadisticas {
 	}
 
 	def getCantidadEventosExitosos() {
-		usuarios.fold(0d, [acum, usr|acum + usr.cantidadEventosExitosos()])
+		this.eventosOrganizados.filter[esExitoso].size
 	}
 
 	def getCantidadEventosFracasados() {
-		usuarios.fold(0d, [acum, usr|acum + usr.cantidadEventosFracasados()])
+		this.eventosOrganizados.filter[esFracaso].size
 	}
 	
 	def getCantidadEntradasVendidas(){

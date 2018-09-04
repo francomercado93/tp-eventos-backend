@@ -173,13 +173,13 @@ class Usuario implements Cloneable{
 		eventosOrganizados.size
 	}
 	
-	def cantidadEventosExitosos() {
-		eventosOrganizados.filter(event | event.esExitoso()).size
-	}
-	
-	def cantidadEventosFracasados() {
-		eventosOrganizados.filter(event | event.esFracaso()).size		
-	}
+//	def cantidadEventosExitosos() {
+//		eventosOrganizados.filter(event | event.esExitoso()).size
+//	}
+//	
+//	def cantidadEventosFracasados() {
+//		eventosOrganizados.filter(event | event.esFracaso()).size		
+//	}
 //EVENTOS ABIERTOS
 	
 	def comprarEntrada(EventoAbierto unEvento) {	
