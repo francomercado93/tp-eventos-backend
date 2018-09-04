@@ -74,7 +74,7 @@ class RepositorioUsuarios extends Repositorio<Usuario> {
 
 	override validarCampos(Usuario usuario) {
 		if(usuario.nombreUsuario === null || usuario.nombreApellido === null || usuario.mail === null ||
-			usuario.fechaNacimiento === null || usuario.direccion === null)
+			usuario.fechaNacimiento === null)
 			throw new BusinessException("Usuario no valido")
 	}
 	

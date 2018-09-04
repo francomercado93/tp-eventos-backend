@@ -11,9 +11,9 @@ import ar.edu.invitaciones.Invitacion
 import ar.edu.main.ServicioInvitacionesAsincronico
 import ar.edu.notificaciones.Notificacion
 import java.time.Duration
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.ArrayList
+import java.util.Date
 import java.util.HashSet
 import java.util.List
 import java.util.Set
@@ -25,6 +25,7 @@ import org.uqbar.commons.model.annotations.Observable
 import org.uqbar.geodds.Point
 import org.uqbar.mailService.Mail
 import org.uqbar.mailService.MailService
+import java.time.LocalDate
 
 @Observable
 @Accessors
@@ -35,6 +36,7 @@ class Usuario implements Cloneable{
 	String nombreApellido
 	String mail
 	LocalDate fechaNacimiento
+	Date nacimiento
 	Direccion direccion
 	TipoPersonalidad tipoPersonalidad
 	double radioCercania

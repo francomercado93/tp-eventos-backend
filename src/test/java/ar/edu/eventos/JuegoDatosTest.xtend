@@ -94,23 +94,31 @@ abstract class JuegoDatosTest {
 		// LOCACIONES
 		salonFiesta = new Locacion() => [
 			descripcion = "Salon de Fiesta"
-			puntoGeografico = new Point(-34.603695, -58.410973)
+			coordenadaX=-34.559276
+			coordenadaY=-58.505377
+			puntoGeografico = new Point(coordenadaX,coordenadaY)
 			superficie = 10d
 		]
 		tecnopolis = new Locacion() => [
 			descripcion = "Tecnopolis"
-			puntoGeografico = new Point(-34.559276, -58.505377)
+			coordenadaX=-34.559276
+			coordenadaY=-58.505377
+			puntoGeografico = new Point(coordenadaX,coordenadaY)
 			superficie = 6d
 		]
 		hipodromo = new Locacion() => [
 			descripcion = "hipodromo San Isidro"
-			puntoGeografico = new Point(-34.480860, -58.518295)
+			coordenadaX=-34.559276
+			coordenadaY=-58.505377
+			puntoGeografico = new Point(coordenadaX,coordenadaY)
 			superficie = 4.8d
 		]
 		
 		hipodromoPalermo = new Locacion() =>[
 			descripcion = "hipodromo Palermo"
-			puntoGeografico = new Point(-34.567684, -58.429661)
+			coordenadaX=-34.559276
+			coordenadaY=-58.505377
+			puntoGeografico = new Point(coordenadaX,coordenadaY)
 			superficie = 4.8d
 		]
 		

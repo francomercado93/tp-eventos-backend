@@ -3,9 +3,14 @@ package ar.edu.usuarios
 import ar.edu.eventos.Evento
 import ar.edu.eventos.EventoCerrado
 import java.time.LocalDateTime
+import org.eclipse.xtend.lib.annotations.Accessors
+import org.uqbar.commons.model.annotations.Observable
 
-
+@Observable
+@Accessors
 class Amateur implements TipoUsuario {
+	
+	String descripcion="Amateur"
 	
 	override maximaCantidadEventosPorMes(){	//no se usa
 		0
@@ -35,5 +40,8 @@ class Amateur implements TipoUsuario {
 		unEvento.asistentes.size() < this.cantidadMaximaInvitaciones		
 	}
 	
+		override mostrarDescripcion() {
+		descripcion
+	}
 
 }

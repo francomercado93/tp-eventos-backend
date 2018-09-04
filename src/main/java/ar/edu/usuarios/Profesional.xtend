@@ -4,9 +4,15 @@ import ar.edu.eventos.Evento
 import ar.edu.eventos.EventoCerrado
 import java.time.LocalDateTime
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.uqbar.commons.model.annotations.Observable
 
+@Observable
 @Accessors
 class Profesional implements TipoUsuario{
+
+String descripcion="Profesional"
+    
+
 
 	override maximaCantidadEventosPorMes(){
 		20
@@ -31,6 +37,10 @@ class Profesional implements TipoUsuario{
 	
 	override puedeInvitarUsuario(EventoCerrado unEvento, Integer cantidadAcompaniantesMaxima){
 		true
+	}
+	
+		override mostrarDescripcion() {
+		descripcion
 	}
 	
 }

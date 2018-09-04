@@ -6,6 +6,9 @@ import java.time.LocalDateTime
 
 interface TipoUsuario {
 
+
+    def String mostrarDescripcion()
+
 	def Integer maximaCantidadEventosPorMes()
 	
 	def Integer maximaCantidadEventosSimultaneos()
