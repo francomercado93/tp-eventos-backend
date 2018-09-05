@@ -179,7 +179,8 @@ abstract class JuegoDatosTest {
 		// PERSONAS
 		agustin = new Usuario() => [
 			nombreUsuario = "agustin"
-			nombreApellido = "agustin gonzalez"
+			nombre = "Agustin"
+			apellido = "Gonzalez"
 			mail = "agustinKpo@gmail.com"
 			setDireccion("Quintana", 2551, "San Martin", "Buenos Aires", new Point(-34.578651, -58.549614))
 			fechaHoraActual = LocalDateTime.of(2018, 03, 15, 22, 00)
@@ -192,7 +193,8 @@ abstract class JuegoDatosTest {
 		]
 		agustina = new Usuario() => [
 			nombreUsuario = "agustina"
-			nombreApellido = "agustina pastor"
+			nombre = "Agustina"
+			apellido = "Pastor"
 			mail = "agus2000@gmail.com"
 			setDireccion("Quintana", 2551, "San Martin", "Buenos Aires", new Point(-34.578651, -58.549614))
 			fechaHoraActual = LocalDateTime.of(2018, 03, 15, 22, 00)
@@ -204,7 +206,8 @@ abstract class JuegoDatosTest {
 		]
 		juan = new Usuario() => [
 			nombreUsuario = "juan"
-			nombreApellido = "Juan Martin del Potro"
+			nombre = "Juan Martin"
+			apellido = " Del Potro"
 			mail = "juan00@gmail.com"
 			setDireccion("Quintana", 2551, "San Martin", "Buenos Aires", new Point(-34.578651, -58.549614))
 			fechaHoraActual = LocalDateTime.of(2018, 03, 15, 22, 00)
@@ -215,7 +218,8 @@ abstract class JuegoDatosTest {
 		]
 		martin = new Usuario() => [
 			nombreUsuario = "martin"
-			nombreApellido = "Martin Benitez"
+			nombre = "Martin"
+			apellido = "Benitez"
 			mail = "martinBntz@gmail.com"
 			setDireccion("America", 3450, "San Martin", "Buenos Aires", new Point(-34.560245, -58.546651))
 			fechaHoraActual = LocalDateTime.of(2018, 03, 16, 00, 22)
@@ -227,7 +231,8 @@ abstract class JuegoDatosTest {
 		// Usuarios que compran entradas y cumplen requisitos
 		maxi = new Usuario() => [
 			nombreUsuario = "maxi5"
-			nombreApellido = "Maxi Coronel"
+			nombre = "Maxi"
+			apellido = "Coronel"
 			mail = "maxigg@gmail.com"
 			setDireccion("Carlos Francisco Melo", 2356, "Vicente Lopez", "Buenos Aires",
 				new Point(-34.534199, -58.490467))
@@ -240,7 +245,8 @@ abstract class JuegoDatosTest {
 		]
 		gaby = new Usuario() => [
 			nombreUsuario = "Gaby555"
-			nombreApellido = "Gabriel Martinez"
+			nombre = "Gabriel"
+			apellido = "Martinez"
 			mail = "gaby_44@gmail.com"
 			setDireccion("Av. Maipú 3144", 2356, "Olivos", "Buenos Aires", new Point(-34.507145, -58.492910))
 			fechaHoraActual = LocalDateTime.of(2017, 09, 02, 20, 15)
@@ -251,7 +257,8 @@ abstract class JuegoDatosTest {
 		]
 		maria = new Usuario() => [
 			nombreUsuario = "MariaSanchez4"
-			nombreApellido = "Maria Sanchez"
+			nombre = "Maria"
+			apellido = "Sanchez"
 			mail = "sanchezmaria@hotmail.com"
 			setDireccion("Av. Bartolomé Mitre", 4787, "Caseros", "Buenos Aires", new Point(-34.609812, -58.563639))
 			fechaHoraActual = LocalDateTime.of(2018, 02, 27, 05, 00)
@@ -263,7 +270,8 @@ abstract class JuegoDatosTest {
 		]
 		lucas = new Usuario() => [
 			nombreUsuario = "Lucas41"
-			nombreApellido = "Lucas Benitez"
+			nombre = "Lucas"
+			apellido = "Benitez"
 			mail = "lucasb@gmail.com"
 			setDireccion("Nogoya", 3460, "Villa del Parque", "CABA", new Point(-34.605375, -58.496150))
 			fechaHoraActual = LocalDateTime.of(2018, 01, 31, 19, 50)
@@ -275,7 +283,8 @@ abstract class JuegoDatosTest {
 		]
 		beatriz = new Usuario() => [
 			nombreUsuario = "Beatriz788"
-			nombreApellido = "Beatriz Fernandez"
+			nombre = "Beatriz"
+			apellido = "Fernandez"
 			mail = "bety@gmail.com"
 			setDireccion("Gral Paz", 1989, "Llavallol", "Buenos Aires", new Point(-34.785584, -58.420979))
 			fechaHoraActual = LocalDateTime.of(2018, 02, 15, 15, 30)
@@ -290,7 +299,8 @@ abstract class JuegoDatosTest {
 		// Organizadores
 		free1 = new Usuario() => [
 			nombreUsuario = "Pablo"
-			nombreApellido = "Pablo Gomez"
+			nombre = "Pablo"
+			apellido = "Gomez"
 			mail = "pabloggz@gmail.com"
 			setDireccion("Av. Sta Fe ", 1370, "San Isidro", "Buenos Aires", new Point(-34.480860, -58.518295))
 			fechaHoraActual = LocalDateTime.of(2018, 05, 15, 19, 00)
@@ -312,7 +322,8 @@ abstract class JuegoDatosTest {
 
 		alejandro = new Usuario() => [
 			nombreUsuario = "Alej4ndro"
-			nombreApellido = "Alejandro Estevanez"
+			nombre = "Alejandro"
+			apellido = "Estevanez"
 			mail = "alejandro598@gmail.com"
 			setDireccion("Independencia", 343, "Pilar", "Buenos Aires", new Point(-34.460323, -58.909506))
 			fechaNacimiento = LocalDate.of(1983, 02, 02)
@@ -321,7 +332,8 @@ abstract class JuegoDatosTest {
 		]
 		marco = new Usuario() => [
 			nombreUsuario = "MarcoCD"
-			nombreApellido = "Marco Sanchez"
+			nombre = "Marco"
+			apellido = "Sanchez"
 			mail = "marquito@gmail.com"
 			setDireccion("Moreno", 256, "Pilar", "Buenos Aires", new Point(-34.461846, -58.907565))
 			fechaNacimiento = LocalDate.of(1996, 05, 02)
@@ -330,7 +342,8 @@ abstract class JuegoDatosTest {
 		]
 		tomas = new Usuario() => [
 			nombreUsuario = "TomasQWE"
-			nombreApellido = "Tomas Diaz"
+			nombre = "Tomas"
+			apellido = "Diaz"
 			mail = "tommy@hotmail.com"
 			setDireccion("Av Colon", 1090, "Ciudad de Cordoba", "Cordoba", new Point(-31.409261, -64.197778))
 			fechaNacimiento = LocalDate.of(1988, 12, 02)
@@ -339,7 +352,8 @@ abstract class JuegoDatosTest {
 		]
 		miriam = new Usuario() => [
 			nombreUsuario = "MiriamP"
-			nombreApellido = "Miriam Perez"
+			nombre = "Miriam"
+			apellido = "Perez"
 			mail = "perezmiriam0@gmail.com"
 			setDireccion("Falucho", 2520, "Mar del Plata", "Buenos Aires", new Point(-38.005192, -57.551312))
 			fechaNacimiento = LocalDate.of(1993, 02, 15)
@@ -406,7 +420,8 @@ abstract class JuegoDatosTest {
 		]
 		carla = new Usuario() => [
 			nombreUsuario = "Carla"
-			nombreApellido = "Carla Peterson"
+			nombre  = "Carla"
+			apellido = "Peterson"
 			fechaNacimiento = LocalDate.of(1994, 02, 10)
 			fechaHoraActual = LocalDateTime.of(2018, 05, 24, 11, 07)
 			tipoUsuario = new Profesional()

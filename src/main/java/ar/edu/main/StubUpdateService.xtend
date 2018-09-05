@@ -9,18 +9,18 @@ class StubUpdateService extends UpdateService {
 	override String getUserUpdates() {
 		var JsonArray usuarios = new JsonArray
 		usuarios.add(
-			Json.object().add("nombreUsuario", "lucas_capo").add("nombreApellido", "Lucas Lopez").add("email",
+			Json.object().add("nombreUsuario", "lucas_capo").add("nombre", "Lucas").add("apellido", "Lopez").add("email",
 				"lucas_93@hotmail.com").add("fechaNacimiento", "15/01/1993").add("direccion",
 				Json.object().add("calle", "25 de Mayo").add("numero", 3918).add("localidad", "San Martin").add(
 					"provincia", "Buenos Aires").add("coordenadas",
 					Json.object().add("x", -34.572224).add("y", 58.535651))))
 		usuarios.add(
-			Json.object().add("nombreUsuario", "martin1990").add("nombreApellido", "Martín Varela").add("email",
+			Json.object().add("nombreUsuario", "martin1990").add("nombre", "Martín").add("apellido", "Varela").add("email",
 				"martinvarela90@yahoo.com").add("fechaNacimiento", "18/11/1990").add("direccion",
 				Json.object().add("calle", "Av. Triunvirato").add("numero", 4065).add("localidad", "CABA").add(
 					"provincia", "").add("coordenadas", Json.object().add("x", -33.582360).add("y", 60.516598))))
 		usuarios.add(
-			Json.object().add("nombreUsuario", "agustin").add("nombreApellido", "Agustin Gonzalez").add("email",
+			Json.object().add("nombreUsuario", "agustin").add("nombre", "Agustin").add("apellido", "Gonzalez").add("email",
 				"agustinGonz@gmail.com").add("fechaNacimiento", "02/01/2000").add("direccion",
 				Json.object().add("calle", "Quintana").add("numero", 2551).add("localidad", "San Martin").add(
 					"provincia", "Buenos Aires").add("coordenadas",

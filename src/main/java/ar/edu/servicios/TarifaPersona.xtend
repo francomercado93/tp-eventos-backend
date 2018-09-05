@@ -36,4 +36,8 @@ class TarifaPersona extends TipoTarifa {
 		"Tarifa por persona"
 	}
 	
+	override getDescripcionCorta() {
+		"p/p"
+	}
+	
 }

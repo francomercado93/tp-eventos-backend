@@ -7,14 +7,19 @@ import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.commons.applicationContext.ApplicationContext
 import org.uqbar.commons.model.annotations.Observable
-import org.uqbar.commons.model.utils.ObservableUtils
 
 @Accessors
 @Observable
 class Estadisticas {
 	
 	List<Usuario> usuarios 
-	
+//	Map<String, Double> test = new HashMap<String, Double>
+//	
+//	def getTestMap(){
+//		test.put("Campo1:	", 28d)
+//		test.put("Campo2:	", 99d)
+//		test
+//	}
 	def RepositorioUsuarios getRepoUsuarios(){
 		ApplicationContext.instance.getSingleton(typeof(Usuario))	
 	}

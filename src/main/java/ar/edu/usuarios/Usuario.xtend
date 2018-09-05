@@ -15,7 +15,6 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.ArrayList
-import java.util.Date
 import java.util.HashSet
 import java.util.List
 import java.util.Set
@@ -25,9 +24,10 @@ import org.uqbar.ccService.CreditCard
 import org.uqbar.ccService.CreditCardService
 import org.uqbar.commons.model.annotations.Observable
 import org.uqbar.commons.model.annotations.Transactional
+import org.uqbar.commons.model.exceptions.UserException
 import org.uqbar.geodds.Point
 import org.uqbar.mailService.Mail
-import org.uqbar.mailService.MailServiceimport org.uqbar.commons.model.exceptions.UserException
+import org.uqbar.mailService.MailService
 
 @Accessors
 @Transactional
@@ -36,10 +36,10 @@ class Usuario /*extends Entity*/ implements Cloneable {
 	int id 
 	 
 	String nombreUsuario
-	String nombreApellido
+	String nombre
+	String apellido
 	String mail
 	LocalDate fechaNacimiento
-	Date nacimiento
 	Direccion direccion
 	TipoPersonalidad tipoPersonalidad
 	double radioCercania
@@ -61,20 +61,40 @@ class Usuario /*extends Entity*/ implements Cloneable {
 	Usuario clon
 	int cantidadEntradasCompradas
 	int cantidadInvitacionesConfirmadas
+	AceptacionMasiva aceptacionMasiva 
 	
 	new(){
 		id = -1
+		aceptacionMasiva = new AceptacionMasiva
 	}
+	
 	def void setNombreUsuario(String unNombreUsuario){
-		if( nombreUsuario !== null)	{
-			throw new UserException("Nombre no valido")
+		if( unNombreUsuario === null || unNombreUsuario == "")	{
+			throw new UserException("Nombre de usuario no valido")
 		}
 		nombreUsuario = unNombreUsuario
-	
 	}
-
 	
-	AceptacionMasiva aceptacionMasiva = new AceptacionMasiva
+	def void setNombre(String unNombre){
+		if( unNombre === null || unNombre == "")	{
+			throw new UserException("Nombre no valido")
+		}
+		nombre = unNombre
+	}
+	
+	def void setApellido(String unApellido){
+		if( unApellido === null || unApellido == ""){
+			throw new UserException("Apellido no valido")
+		}
+		apellido = unApellido
+	}
+	
+	def void setMail(String unMail){
+		if(unMail === null || unMail == "" || !unMail.contains("@") || !unMail.contains(".com")){
+			throw new UserException("Mail no valido")
+		}
+		mail = unMail
+	}
 	
 	def setDireccion(String calle, int numero, String localidad, String provincia, Point punto){
 		direccion = new Direccion(calle, numero, localidad, provincia, punto)

@@ -19,4 +19,6 @@ abstract class TipoTarifa {
 	}
 
 	def String getDescripcion()
+	
+	def String getDescripcionCorta()
 }

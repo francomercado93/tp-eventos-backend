@@ -17,5 +17,9 @@ class TarifaFija extends TipoTarifa {
 	override getDescripcion() {
 		"Tarifa fija"
 	}
+	
+	override getDescripcionCorta() {
+		"tf"
+	}
 
 }

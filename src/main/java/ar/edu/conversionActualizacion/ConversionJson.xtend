@@ -34,7 +34,8 @@ class ConversionJson {
 	def jsonUser(JsonObject usr) {
 		var usuario = new Usuario() => [
 			nombreUsuario = usr.get("nombreUsuario").asString
-			nombreApellido = usr.get("nombreApellido").asString
+			nombre = usr.get("nombre").asString
+			apellido = usr.get("apellido").asString
 			mail = usr.get("email").asString
 			var stringNacimiento = usr.get("fechaNacimiento").asString
 			val DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")

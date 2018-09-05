@@ -25,4 +25,9 @@ class TarifaPorHora extends TipoTarifa {
 		"Tarifa por hora"
 
 	}
+	
+	override getDescripcionCorta() {
+		"p/h"
+	}
+	
 }

@@ -97,7 +97,8 @@ class TestRepositorios extends JuegoDatosTest{
 		repo.create(marco)
 		var nuevoLucas = new Usuario => [
 			nombreUsuario = "Lucas41"
-			nombreApellido = "Lucas Benitez"
+			nombre = "Lucas"
+			apellido = "Benitez"
 			mail = "lucasBenitez@gmail.com"	//CAMBIA EL MAIL
 			setDireccion("Nogoya", 3460, "Villa del Parque", "CABA", new Point(-34.605375, -58.496150))
 			fechaHoraActual = LocalDateTime.of(2018, 01, 31, 19, 50)
@@ -275,8 +276,8 @@ class TestRepositorios extends JuegoDatosTest{
 		var main = new ConversionJson()
 		var usuariosActualizados = new StubUpdateService
 		main.conversionJsonAUsuarios(usuariosActualizados.getUserUpdates)
-		main.usuarios.forEach(usuario | println("\nNombre usuario: "+ usuario.nombreUsuario+"\nNombre y apellido: "+
-			 usuario.nombreApellido+"\nEmail: "+ usuario.mail+"\nFecha de nacimiento: "+ 
+		main.usuarios.forEach(usuario | println("\nNombre usuario: "+ usuario.nombreUsuario+"\nNombre apellido: "+
+			 usuario.nombre+"\nEmail: "+ usuario.mail+"\nFecha de nacimiento: "+ 
 			 usuario.fechaNacimiento+"\nDireccion:\nCalle: "+usuario.direccion.calle +" "
 			 +usuario.direccion.numero+"\nLocalidad: "+usuario.direccion.localidad+"\nProvincia: "+ 
 			 usuario.direccion.provincia+"\nCoordenadas: "+usuario.direccion.coordenadas))
