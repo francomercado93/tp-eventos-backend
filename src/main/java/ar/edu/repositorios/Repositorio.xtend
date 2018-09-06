@@ -5,12 +5,10 @@ import ar.edu.conversionActualizacion.ConversionJson
 import java.util.ArrayList
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
-import org.uqbar.commons.model.annotations.Observable
-import org.uqbar.commons.model.annotations.Transactional
+import org.uqbar.commons.model.annotations.TransactionalAndObservable
 import org.uqbar.updateService.UpdateService
 
-@Transactional
-@Observable
+@TransactionalAndObservable
 @Accessors
 abstract class Repositorio<T> {
 

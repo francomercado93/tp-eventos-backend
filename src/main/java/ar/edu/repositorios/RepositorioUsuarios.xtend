@@ -2,6 +2,7 @@ package ar.edu.repositorios
 
 import ar.edu.eventos.exceptions.BusinessException
 import ar.edu.usuarios.Usuario
+import org.uqbar.commons.model.exceptions.UserException
 
 class RepositorioUsuarios extends Repositorio<Usuario> {
 	
@@ -18,11 +19,13 @@ class RepositorioUsuarios extends Repositorio<Usuario> {
 	//==========================================
 	
 	override create(Usuario usuario) {
-		if(!lista.exists[ usr | usr.nombreUsuario.equals(usuario.nombreUsuario) ]){ //con list
-			this.validarCampos(usuario)
-			this.asignarId(usuario)
-			super.create(usuario)
+		if(lista.exists[ usr | usr.nombreUsuario.equals(usuario.nombreUsuario) ]){ //con list
+			throw new UserException ("No se puede agregar usuario "+usuario.nombreUsuario +" : ya existe un usuario con el nombre de usuario")		
 		}
+		this.validarCampos(usuario)
+		this.asignarId(usuario)
+		super.create(usuario)
+		
 	}
 
 	override searchById(int id) {
@@ -54,19 +57,19 @@ class RepositorioUsuarios extends Repositorio<Usuario> {
 	}
 	
 	def void actualizarDireccion(Usuario usrActualizado, Usuario usrRepo) {
-		if(usrActualizado.direccion === null){
-			throw new BusinessException("No se puede actualizar direccion")
+		//SOLO ACTUALIZA DIRECCION SI LA DIRECCION DEL USRACTUALIZADO NO ES NULL
+		if(usrActualizado.direccion !== null){
+			if(!usrActualizado.direccion.calle.equals(usrRepo.direccion.calle))
+				usrRepo.direccion.calle = usrActualizado.direccion.calle
+			if(!(usrActualizado.direccion.numero == (usrRepo.direccion.numero)))
+				usrRepo.direccion.numero = usrActualizado.direccion.numero
+			if(!usrActualizado.direccion.localidad.equals(usrRepo.direccion.localidad))
+				usrRepo.direccion.localidad = usrActualizado.direccion.localidad
+			if(!usrActualizado.direccion.provincia.equals(usrRepo.direccion.provincia))
+				usrRepo.direccion.provincia = usrActualizado.direccion.provincia
+			if(!usrActualizado.direccion.coordenadas.equals(usrRepo.direccion.coordenadas))
+				usrRepo.direccion.coordenadas = usrActualizado.direccion.coordenadas
 		}
-		if(!usrActualizado.direccion.calle.equals(usrRepo.direccion.calle))
-			usrRepo.direccion.calle = usrActualizado.direccion.calle
-		if(!(usrActualizado.direccion.numero == (usrRepo.direccion.numero)))
-			usrRepo.direccion.numero = usrActualizado.direccion.numero
-		if(!usrActualizado.direccion.localidad.equals(usrRepo.direccion.localidad))
-			usrRepo.direccion.localidad = usrActualizado.direccion.localidad
-		if(!usrActualizado.direccion.provincia.equals(usrRepo.direccion.provincia))
-			usrRepo.direccion.provincia = usrActualizado.direccion.provincia
-		if(!usrActualizado.direccion.coordenadas.equals(usrRepo.direccion.coordenadas))
-			usrRepo.direccion.coordenadas = usrActualizado.direccion.coordenadas
 	}
 	
 	def void actualizarFechaNacimiento(Usuario usrActualizado, Usuario usrRepo) {

@@ -22,16 +22,15 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.ccService.CCResponse
 import org.uqbar.ccService.CreditCard
 import org.uqbar.ccService.CreditCardService
-import org.uqbar.commons.model.annotations.Observable
-import org.uqbar.commons.model.annotations.Transactional
+import org.uqbar.commons.model.annotations.TransactionalAndObservable
 import org.uqbar.commons.model.exceptions.UserException
 import org.uqbar.geodds.Point
 import org.uqbar.mailService.Mail
 import org.uqbar.mailService.MailService
 
 @Accessors
-@Transactional
-@Observable
+@TransactionalAndObservable
+
 class Usuario /*extends Entity*/ implements Cloneable { 
 	int id 
 	 
@@ -45,7 +44,7 @@ class Usuario /*extends Entity*/ implements Cloneable {
 	double radioCercania
 	Set<Usuario> amigos = new HashSet<Usuario>()
 	LocalDateTime fechaHoraActual
-	TipoUsuario tipoUsuario;
+	TipoUsuario tipoUsuario
 	double saldoAFavor = 0
 	List<Evento> eventosOrganizados = new ArrayList<Evento>()
 	Set<Invitacion> invitaciones = new HashSet<Invitacion>()

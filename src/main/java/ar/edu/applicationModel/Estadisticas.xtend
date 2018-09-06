@@ -6,26 +6,21 @@ import ar.edu.usuarios.Usuario
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.commons.applicationContext.ApplicationContext
-import org.uqbar.commons.model.annotations.Observable
+import org.uqbar.commons.model.annotations.Dependencies
+import org.uqbar.commons.model.annotations.TransactionalAndObservable
 
 @Accessors
-@Observable
+@TransactionalAndObservable
 class Estadisticas {
 	
-	List<Usuario> usuarios 
-//	Map<String, Double> test = new HashMap<String, Double>
-//	
-//	def getTestMap(){
-//		test.put("Campo1:	", 28d)
-//		test.put("Campo2:	", 99d)
-//		test
-//	}
+	//List<Usuario> usuarios
+	
 	def RepositorioUsuarios getRepoUsuarios(){
 		ApplicationContext.instance.getSingleton(typeof(Usuario))	
 	}
 	
 	def getUsuarios(){
-		usuarios = repoUsuarios.lista
+		repoUsuarios.lista
 	}	
 	
 	def getCantidadTotalEventosOrganizados() {
@@ -51,11 +46,11 @@ class Estadisticas {
 	def getCantidadInvitacionesEnviadas(){
 		usuarios.fold(0d, [acum, usr|acum + usr.cantidadInvitaciones()])
 	}
+	@Dependencies("usuarios")
+	def getUsuariosMasActivos(){
+		usuarios.sortBy[usr | usr.cantidadActividad].take(5).toList	
+		//ObservableUtils.firePropertyChanged(typeof(Estadisticas), "usuarios")
 	
-	def List<Usuario> getUsuariosMasActivos(){
-		val list = usuarios.sortBy[usr | usr.cantidadActividad].take(5).toList	
-		//ObservableUtils.firePropertyChanged(Estadisticas, "usuarios")
-		list
 	}
 	
 	def getLocacionesMasPopulares() {
