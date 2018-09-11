@@ -31,7 +31,7 @@ class GestionUsuarios  {
 
 	}
 
-	override updateMasivo() {
+	def updateMasivo() {
 		val repoUsuarios = repositorio
 		repoUsuarios.updateService = new StubUpdateService
 		repoUsuarios.conversion = new ConversionJson
