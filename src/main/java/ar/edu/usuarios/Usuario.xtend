@@ -67,6 +67,9 @@ class Usuario /*extends Entity*/ implements Cloneable {
 		aceptacionMasiva = new AceptacionMasiva
 	}
 	
+	def Boolean tieneTipo(){
+		tipoUsuario !== null
+	}
 	def void setNombreUsuario(String unNombreUsuario){
 		if( unNombreUsuario === null || unNombreUsuario == "")	{
 			throw new UserException("Nombre de usuario no valido")
@@ -104,9 +107,9 @@ class Usuario /*extends Entity*/ implements Cloneable {
 	}
 	
 	// Organizador
-	def cambiarTipoUsuario(TipoUsuario unTipoUsuario){
-		tipoUsuario = unTipoUsuario
-	}
+//	def cambiarTipoUsuario(TipoUsuario unTipoUsuario){
+//		tipoUsuario = unTipoUsuario
+//	}
 	
 	/*Solo puede realizar invitaciones si la cantidad de acompaniantes de la nueva invitacion + la cantidad de posibles asistentes no supera 
 	capacidad maxima, de esta forma EL USUARIO PUEDE CONFIRMAR SIEMPRE y cuando este a tiempo*/

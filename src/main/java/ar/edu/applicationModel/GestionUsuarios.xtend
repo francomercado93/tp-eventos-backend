@@ -7,33 +7,31 @@ import ar.edu.usuarios.Usuario
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.commons.applicationContext.ApplicationContext
 import org.uqbar.commons.model.annotations.Dependencies
-import org.uqbar.commons.model.annotations.TransactionalAndObservable
+import org.uqbar.commons.model.annotations.Observable
 
 @Accessors
-@TransactionalAndObservable
-class GestionUsuarios {
+@Observable
+class GestionUsuarios  {
 
-	Usuario usuarioSeleccionado //= new Usuario
-	
-	def getUsuarios(){
-		repositorio.lista
-	}
-	
+	Usuario usuarioSeleccionado
+
 	def crear(Usuario unUsuario) {
 		repositorio.create(unUsuario)
 	}
+
 	@Dependencies("usuarioSeleccionado")
 	def eliminar() {
 		repositorio.delete(usuarioSeleccionado)
-		
 	}
 
+	@Dependencies("usuarioSeleccionado")
 	def actualizar() {
-		println(usuarioSeleccionado.tipoUsuario.descripcion)
 		repositorio.update(usuarioSeleccionado)
+		//ObservableUtils.firePropertyChanged(this, "elementos")
+
 	}
 
-	def updateMasivo() {
+	override updateMasivo() {
 		val repoUsuarios = repositorio
 		repoUsuarios.updateService = new StubUpdateService
 		repoUsuarios.conversion = new ConversionJson
@@ -43,5 +41,4 @@ class GestionUsuarios {
 	def RepositorioUsuarios getRepositorio() {
 		ApplicationContext.instance.getSingleton(typeof(Usuario)) as RepositorioUsuarios
 	}
-
 }

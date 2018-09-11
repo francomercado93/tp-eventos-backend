@@ -2,8 +2,10 @@ package ar.edu.repositorios
 
 import ar.edu.eventos.exceptions.BusinessException
 import ar.edu.usuarios.Usuario
+import org.uqbar.commons.model.annotations.Observable
 import org.uqbar.commons.model.exceptions.UserException
 
+@Observable
 class RepositorioUsuarios extends Repositorio<Usuario> {
 	
 	//PROVISORIO

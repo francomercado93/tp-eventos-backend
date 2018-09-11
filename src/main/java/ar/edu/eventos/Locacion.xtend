@@ -26,5 +26,7 @@ class Locacion {
 		capacidad = Math.round(superficie / espacionNecesarioPorPersona) 
 	}
 	
+	
+	
 }
 
