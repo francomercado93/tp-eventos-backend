@@ -5,7 +5,10 @@ import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors
 class TarifaFija extends TipoTarifa {
-
+	
+	new(){
+		super()
+	}
 	new(double unCostoFijo) {
 		super(unCostoFijo)
 	}

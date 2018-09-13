@@ -7,7 +7,11 @@ import org.eclipse.xtend.lib.annotations.Accessors
 class TarifaPersona extends TipoTarifa {
 
 	double porcentaje // en decimal
-
+	
+	new(){
+		super()
+	}
+	
 	new(double costoPorPersona, double unPorcentaje) {
 		super(costoPorPersona) // costoFijo
 		porcentaje = unPorcentaje

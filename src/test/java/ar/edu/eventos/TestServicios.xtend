@@ -1,5 +1,6 @@
 package ar.edu.eventos
 
+import java.util.HashMap
 import org.junit.Assert
 import org.junit.Test
 
@@ -15,6 +16,7 @@ class TestServicios extends JuegoDatosTest {
 	@Test
 	def void pruebaCostoUnServicioConTarifaPorHora() {
 		lollapalooza.contratarServicio(animacionMago)
+		
 		Assert.assertEquals(34.62, animacionMago.costoTraslado(lollapalooza), 0.1)
 		Assert.assertEquals(7, lollapalooza.duracion, 0.1)
 		Assert.assertEquals(418.62, lollapalooza.costoTotalEvento, 0.1)

@@ -7,7 +7,11 @@ import org.eclipse.xtend.lib.annotations.Accessors
 class TarifaPorHora extends TipoTarifa {
 
 	double tarifaPorHora
-
+	
+	new(){
+		super()
+	}
+	
 	new(double unCostoFijo, double unaTarifaPorHora) {
 		super(unCostoFijo)
 		tarifaPorHora = unaTarifaPorHora

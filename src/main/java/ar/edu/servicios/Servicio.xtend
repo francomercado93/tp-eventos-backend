@@ -14,12 +14,10 @@ class Servicio {
 	double tarifaPorKilometro
 	Point ubicacionServicio
 	String descripcion
-	
-//	
-//	new(){
-//		 coordX = ubicacionServicio.x
-//		 coordY= ubicacionServicio.y
-//	}
+	Double nuevaTarifa
+	Double coordX
+	Double coordY
+
 	def double costo(Evento evento) {
 		tipoTarifa.costo(evento) + this.costoTraslado(evento)
 	}
@@ -29,19 +27,29 @@ class Servicio {
 	}
 
 	def getTiposPosibles() {
-		#[new TarifaFija(0), new TarifaPersona(0, 0), new TarifaPorHora(0, 0)]
+		#[new TarifaFija, new TarifaPersona, new TarifaPorHora]
 	}
 	
-	def getCoordenadaX(){
-		ubicacionServicio.x
-	}	
-	
-	def getCoordenadaY(){
-		ubicacionServicio.y
+	def setNuevaTarifa(Double tarifa){
+		nuevaTarifa = tarifa
+		this.setNuevaTarifaTipoTarifa
 	}
 	
-//	def cambiarUbicacion(double x, double y){
-//		ubicacionServicio.(x, y)
-//	}
+	def void setNuevaTarifaTipoTarifa(){
+		tipoTarifa.costoFijo = nuevaTarifa
+	}
 	
+	def setUbicacionServicio(){
+		ubicacionServicio  = new Point(coordX, ubicacionServicio.y)
+	}
+	
+	def void setCoordX(Double coordenada){
+		coordX = coordenada
+		this.setUbicacionServicio
+	}
+	
+	def Double getCoordX(){
+		coordX = ubicacionServicio.x
+		coordX
+	}
 }	
