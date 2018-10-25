@@ -85,9 +85,9 @@ class EventoCerrado extends Evento {
 			throw new BusinessException("Usuario paso la fecha maxima de confirmacion ") 
 	}										
 
-	override cumpleCondiciones(Usuario invitado){
-		super.usuarioEstaATiempo(invitado)
-	}
+		override cumpleCondiciones(Usuario invitado){
+			super.usuarioEstaATiempo(invitado)
+		}
 	
 	override cantidadDisponibles() {
 		Math.round(this.capacidadMaxima() - this.cantidadAsistentesPosibles())

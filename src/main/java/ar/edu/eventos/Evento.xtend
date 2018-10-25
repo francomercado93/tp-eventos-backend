@@ -116,9 +116,9 @@ abstract class Evento {
 
 	def boolean cumpleCondiciones(Usuario unUsuario)
 
-	def boolean usuarioEstaATiempo(Usuario unUsuario) {
-		unUsuario.fechaHoraActual.isBefore(this.fechaMaximaConfirmacion)
-	}
+		def boolean usuarioEstaATiempo(Usuario unUsuario) {
+			unUsuario.fechaHoraActual.isBefore(this.fechaMaximaConfirmacion)
+		}
 
 	def void cancelarEvento() {
 		estaCancelado = true

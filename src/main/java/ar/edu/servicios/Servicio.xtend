@@ -40,7 +40,7 @@ class Servicio {
 	}
 	
 	def setUbicacionServicio(){
-		ubicacionServicio  = new Point(coordX, ubicacionServicio.y)
+		ubicacionServicio  = new Point(coordX, coordY)
 	}
 	
 	def void setCoordX(Double coordenada){
@@ -51,5 +51,15 @@ class Servicio {
 	def Double getCoordX(){
 		coordX = ubicacionServicio.x
 		coordX
+	}
+	
+	def void setCoordY(Double coordenada){
+		coordY = coordenada
+		this.setUbicacionServicio
+	}
+	
+	def Double getCoordY(){
+		coordY = ubicacionServicio.y
+		coordY
 	}
 }	
