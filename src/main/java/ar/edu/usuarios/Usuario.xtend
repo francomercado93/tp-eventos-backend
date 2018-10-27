@@ -27,44 +27,57 @@ import org.uqbar.commons.model.exceptions.UserException
 import org.uqbar.geodds.Point
 import org.uqbar.mailService.Mail
 import org.uqbar.mailService.MailService
+import org.uqbar.commons.model.Entity
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
 
 @Accessors
 @TransactionalAndObservable
 
-class Usuario /*extends Entity*/ implements Cloneable { 
-	int id 
+class Usuario extends Entity implements Cloneable { 
+//	int id 
 	 
 	String nombreUsuario
 	String nombre
 	String apellido
 	String mail
-	LocalDate fechaNacimiento
-	Direccion direccion
-	TipoPersonalidad tipoPersonalidad
-	double radioCercania
-	Set<Usuario> amigos = new HashSet<Usuario>()
-	LocalDateTime fechaHoraActual
-	TipoUsuario tipoUsuario
-	double saldoAFavor = 0
-	List<Evento> eventosOrganizados = new ArrayList<Evento>()
-	Set<Invitacion> invitaciones = new HashSet<Invitacion>()
-	CreditCard miTarjeta
-	CreditCardService servicioTarjeta
-	List<Notificacion> tiposNotificaciones = new ArrayList<Notificacion>()
-	MailService servicioMail
-	List<Artista> artistasFavoritos = new ArrayList<Artista>()
-	Set<Usuario> invAceptado = new HashSet<Usuario>()
-	Set<Usuario> invRechazado = new HashSet<Usuario>()
-	EventoCerrado auxEvento
-	int auxInvitados
-	Usuario clon
-	int cantidadEntradasCompradas
-	int cantidadInvitacionesConfirmadas
-	AceptacionMasiva aceptacionMasiva 
+	@JsonIgnore LocalDate fechaNacimiento
+	@JsonIgnore Direccion direccion
+	@JsonIgnore TipoPersonalidad tipoPersonalidad
+	@JsonIgnore double radioCercania
+	@JsonIgnore Set<Usuario> amigos = new HashSet<Usuario>()
+	@JsonIgnore LocalDateTime fechaHoraActual
+	@JsonIgnore TipoUsuario tipoUsuario
+	@JsonIgnore double saldoAFavor = 0
+	@JsonIgnore List<Evento> eventosOrganizados = new ArrayList<Evento>()
+	@JsonIgnore Set<Invitacion> invitaciones = new HashSet<Invitacion>()
+	@JsonIgnore CreditCard miTarjeta
+	@JsonIgnore CreditCardService servicioTarjeta
+	@JsonIgnore List<Notificacion> tiposNotificaciones = new ArrayList<Notificacion>()
+	@JsonIgnore MailService servicioMail
+	@JsonIgnore List<Artista> artistasFavoritos = new ArrayList<Artista>()
+	@JsonIgnore Set<Usuario> invAceptado = new HashSet<Usuario>()
+	@JsonIgnore Set<Usuario> invRechazado = new HashSet<Usuario>()
+	@JsonIgnore EventoCerrado auxEvento
+	@JsonIgnore int auxInvitados
+	@JsonIgnore Usuario clon
+	@JsonIgnore int cantidadEntradasCompradas
+	@JsonIgnore int cantidadInvitacionesConfirmadas
+	@JsonIgnore AceptacionMasiva aceptacionMasiva 
 	
 	new(){
 		id = -1
 		aceptacionMasiva = new AceptacionMasiva
+	}
+	
+//	@JsonProperty("amigos")
+//	def getNombreUsuarioAmigos(){
+//		amigos.map[amigo | amigo.nombreUsuario].toList
+//	}
+	
+	@JsonProperty("tipoUsuario")
+	def getTipoUsuario(){
+		tipoUsuario.descripcion
 	}
 	
 	def Boolean tieneTipo(){
@@ -101,7 +114,7 @@ class Usuario /*extends Entity*/ implements Cloneable {
 	def setDireccion(String calle, int numero, String localidad, String provincia, Point punto){
 		direccion = new Direccion(calle, numero, localidad, provincia, punto)
 	}
-	
+	@JsonIgnore
 	def getEdad(){		
 		Duration.between(LocalDateTime.of(fechaNacimiento, fechaHoraActual.toLocalTime), fechaHoraActual).getSeconds() / 31536000
 	}
@@ -158,7 +171,7 @@ class Usuario /*extends Entity*/ implements Cloneable {
 		}
 		unaInvitacion.rechazar()
 	}
-	
+	@JsonIgnore
 	def getEventoDeInvitacion(EventoCerrado unEvento ){
 		invitaciones.findFirst(invitacion | invitacion.evento == unEvento)//obtengo la invitacion con el evento
 	}
@@ -332,7 +345,7 @@ class Usuario /*extends Entity*/ implements Cloneable {
 	def sumarSaldoAFavor(EventoAbierto evento) {
 		saldoAFavor +=  evento.valorEntrada * evento.porcentajeADevolver(this)
 	}
-	
+	@JsonIgnore
 	def getTiposPosibles(){
 		#[new Free, new Amateur,new Profesional]
 	}
@@ -343,4 +356,17 @@ class Usuario /*extends Entity*/ implements Cloneable {
 	def cantidadInvitaciones() {
 		invitaciones.size
 	}
+	
+	def eliminarAmigo(Usuario usuario) {
+		amigos.remove(usuario)
+	}
+	
+	def buscarAmigo(Usuario usuario) {
+		amigos.findFirst[usr | usr.nombreUsuario == usuario.nombreUsuario]
+	}
+	
+	def esAmigo(Usuario usuario) {
+		amigos.contains(usuario)
+	}
+	
 }

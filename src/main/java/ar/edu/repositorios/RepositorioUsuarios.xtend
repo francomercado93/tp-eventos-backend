@@ -9,14 +9,14 @@ import org.uqbar.commons.model.exceptions.UserException
 class RepositorioUsuarios extends Repositorio<Usuario> {
 	
 	//PROVISORIO
-	static RepositorioUsuarios instance
-
-	static def getInstance() {
-		if (instance === null) {
-			instance = new RepositorioUsuarios()
-		}
-		instance
-	}
+//	static RepositorioUsuarios instance
+//
+//	static def getInstance() {
+//		if (instance === null) {
+//			instance = new RepositorioUsuarios()
+//		}
+//		instance
+//	}
 	
 	//==========================================
 	

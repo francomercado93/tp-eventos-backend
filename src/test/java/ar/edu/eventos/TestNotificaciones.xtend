@@ -3,7 +3,7 @@ package ar.edu.eventos
 import ar.edu.notificaciones.NotificacionAmigos
 import ar.edu.notificaciones.NotificacionUsuarioQueVivenCerca
 import ar.edu.notificaciones.NotificacionUsuariosAmigosOrganizador
-import ar.edu.notificaciones.NotificacionYMailContactosCercaEvento
+//import ar.edu.notificaciones.NotificacionYMailContactosCercaEvento
 import org.junit.Test
 import org.uqbar.mailService.Mail
 
@@ -28,16 +28,16 @@ class TestNotificaciones extends JuegoDatosTest {
 		carla.crearEvento(lollapalooza)
 	}
 	
-	@Test
-	def void pruebaNotificacionYMailContactosCercaEvento(){
-		carla.servicioMail = mockedServicioMail		
-		var notificacion = new NotificacionYMailContactosCercaEvento
-		notificacion.repoUsuarios = repoUsuariosTest
-		carla.agregarTipoNotificacion(notificacion)
-		carla.crearEvento(lollapalooza) 
-		verify(mockedServicioMail, times(3)).sendMail(any(Mail))
-
-	}
+//	@Test
+//	def void pruebaNotificacionYMailContactosCercaEvento(){
+//		carla.servicioMail = mockedServicioMail		
+//		var notificacion = new NotificacionYMailContactosCercaEvento
+//		notificacion.repoUsuarios = repoUsuariosTest
+//		carla.agregarTipoNotificacion(notificacion)
+//		carla.crearEvento(lollapalooza) 
+//		verify(mockedServicioMail, times(3)).sendMail(any(Mail))
+//
+//	}
 	
 	@Test
 	def void pruebaNotificacionUsuarioQueVivenCerca(){

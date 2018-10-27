@@ -79,14 +79,14 @@ class TestRepositorios extends JuegoDatosTest{
 		repo.update(nuevoLucas)
 	}
 	
-	@Test
-	def void noSeRepitenLosUsuariosDeUnaLista() {
-		var repo = new RepositorioUsuarios()
-		repo.create(lucas)
-		var lucas2 = lucas
-		repo.create(lucas2)
-		Assert.assertEquals(1, repo.lista.size, 0.1)
-	}
+//	@Test
+//	def void noSeRepitenLosUsuariosDeUnaLista() {
+//		var repo = new RepositorioUsuarios()
+//		repo.create(lucas)
+//		var lucas2 = lucas
+//		repo.create(lucas2)
+//		Assert.assertEquals(1, repo.lista.size, 0.1)
+//	}
 
 	@Test 
 	def void pruebaUpdateRepoUsuario() {
@@ -271,18 +271,18 @@ class TestRepositorios extends JuegoDatosTest{
 	}
 	
 	//CONVERSION JSON
-	@Test
-	def void pruebaJSONUsuario() {
-		var main = new ConversionJson()
-		var usuariosActualizados = new StubUpdateService
-		main.conversionJsonAUsuarios(usuariosActualizados.getUserUpdates)
-		main.usuarios.forEach(usuario | println("\nNombre usuario: "+ usuario.nombreUsuario+"\nNombre apellido: "+
-			 usuario.nombre+"\nEmail: "+ usuario.mail+"\nFecha de nacimiento: "+ 
-			 usuario.fechaNacimiento+"\nDireccion:\nCalle: "+usuario.direccion.calle +" "
-			 +usuario.direccion.numero+"\nLocalidad: "+usuario.direccion.localidad+"\nProvincia: "+ 
-			 usuario.direccion.provincia+"\nCoordenadas: "+usuario.direccion.coordenadas))
-		Assert.assertEquals(3, main.usuarios.size, 0.1)
-	}
+//	@Test
+//	def void pruebaJSONUsuario() {
+//		var main = new ConversionJson()
+//		var usuariosActualizados = new StubUpdateService
+//		main.conversionJsonAUsuarios(usuariosActualizados.getUserUpdates)
+//		main.usuarios.forEach(usuario | println("\nNombre usuario: "+ usuario.nombreUsuario+"\nNombre apellido: "+
+//			 usuario.nombre+"\nEmail: "+ usuario.mail+"\nFecha de nacimiento: "+ 
+//			 usuario.fechaNacimiento+"\nDireccion:\nCalle: "+usuario.direccion.calle +" "
+//			 +usuario.direccion.numero+"\nLocalidad: "+usuario.direccion.localidad+"\nProvincia: "+ 
+//			 usuario.direccion.provincia+"\nCoordenadas: "+usuario.direccion.coordenadas))
+//		Assert.assertEquals(3, main.usuarios.size, 0.1)
+//	}
 	
 	@Test
 	def void pruebaJSONLocaciones() {
@@ -306,22 +306,22 @@ class TestRepositorios extends JuegoDatosTest{
 	
 	//=======ENTREGA 3====================================
 
-	@Test
-	def void pruebaUpdateAllUsuarios() {
-		var repo = new RepositorioUsuarios()
-		repo.updateService = new StubUpdateService
-		repo.conversion = new ConversionJson
-		repo.create(agustin)
-		repo.create(agustina)
-		repo.create(lucas)
-		repo.create(miriam)
-		println("==========Repo sin actualizar================")
-		repo.lista.forEach(usuario | println("\nNombre usuario: "+ usuario.nombreUsuario+"\nEmail: "+ usuario.mail))
-		repo.updateAll()	//Actualiza usuario agustin y agrega dos usuarios mas
-		println("\n===============Repo actualizado==========")
-		repo.lista.forEach(usuario | println("\nNombre usuario: "+ usuario.nombreUsuario+"\nEmail: "+ usuario.mail))
-		Assert.assertEquals(6, repo.lista.size, 0.1)
-	}
+//	@Test
+//	def void pruebaUpdateAllUsuarios() {
+//		var repo = new RepositorioUsuarios()
+//		repo.updateService = new StubUpdateService
+//		repo.conversion = new ConversionJson
+//		repo.create(agustin)
+//		repo.create(agustina)
+//		repo.create(lucas)
+//		repo.create(miriam)
+//		println("==========Repo sin actualizar================")
+//		repo.lista.forEach(usuario | println("\nNombre usuario: "+ usuario.nombreUsuario+"\nEmail: "+ usuario.mail))
+//		repo.updateAll()	//Actualiza usuario agustin y agrega dos usuarios mas
+//		println("\n===============Repo actualizado==========")
+//		repo.lista.forEach(usuario | println("\nNombre usuario: "+ usuario.nombreUsuario+"\nEmail: "+ usuario.mail))
+//		Assert.assertEquals(6, repo.lista.size, 0.1)
+//	}
 	
 	@Test
 	def void pruebaUpdateAllServicios() {
@@ -343,22 +343,22 @@ class TestRepositorios extends JuegoDatosTest{
 		Assert.assertEquals(4, repo.lista.size, 0.1)
 	}
 	
-	@Test
-	def void pruebaUpdateAllLocaciones() {
-		var repo = new RepositorioLocacion()
-		repo.updateService = new StubUpdateService
-		repo.conversion = new ConversionJson
-		repo.create(tecnopolis)
-		repo.create(hipodromo)
-		repo.create(hipodromoPalermo)
-		repo.create(salonFiesta)
-		println("==========Repo sin actualizar================")
-		repo.lista.forEach(locacion | println("\nDescripcion: "+locacion.descripcion+"\nCoordenadas :"
-			+locacion.puntoGeografico))
-		repo.updateAll()//Actualiza las coordenadas del salon de Fiesta y agrega los nuevos datos
-		println("\n===============Repo actualizado==========")
-		repo.lista.forEach(locacion | println("\nDescripcion: "+locacion.descripcion+"\nCoordenadas :"
-			+locacion.puntoGeografico))
-		Assert.assertEquals(6, repo.lista.size, 0.1)
-	 }
+//	@Test
+//	def void pruebaUpdateAllLocaciones() {
+//		var repo = new RepositorioLocacion()
+//		repo.updateService = new StubUpdateService
+//		repo.conversion = new ConversionJson
+//		repo.create(tecnopolis)
+//		repo.create(hipodromo)
+//		repo.create(hipodromoPalermo)
+//		repo.create(salonFiesta)
+//		println("==========Repo sin actualizar================")
+//		repo.lista.forEach(locacion | println("\nDescripcion: "+locacion.descripcion+"\nCoordenadas :"
+//			+locacion.puntoGeografico))
+//		repo.updateAll()//Actualiza las coordenadas del salon de Fiesta y agrega los nuevos datos
+//		println("\n===============Repo actualizado==========")
+//		repo.lista.forEach(locacion | println("\nDescripcion: "+locacion.descripcion+"\nCoordenadas :"
+//			+locacion.puntoGeografico))
+//		Assert.assertEquals(6, repo.lista.size, 0.1)
+//	 }
  }

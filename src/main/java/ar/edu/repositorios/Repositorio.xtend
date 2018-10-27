@@ -1,4 +1,3 @@
-
 package ar.edu.repositorios
 
 import ar.edu.conversionActualizacion.ConversionJson
@@ -14,9 +13,13 @@ abstract class Repositorio<T> {
 
 	int id = 0
 	List<T> lista = new ArrayList<T>()
-	UpdateService updateService 
-	ConversionJson conversion = new ConversionJson
-	
+	UpdateService updateService
+	ConversionJson conversion
+
+	new() {
+		this.conversion = new ConversionJson
+	}
+
 	def void create(T elemento) {
 		lista.add(elemento)
 	}
