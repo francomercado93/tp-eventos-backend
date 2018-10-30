@@ -33,7 +33,7 @@ abstract class Evento {
 	List<Usuario> asistentes = new ArrayList<Usuario>
 	@JsonIgnore List<Artista> artistas = new ArrayList<Artista> // Solo los eventos abiertos pueden agregar artistas
 
-	@JsonProperty("organizador")
+	@JsonProperty("organizadorEvento")
 	def getNombreUsuarioOrganizador() {
 		organizador.nombreUsuario
 	}

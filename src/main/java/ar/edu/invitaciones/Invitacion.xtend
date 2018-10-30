@@ -13,13 +13,15 @@ class Invitacion {
 	@JsonIgnore Usuario invitado
 	Integer cantidadAcompaniantesMaxima = 0
 	@JsonIgnore Integer cantidadAcompaniantesConfirmados = 0
-	//boolean estaConfirmado = false
-	//boolean estaRechazado = false
-	
+	boolean estaConfirmado 
+	boolean estaRechazado 
+//	
 	new (Usuario invitado, EventoCerrado unEvento, Integer unaCantidadAcompaniantesMaxima){
 		this.invitado = invitado
 		this.cantidadAcompaniantesMaxima = unaCantidadAcompaniantesMaxima
 		this.evento = unEvento
+		this.estaConfirmado = false
+		this.estaRechazado = false
 	}
 	@JsonProperty("invitado")
 	def getNombreUsuarioInvitado(){
@@ -29,7 +31,7 @@ class Invitacion {
 	def void confirmar(Integer cantidadAcompaniantesInvitado){
 			cantidadAcompaniantesConfirmados = cantidadAcompaniantesInvitado	//guardo la cantidad en una variable de invitacion
 		if(cantidadAcompaniantesConfirmados <= cantidadAcompaniantesMaxima){
-			//estaConfirmado = true
+			estaConfirmado = true
 			evento.confirmarUsuario(invitado)
 		}
 		else
@@ -37,7 +39,7 @@ class Invitacion {
 	}
 	
 	def void rechazar(){
-		//estaRechazado = true
+		estaRechazado = true
 		evento.usuarioRechazaInvitacion(invitado)
 	}
 	

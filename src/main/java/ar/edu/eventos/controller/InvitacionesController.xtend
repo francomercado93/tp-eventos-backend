@@ -6,6 +6,9 @@ import org.uqbar.xtrest.api.Result
 import org.uqbar.xtrest.api.annotation.Controller
 import org.uqbar.xtrest.api.annotation.Get
 import org.uqbar.xtrest.json.JSONUtils
+import org.uqbar.xtrest.api.annotation.Put
+import org.uqbar.xtrest.api.annotation.Body
+import ar.edu.invitaciones.Invitacion
 
 @Controller
 class InvitacionesController {
@@ -16,9 +19,25 @@ class InvitacionesController {
 	def Result invitaciones() {
 		val iId = Integer.valueOf(id)
 		try {
-			ok(RepoUsuariosAngular.instance.searchById(iId).invitaciones.toJson)
+		val invitacionesPendientes = RepoUsuariosAngular.instance.searchById(iId).invitaciones.filter(inv | !inv.estaRechazado && !inv.estaConfirmado).toList
+			ok(invitacionesPendientes.toJson)
 		} catch (UserException e) {
 			notFound("No existe el usuario con id " + id + "")
+		}
+	}
+	
+	@Put('/usuarios/:idUsr/invitacion')
+	def Result actualizar(@Body String body) {
+		try {
+//			if (true) throw new RuntimeException("ACHALAY")
+			val invitacionActualizada = body.fromJson(Invitacion)
+			val usr = RepoUsuariosAngular.instance.searchById(Integer.parseInt(idUsr))
+//			val eventoActualizado = invitacionActualizada.evento
+			usr.actualizarInvitacion(invitacionActualizada)			
+
+			ok('{ "status" : "OK" }');
+		} catch (Exception e) {
+			badRequest(e.message)
 		}
 	}
 }

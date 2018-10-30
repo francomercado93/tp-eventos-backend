@@ -30,6 +30,7 @@ import org.uqbar.mailService.MailService
 import org.uqbar.commons.model.Entity
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
+import ar.edu.invitaciones.Entrada
 
 @Accessors
 @TransactionalAndObservable
@@ -64,6 +65,7 @@ class Usuario extends Entity implements Cloneable {
 	@JsonIgnore int cantidadEntradasCompradas
 	@JsonIgnore int cantidadInvitacionesConfirmadas
 	@JsonIgnore AceptacionMasiva aceptacionMasiva 
+	@JsonIgnore List<Entrada> Entradas = new ArrayList<Entrada>
 	
 	new(){
 		id = -1
@@ -367,6 +369,11 @@ class Usuario extends Entity implements Cloneable {
 	
 	def esAmigo(Usuario usuario) {
 		amigos.contains(usuario)
+	}
+	
+	def actualizarInvitacion(Invitacion invitacion) {
+		invitaciones.remove(getEventoDeInvitacion(invitacion.evento))
+		invitaciones.add(invitacion)
 	}
 	
 }

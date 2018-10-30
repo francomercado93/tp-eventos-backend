@@ -8,6 +8,11 @@ import ar.edu.usuarios.Profesional
 import ar.edu.usuarios.Usuario
 import java.time.LocalDate
 import java.time.LocalDateTime
+import org.uqbar.ccService.CreditCard
+import org.uqbar.ccService.CreditCardService
+
+import static org.mockito.Mockito.*
+import org.uqbar.ccService.CCResponse
 
 class RepoUsuariosAngular extends RepositorioUsuarios {
 	/* Singleton */
@@ -86,6 +91,7 @@ class RepoUsuariosAngular extends RepositorioUsuarios {
 			mail = "bety@gmail.com"
 			fechaNacimiento = LocalDate.of(1973, 02, 02)
 			tipoUsuario = new Free()
+
 		]
 		val marco = new Usuario() => [
 			nombreUsuario = "MarcoCD"
@@ -156,7 +162,7 @@ class RepoUsuariosAngular extends RepositorioUsuarios {
 		val tecnopolis = RepoLocacionesAngular.instance.search("Tecnopolis").get(0)
 		val hipodromo = RepoLocacionesAngular.instance.search("Hipodromo San Isidro").get(0)
 		val saloncito = RepoLocacionesAngular.instance.search("Saloncito").get(0)
-		
+
 		val cumpleJulian = new EventoCerrado() => [
 			nombreEvento = "Cumple Julian"
 			inicioEvento = LocalDateTime.of(2018, 6, 7, 18, 30)
@@ -259,15 +265,68 @@ class RepoUsuariosAngular extends RepositorioUsuarios {
 
 		agustin.fechaHoraActual = LocalDateTime.of(2018, 04, 14, 18, 00)
 		agustin.crearEvento(soundhearts)
+
 		agustin.fechaHoraActual = LocalDateTime.of(2018, 06, 27, 18, 00)
 		agustin.crearEvento(lollapalooza)
+
 		agustin.fechaHoraActual = LocalDateTime.of(2018, 06, 06, 19, 30)
 		agustin.crearEvento(cumpleMartin)
+		agustin.invitarUsuario(agustina, cumpleMartin, 6)
+		agustin.invitarUsuario(beatriz, cumpleMartin, 2)
+
 		agustin.fechaHoraActual = LocalDateTime.of(2018, 06, 01, 10, 30)
 		agustin.crearEvento(bautismo)
+		agustin.invitarUsuario(agustina, bautismo, 3)
+		agustin.invitarUsuario(beatriz, bautismo, 2)
+		agustin.invitarUsuario(gaby, bautismo, 3)
+		gaby.fechaHoraActual = LocalDateTime.of(2018, 06, 15, 10, 30)
+		gaby.confirmarInvitacion(bautismo,3 )
+		beatriz.rechazarInvitacion(bautismo)
+
+		beatriz.fechaHoraActual = LocalDateTime.of(2019, 04, 13, 10, 00)
+		beatriz.miTarjeta = new CreditCard
+		beatriz.servicioTarjeta = mockearCreditCardServicePagoExitoso(beatriz.miTarjeta, soundhearts.valorEntrada)
+		beatriz.comprarEntrada(soundhearts)
+
+		gaby.fechaHoraActual = LocalDateTime.of(2019, 04, 13, 10, 00)
+		gaby.miTarjeta = new CreditCard
+		gaby.servicioTarjeta = mockearCreditCardServicePagoExitoso(gaby.miTarjeta, soundhearts.valorEntrada)
+		gaby.comprarEntrada(soundhearts)
+
+		maria.fechaHoraActual = LocalDateTime.of(2019, 02, 13, 10, 00)
+		maria.miTarjeta = new CreditCard
+		maria.servicioTarjeta = mockearCreditCardServicePagoExitoso(maria.miTarjeta, soundhearts.valorEntrada)
+		maria.comprarEntrada(soundhearts)
+		maria.fechaHoraActual = LocalDateTime.of(2019, 02, 13, 10, 00)
+		maria.devolverEntrada(soundhearts)
+
+		juan.fechaHoraActual = LocalDateTime.of(2019, 04, 13, 10, 00)
+		juan.miTarjeta = new CreditCard
+		juan.servicioTarjeta = mockearCreditCardServicePagoExitoso(juan.miTarjeta, soundhearts.valorEntrada)
+		juan.comprarEntrada(soundhearts)
+
+		beatriz.fechaHoraActual = LocalDateTime.of(2018, 03, 15, 10, 00)
+		beatriz.miTarjeta = new CreditCard
+		beatriz.servicioTarjeta = mockearCreditCardServicePagoExitoso(beatriz.miTarjeta, lollapalooza.valorEntrada)
+		beatriz.comprarEntrada(lollapalooza)
+
+		gaby.fechaHoraActual = LocalDateTime.of(2018, 03, 15, 10, 00)
+		gaby.miTarjeta = new CreditCard
+		gaby.servicioTarjeta = mockearCreditCardServicePagoExitoso(gaby.miTarjeta, lollapalooza.valorEntrada)
+		gaby.comprarEntrada(lollapalooza)
+
 	}
 
 	def getUsrsRepo() {
 		lista
+	}
+
+	def CreditCardService mockearCreditCardServicePagoExitoso(CreditCard tarjeta, double valor) {
+		val servicioTarjeta = mock(typeof(CreditCardService))
+		when(servicioTarjeta.pay(tarjeta, valor)).thenReturn(new CCResponse() => [
+			statusCode = 0
+			statusMessage = "Transaccion Exitosa"
+		])
+		return servicioTarjeta
 	}
 }
