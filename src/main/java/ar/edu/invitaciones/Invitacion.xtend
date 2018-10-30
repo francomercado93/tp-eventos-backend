@@ -4,13 +4,15 @@ import ar.edu.eventos.EventoCerrado
 import ar.edu.eventos.exceptions.BusinessException
 import ar.edu.usuarios.Usuario
 import org.eclipse.xtend.lib.annotations.Accessors
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
 
 @Accessors
 class Invitacion {
 	EventoCerrado evento
-	Usuario invitado
+	@JsonIgnore Usuario invitado
 	Integer cantidadAcompaniantesMaxima = 0
-	Integer cantidadAcompaniantesConfirmados = 0
+	@JsonIgnore Integer cantidadAcompaniantesConfirmados = 0
 	//boolean estaConfirmado = false
 	//boolean estaRechazado = false
 	
@@ -18,6 +20,10 @@ class Invitacion {
 		this.invitado = invitado
 		this.cantidadAcompaniantesMaxima = unaCantidadAcompaniantesMaxima
 		this.evento = unEvento
+	}
+	@JsonProperty("invitado")
+	def getNombreUsuarioInvitado(){
+		invitado.nombreUsuario
 	}
 	
 	def void confirmar(Integer cantidadAcompaniantesInvitado){

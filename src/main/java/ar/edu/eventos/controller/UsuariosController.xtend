@@ -1,15 +1,12 @@
 package ar.edu.eventos.controller
 
 import ar.edu.repositorios.RepoUsuariosAngular
-import ar.edu.usuarios.Usuario
-import java.util.List
 import org.uqbar.commons.model.exceptions.UserException
 import org.uqbar.xtrest.api.Result
 import org.uqbar.xtrest.api.annotation.Controller
 import org.uqbar.xtrest.api.annotation.Get
 import org.uqbar.xtrest.api.annotation.Put
 import org.uqbar.xtrest.json.JSONUtils
-import ar.edu.eventos.exceptions.BusinessException
 
 @Controller
 class UsuariosController {
@@ -40,7 +37,8 @@ class UsuariosController {
 			notFound("No existe el usuario con id " + id + "")
 		}
 	}
-
+	
+	//????
 	@Get('/usuarios/:id/amigos')
 	def Result searchAmigos() {
 		val iId = Integer.valueOf(id)
@@ -81,9 +79,5 @@ class UsuariosController {
 		} catch (Exception e) {
 			badRequest(e.message)
 		}
-	}
-
-	def actualizarAmigos(Usuario usuario, List<Usuario> amigos) {
-		amigos.filter(amigo|!usuario.esAmigo(amigo)).forEach(amigo|usuario.eliminarAmigo(amigo))
 	}
 }

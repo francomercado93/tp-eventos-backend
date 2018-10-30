@@ -45,7 +45,7 @@ class Usuario extends Entity implements Cloneable {
 	@JsonIgnore Direccion direccion
 	@JsonIgnore TipoPersonalidad tipoPersonalidad
 	@JsonIgnore double radioCercania
-	@JsonIgnore Set<Usuario> amigos = new HashSet<Usuario>()
+	Set<Usuario> amigos = new HashSet<Usuario>()
 	@JsonIgnore LocalDateTime fechaHoraActual
 	@JsonIgnore TipoUsuario tipoUsuario
 	@JsonIgnore double saldoAFavor = 0

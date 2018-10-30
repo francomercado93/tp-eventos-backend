@@ -12,24 +12,54 @@ import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.commons.model.annotations.Observable
 import org.uqbar.geodds.Point
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
+import java.time.format.DateTimeFormatter
 
 @Accessors
 @Observable
 abstract class Evento {
-
-	Usuario organizador		//doble referencia, asociacion
+	static String DATE_PATTERN = "dd/MM/yyyy hh:mm"
+	@JsonIgnore Usuario organizador // doble referencia, asociacion
 	String nombreEvento
-	LocalDateTime inicioEvento
-	LocalDateTime finEvento
+	@JsonIgnore LocalDateTime inicioEvento
+	@JsonIgnore LocalDateTime finEvento
 	Locacion locacion
-	LocalDateTime fechaMaximaConfirmacion
-	LocalDateTime fechaCreacion
-	boolean estaCancelado = false
-	boolean estaPostergado = false
-	Set<Servicio> serviciosContratados = new HashSet<Servicio>
-	List<Usuario> asistentes = new ArrayList<Usuario>
-	List<Artista> artistas = new ArrayList<Artista> 	//Solo los eventos abiertos pueden agregar artistas
-	
+	@JsonIgnore LocalDateTime fechaMaximaConfirmacion
+	@JsonIgnore LocalDateTime fechaCreacion
+	@JsonIgnore boolean estaCancelado = false
+	@JsonIgnore boolean estaPostergado = false
+	@JsonIgnore Set<Servicio> serviciosContratados = new HashSet<Servicio>
+	@JsonIgnore List<Usuario> asistentes = new ArrayList<Usuario>
+	@JsonIgnore List<Artista> artistas = new ArrayList<Artista> // Solo los eventos abiertos pueden agregar artistas
+
+	@JsonProperty("organizador")
+	def getNombreUsuarioOrganizador() {
+		organizador.nombreUsuario
+	}
+
+	@JsonProperty("rechazados")
+	def Integer getRechazados()
+
+	@JsonProperty("fechaMaximaConfirmacion")
+	def getFechaMaximaConfirmacion() {
+		formatter.format(this.fechaMaximaConfirmacion)
+	}
+
+	@JsonProperty("inicioEvento")
+	def getInicioEventoAsString() {
+		formatter.format(this.inicioEvento)
+	}
+
+	@JsonProperty("finEvento")
+	def getFinEventoAsString() {
+		formatter.format(this.finEvento)
+	}
+
+	def formatter() {
+		DateTimeFormatter.ofPattern(DATE_PATTERN)
+	}
+
 	def double porcentajeExito() {
 		0.9
 	}
@@ -102,6 +132,7 @@ abstract class Evento {
 		Math.round(this.capacidadMaxima() - this.cantidadAsistentesPosibles)
 	}
 
+	@JsonProperty("cantidadAsistentesPosibles")
 	def cantidadAsistentesPosibles() {
 		asistentes.size
 	}
@@ -116,9 +147,9 @@ abstract class Evento {
 
 	def boolean cumpleCondiciones(Usuario unUsuario)
 
-		def boolean usuarioEstaATiempo(Usuario unUsuario) {
-			unUsuario.fechaHoraActual.isBefore(this.fechaMaximaConfirmacion)
-		}
+	def boolean usuarioEstaATiempo(Usuario unUsuario) {
+		unUsuario.fechaHoraActual.isBefore(this.fechaMaximaConfirmacion)
+	}
 
 	def void cancelarEvento() {
 		estaCancelado = true
@@ -157,16 +188,16 @@ abstract class Evento {
 	def boolean estaInvitado(Usuario unUsuario) {
 		asistentes.contains(unUsuario)
 	}
-	
-	def boolean tipoUsuarioPuedeOrganizar(){
+
+	def boolean tipoUsuarioPuedeOrganizar() {
 		true
 	}
-	
-	def double cantidadEntradasVendidas(){
+
+	def double cantidadEntradasVendidas() {
 		0d
 	}
-	
-	def cantidadTotalInvitaciones(){
+
+	def cantidadTotalInvitaciones() {
 		0
 	}
 }

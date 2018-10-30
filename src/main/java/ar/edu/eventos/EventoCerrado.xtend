@@ -6,17 +6,25 @@ import ar.edu.usuarios.Usuario
 import java.util.HashSet
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
 
 @Accessors
 class EventoCerrado extends Evento {
 
-	Set<Usuario> invitadosConfirmados = new HashSet<Usuario>
+	@JsonIgnore Set<Usuario> invitadosConfirmados = new HashSet<Usuario>
 	Integer capacidadMaxima
+	@JsonIgnore Set<Usuario> usuariosConInvitacionesRechazadas = new HashSet<Usuario>
+
 	
-	override porcentajeExito(){
+	override getRechazados() {
+		usuariosConInvitacionesRechazadas.size
+	}
+
+	override porcentajeExito() {
 		0.8
 	}
-	
+
 	override capacidadMaxima() {
 		capacidadMaxima
 	}
@@ -26,35 +34,38 @@ class EventoCerrado extends Evento {
 	}
 
 	override double cantidadExito() {
-		this.cantidadTotalInvitaciones  * this.porcentajeExito
+		this.cantidadTotalInvitaciones * this.porcentajeExito
 	}
-	
-	override cantidadTotalInvitaciones(){
+
+	override cantidadTotalInvitaciones() {
 		asistentes.size() + this.cantidadInvitacionesConfirmadas
 	}
-	
-	
-	def cantidadAcompaniantesPendientes(){	//Obtiene la cantidad maxima de acompaniantes de las invitaciones para este evento
-		asistentes.fold(0, [ acum, usuario | acum + usuario.getEventoDeInvitacion(this).cantidadAcompaniantesMaxima ])
+
+	def cantidadAcompaniantesPendientes() { // Obtiene la cantidad maxima de acompaniantes de las invitaciones para este evento
+		asistentes.fold(0, [acum, usuario|acum + usuario.getEventoDeInvitacion(this).cantidadAcompaniantesMaxima])
 	}
-	
+
 	override cantidadAsistentesPosibles() { // o Total
-		this.cantidadInvitacionesPendientes() +  this.cantidadAcompaniantesPendientes + this.cantidadAsistentesConfirmados()
+		this.cantidadInvitacionesPendientes() + this.cantidadAcompaniantesPendientes +
+			this.cantidadAsistentesConfirmados()
 	}
-	
+
 	def cantidadInvitacionesPendientes() {
 		asistentes.size()
 	}
-	
+
+	@JsonProperty("cantidadAsistentesConfirmados")
 	def cantidadAsistentesConfirmados() {
 		this.cantidadInvitacionesConfirmadas + this.cantidadAcompaniantesConfirmados
 	}
-	
-	def cantidadAcompaniantesConfirmados(){
-		invitadosConfirmados.fold(0, [ acum, usuario | acum + usuario.getEventoDeInvitacion(this).cantidadAcompaniantesConfirmados ])
+
+	def cantidadAcompaniantesConfirmados() {
+		invitadosConfirmados.fold(0, [ acum, usuario |
+			acum + usuario.getEventoDeInvitacion(this).cantidadAcompaniantesConfirmados
+		])
 	}
-	
-	def cantidadInvitacionesConfirmadas(){
+
+	def cantidadInvitacionesConfirmadas() {
 		invitadosConfirmados.size
 	}
 
@@ -63,7 +74,7 @@ class EventoCerrado extends Evento {
 	}
 
 	override double cantidadFracaso() {
-		this.cantidadTotalInvitaciones  * this.porcentajeFracaso
+		this.cantidadTotalInvitaciones * this.porcentajeFracaso
 	}
 
 	def boolean estaConfirmado(Usuario unUsuario) {
@@ -76,23 +87,27 @@ class EventoCerrado extends Evento {
 
 	def void usuarioRechazaInvitacion(Usuario unUsuario) {
 		this.removerUsuario(unUsuario)
+		this.agregarUsuarioInvitacionRechazada(unUsuario)
+	}
+
+	def agregarUsuarioInvitacionRechazada(Usuario usuario) {
+		usuariosConInvitacionesRechazadas.add(usuario)
 	}
 
 	def void confirmarUsuario(Usuario invitado) {
 		if (this.cumpleCondiciones(invitado)) {
 			this.agregarListaConfirmado(invitado)
 		} else
-			throw new BusinessException("Usuario paso la fecha maxima de confirmacion ") 
-	}										
+			throw new BusinessException("Usuario paso la fecha maxima de confirmacion ")
+	}
 
-		override cumpleCondiciones(Usuario invitado){
-			super.usuarioEstaATiempo(invitado)
-		}
-	
+	override cumpleCondiciones(Usuario invitado) {
+		super.usuarioEstaATiempo(invitado)
+	}
+
 	override cantidadDisponibles() {
 		Math.round(this.capacidadMaxima() - this.cantidadAsistentesPosibles())
 	}
-
 
 	def agregarListaConfirmado(Usuario unUsuario) {
 		invitadosConfirmados.add(unUsuario) // Se lo agrega a una lista que no puede estar en otra
@@ -107,8 +122,9 @@ class EventoCerrado extends Evento {
 		super.cancelarEvento
 		this.notificarConfirmados()
 	}
-   def ejecucionesDeInvitacionesAsincronicas(ServicioInvitacionesAsincronico unServicio){
-   	unServicio.ejecucionInvitacionesAsincronicas
-   }
-   
+
+	def ejecucionesDeInvitacionesAsincronicas(ServicioInvitacionesAsincronico unServicio) {
+		unServicio.ejecucionInvitacionesAsincronicas
+	}
+
 }

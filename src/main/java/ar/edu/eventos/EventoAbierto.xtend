@@ -1,19 +1,26 @@
 package ar.edu.eventos
 
-
 import ar.edu.eventos.exceptions.BusinessException
 import ar.edu.usuarios.Usuario
 import org.eclipse.xtend.lib.annotations.Accessors
-
-
+import com.fasterxml.jackson.annotation.JsonIgnore
 
 @Accessors
 class EventoAbierto extends Evento {
-
-	int edadMinima
-	double valorEntrada
 	static final double ESPACIONECESARIOPERSONA = 0.8
-		
+
+	@JsonIgnore int edadMinima
+	@JsonIgnore double valorEntrada
+	@JsonIgnore int entradasDevueltas
+
+	new() {
+		entradasDevueltas = 0
+	}
+
+	override getRechazados() {
+		entradasDevueltas
+	}
+
 	override capacidadMaxima() {
 		locacion.calcularCapacidad(ESPACIONECESARIOPERSONA)
 		locacion.capacidad
@@ -22,7 +29,7 @@ class EventoAbierto extends Evento {
 	override boolean cumpleCondiciones(Usuario unUsuario) {
 		(this.superaEdadMin(unUsuario) && this.cantidadDisponibles > 0 && this.usuarioEstaATiempo(unUsuario))
 	}
-	
+
 	def boolean usuarioPuedeDevolverEntrada(Usuario usuario) {
 		this.estaInvitado(usuario) && this.diasfechaMaximaConfirmacion(usuario) > 0
 	}
@@ -68,28 +75,29 @@ class EventoAbierto extends Evento {
 		else
 			0.8
 	}
-	
-	def agregarArtista(Artista artista){
+
+	def agregarArtista(Artista artista) {
 		artistas.add(artista)
 	}
-	
-	def eliminarArtista(String artista){
+
+	def eliminarArtista(String artista) {
 		artistas.remove(artista)
 	}
-	
-	override tipoUsuarioPuedeOrganizar(){
+
+	override tipoUsuarioPuedeOrganizar() {
 		false
 	}
-	
+
 	def usuarioDevuelveEntrada(Usuario usuario) {
-		if(!this.usuarioPuedeDevolverEntrada(usuario)){
+		if (!this.usuarioPuedeDevolverEntrada(usuario)) {
 			throw new BusinessException("Error: usuario no puede devolver entrada")
 		}
 		this.devolverDinero(usuario)
+		entradasDevueltas++
 		this.removerUsuario(usuario)
 	}
-	
-	override cantidadEntradasVendidas(){
+
+	override cantidadEntradasVendidas() {
 		super.cantidadAsistentesPosibles()
-	}	
+	}
 }

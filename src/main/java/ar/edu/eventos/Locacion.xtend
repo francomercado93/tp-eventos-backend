@@ -1,4 +1,3 @@
-
 package ar.edu.eventos
 
 import org.eclipse.xtend.lib.annotations.Accessors
@@ -6,6 +5,7 @@ import org.uqbar.commons.model.annotations.Dependencies
 import org.uqbar.commons.model.annotations.Observable
 import org.uqbar.commons.model.annotations.Transactional
 import org.uqbar.geodds.Point
+import com.fasterxml.jackson.annotation.JsonIgnore
 
 @Transactional
 @Observable
@@ -14,19 +14,17 @@ class Locacion {
 
 	int id = -1
 	String descripcion
-	Point puntoGeografico
-	double superficie
-	double capacidad
+	@JsonIgnore Point puntoGeografico
+	@JsonIgnore double superficie
+	@JsonIgnore double capacidad
 
 	def double distancia(Point unPunto) {
 		puntoGeografico.distance(unPunto)
 	}
+
 	@Dependencies("superficie")
 	def calcularCapacidad(double espacionNecesarioPorPersona) {
-		capacidad = Math.round(superficie / espacionNecesarioPorPersona) 
+		capacidad = Math.round(superficie / espacionNecesarioPorPersona)
 	}
-	
-	
-	
-}
 
+}
