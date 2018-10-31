@@ -9,40 +9,45 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 @Accessors
 class Invitacion {
-	EventoCerrado evento
+	 EventoCerrado evento
 	@JsonIgnore Usuario invitado
 	Integer cantidadAcompaniantesMaxima = 0
 	@JsonIgnore Integer cantidadAcompaniantesConfirmados = 0
-	boolean estaConfirmado 
-	boolean estaRechazado 
+	@JsonIgnore Boolean estaConfirmado
+	@JsonIgnore Boolean estaRechazado
+//
+//	new(int cantidadAcompaniantesMaxima) {
+//		this.cantidadAcompaniantesMaxima = cantidadAcompaniantesMaxima
+//
+//	}
 //	
-	new (Usuario invitado, EventoCerrado unEvento, Integer unaCantidadAcompaniantesMaxima){
+	new(Usuario invitado, EventoCerrado unEvento, Integer unaCantidadAcompaniantesMaxima) {
 		this.invitado = invitado
 		this.cantidadAcompaniantesMaxima = unaCantidadAcompaniantesMaxima
 		this.evento = unEvento
 		this.estaConfirmado = false
 		this.estaRechazado = false
 	}
-	@JsonProperty("invitado")
-	def getNombreUsuarioInvitado(){
-		invitado.nombreUsuario
-	}
-	
-	def void confirmar(Integer cantidadAcompaniantesInvitado){
-			cantidadAcompaniantesConfirmados = cantidadAcompaniantesInvitado	//guardo la cantidad en una variable de invitacion
-		if(cantidadAcompaniantesConfirmados <= cantidadAcompaniantesMaxima){
+
+
+//	@JsonProperty("idInvitado")
+//	def getIdInvitado(){
+//		invitado.id
+//	}
+	def void confirmar(Integer cantidadAcompaniantesInvitado) {
+		cantidadAcompaniantesConfirmados = cantidadAcompaniantesInvitado // guardo la cantidad en una variable de invitacion
+		if (cantidadAcompaniantesConfirmados <= cantidadAcompaniantesMaxima) {
 			estaConfirmado = true
 			evento.confirmarUsuario(invitado)
-		}
-		else
+		} else
 			throw new BusinessException("La cantidad de acompaniantes supera la maxima permitida en la invitacion")
 	}
-	
-	def void rechazar(){
+
+	def void rechazar() {
 		estaRechazado = true
 		evento.usuarioRechazaInvitacion(invitado)
 	}
-	
+
 	def String recibirNotificacionNuevaInvitacion() {
 		evento.agregarUsuarioListaAsistentes(invitado)
 		println(invitado.nombreUsuario + " tiene una nueva invitacion para el evento " + evento.nombreEvento)

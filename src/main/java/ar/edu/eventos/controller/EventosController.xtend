@@ -9,6 +9,7 @@ import org.uqbar.xtrest.json.JSONUtils
 import org.uqbar.xtrest.api.annotation.Put
 import org.uqbar.xtrest.api.annotation.Body
 import ar.edu.eventos.Evento
+import ar.edu.eventos.EventoCerrado
 
 @Controller
 class EventosController {
@@ -34,14 +35,15 @@ class EventosController {
 		}
 	}
 
-	@Put('/usuarios/:idUsr/nuevoEvento/')
+	@Put('/usuarios/:idUsr/nuevoevento')
 	def Result actualizar(@Body String body) {
 		try {
-			val nuevoEvento = body.fromJson(Evento)
+			println(body)
+			val nuevoEvento = body.fromJson(EventoCerrado)
 			println(nuevoEvento)
 			val usrActualizado = RepoUsuariosAngular.instance.searchById(Integer.parseInt(idUsr))
-			usrActualizado.crearEvento(nuevoEvento)
-			RepoUsuariosAngular.instance.update(usrActualizado)
+//			usrActualizado.crearEvento(nuevoEvento)
+//			RepoUsuariosAngular.instance.update(usrActualizado)
 
 			if (Integer.parseInt(idUsr) != usrActualizado.id) {
 				return badRequest('{ "error" : "Id en URL distinto del cuerpo" }')
@@ -49,6 +51,7 @@ class EventosController {
 
 			ok('{ "status" : "OK" }');
 		} catch (Exception e) {
+			println(e.message)
 			badRequest(e.message)
 		}
 	}

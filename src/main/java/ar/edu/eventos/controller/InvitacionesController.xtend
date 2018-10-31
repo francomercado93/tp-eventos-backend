@@ -27,13 +27,13 @@ class InvitacionesController {
 	}
 	
 	@Put('/usuarios/:idUsr/invitacion')
-	def Result actualizar(@Body String body) {
+	def Result rechazarInvitacion(@Body String body) {
 		try {
-//			if (true) throw new RuntimeException("ACHALAY")
-			val invitacionActualizada = body.fromJson(Invitacion)
-			val usr = RepoUsuariosAngular.instance.searchById(Integer.parseInt(idUsr))
-//			val eventoActualizado = invitacionActualizada.evento
-			usr.actualizarInvitacion(invitacionActualizada)			
+			if (true) throw new RuntimeException("ACHALAY")
+			//val invitacionActualizada = body.fromJson(Invitacion)
+//			val usr = RepoUsuariosAngular.instance.searchById(Integer.parseInt(idUsr))
+//			invitacionActualizada.invitado = usr
+//			usr.rechazarInvitacion(invitacionActualizada.evento)
 
 			ok('{ "status" : "OK" }');
 		} catch (Exception e) {

@@ -371,9 +371,4 @@ class Usuario extends Entity implements Cloneable {
 		amigos.contains(usuario)
 	}
 	
-	def actualizarInvitacion(Invitacion invitacion) {
-		invitaciones.remove(getEventoDeInvitacion(invitacion.evento))
-		invitaciones.add(invitacion)
-	}
-	
 }

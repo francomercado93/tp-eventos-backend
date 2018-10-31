@@ -30,7 +30,7 @@ abstract class Evento {
 	@JsonIgnore boolean estaCancelado = false
 	@JsonIgnore boolean estaPostergado = false
 	@JsonIgnore Set<Servicio> serviciosContratados = new HashSet<Servicio>
-	List<Usuario> asistentes = new ArrayList<Usuario>
+	@JsonIgnore List<Usuario> asistentes = new ArrayList<Usuario>
 	@JsonIgnore List<Artista> artistas = new ArrayList<Artista> // Solo los eventos abiertos pueden agregar artistas
 
 	@JsonProperty("organizadorEvento")
