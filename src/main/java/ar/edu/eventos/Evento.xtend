@@ -19,12 +19,13 @@ import java.time.format.DateTimeFormatter
 @Accessors
 @Observable
 abstract class Evento {
-	static String DATE_PATTERN = "dd/MM/yyyy hh:mm"
+//	hh:mm
+	static String DATE_PATTERN = "dd/MM/yyyy HH:mm"
 	@JsonIgnore Usuario organizador // doble referencia, asociacion
 	String nombreEvento
 	@JsonIgnore LocalDateTime inicioEvento
 	@JsonIgnore LocalDateTime finEvento
-	Locacion locacion
+	@JsonIgnore Locacion locacion
 	@JsonIgnore LocalDateTime fechaMaximaConfirmacion
 	@JsonIgnore LocalDateTime fechaCreacion
 	@JsonIgnore boolean estaCancelado = false
@@ -32,6 +33,38 @@ abstract class Evento {
 	@JsonIgnore Set<Servicio> serviciosContratados = new HashSet<Servicio>
 	@JsonIgnore List<Usuario> asistentes = new ArrayList<Usuario>
 	@JsonIgnore List<Artista> artistas = new ArrayList<Artista> // Solo los eventos abiertos pueden agregar artistas
+
+	new() {
+		initialize()
+	}
+
+	@JsonProperty("locacion")
+	def getDescripcionLocacion() {
+		locacion.descripcion
+	}
+
+	new(String nombreEvento, Locacion locacion, LocalDateTime inicio, LocalDateTime fin,
+		LocalDateTime maximaConfirmacion) {
+		initialize()
+		this.locacion = locacion
+		this.inicioEvento = inicio
+		this.finEvento = fin
+		this.fechaMaximaConfirmacion = maximaConfirmacion
+	}
+
+	def initialize() {
+		this.nombreEvento = ""
+		this.inicioEvento = LocalDateTime.now
+		this.finEvento = LocalDateTime.now
+		this.fechaMaximaConfirmacion = LocalDateTime.now
+	}
+
+
+	def asignarFechas(String fechaConfirmacion, String fechaInicio, String fechaFin) {
+		this.inicioEvento = LocalDateTime.parse(fechaInicio, formatter)
+		this.finEvento = LocalDateTime.parse(fechaFin, formatter)
+		this.fechaMaximaConfirmacion= LocalDateTime.parse(fechaConfirmacion, formatter)
+	}
 
 	@JsonProperty("organizadorEvento")
 	def getNombreUsuarioOrganizador() {
@@ -42,7 +75,7 @@ abstract class Evento {
 	def Integer getRechazados()
 
 	@JsonProperty("fechaMaximaConfirmacion")
-	def getFechaMaximaConfirmacion() {
+	def getFechaMaximaConfirmacionAsString() {
 		formatter.format(this.fechaMaximaConfirmacion)
 	}
 

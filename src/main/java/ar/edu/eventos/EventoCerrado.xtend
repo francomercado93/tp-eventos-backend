@@ -16,7 +16,6 @@ class EventoCerrado extends Evento {
 	Integer capacidadMaxima
 	@JsonIgnore Set<Usuario> usuariosConInvitacionesRechazadas = new HashSet<Usuario>
 
-	
 	override getRechazados() {
 		usuariosConInvitacionesRechazadas.size
 	}

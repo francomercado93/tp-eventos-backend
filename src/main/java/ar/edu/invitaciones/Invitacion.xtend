@@ -9,12 +9,13 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 @Accessors
 class Invitacion {
-	 EventoCerrado evento
+	EventoCerrado evento
 	@JsonIgnore Usuario invitado
 	Integer cantidadAcompaniantesMaxima = 0
 	@JsonIgnore Integer cantidadAcompaniantesConfirmados = 0
-	@JsonIgnore Boolean estaConfirmado
-	@JsonIgnore Boolean estaRechazado
+	Boolean estaConfirmado
+	Boolean estaRechazado
+
 //
 //	new(int cantidadAcompaniantesMaxima) {
 //		this.cantidadAcompaniantesMaxima = cantidadAcompaniantesMaxima
@@ -28,7 +29,6 @@ class Invitacion {
 		this.estaConfirmado = false
 		this.estaRechazado = false
 	}
-
 
 //	@JsonProperty("idInvitado")
 //	def getIdInvitado(){
