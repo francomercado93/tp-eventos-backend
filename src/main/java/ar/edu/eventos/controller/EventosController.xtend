@@ -14,6 +14,7 @@ import org.uqbar.xtrest.api.annotation.Get
 import org.uqbar.xtrest.api.annotation.Put
 import org.uqbar.xtrest.json.JSONUtils
 import ar.edu.eventos.EventoAbierto
+import java.util.ArrayList
 
 @Controller
 class EventosController {
@@ -33,7 +34,15 @@ class EventosController {
 	def Result agenda() {
 		val iId = Integer.valueOf(id)
 		try {
-			ok(RepoUsuariosAngular.instance.searchById(iId).eventosOrganizados.toJson)
+			val usr = RepoUsuariosAngular.instance.searchById(iId)
+			val eventosOrganizados = usr.eventosOrganizados
+			val eventosInvitaciones = usr.invitaciones.map(invitacion|invitacion.evento)
+			val eventosEntradas = usr.entradasCompradas.map(entrada|entrada.evento)
+			val agenda = new ArrayList<Evento>
+			agenda.addAll(eventosOrganizados)
+			agenda.addAll(eventosInvitaciones)
+			agenda.addAll(eventosEntradas)
+			ok(agenda.toJson)
 		} catch (UserException e) {
 			notFound("No existe el usuario con id " + id + "")
 		}
@@ -57,6 +66,7 @@ class EventosController {
 	@Put('/usuarios/:idusr/nuevoeventoabierto')
 	def Result nuevoEventoAbierto(@Body String body) {
 		try {
+			println(body)
 			val nuevoEvento = body.fromJson(EventoAbierto)
 			val usrActualizado = actualizarEvento(nuevoEvento, body, idusr)
 			if (Integer.parseInt(idusr) != usrActualizado.id) {
@@ -72,9 +82,9 @@ class EventosController {
 	def Usuario actualizarEvento(Evento nuevoEvento, String body, String idusr) {
 		nuevoEvento.locacion = RepoLocacionesAngular.instance.search(body.getPropertyValue("locacion")).get(0)
 		nuevoEvento.asignarFechas(body.getPropertyValue("inicioEvento"), body.getPropertyValue("finEvento"),
-			body.getPropertyValue("fechaMaximaConfirmacion"))
+			body.getPropertyValue("fechaMaximaConfirmacion"), body.getPropertyValue("fechaCreacion"))
 		val usrActualizado = RepoUsuariosAngular.instance.searchById(Integer.parseInt(idusr))
-		usrActualizado.fechaHoraActual = LocalDateTime.of(2018, 06, 05, 12, 00) // Obtiene fecha "actual"
+		usrActualizado.fechaHoraActual = LocalDateTime.now // Obtiene fecha "actual"
 		usrActualizado.crearEvento(nuevoEvento)
 		usrActualizado
 	}

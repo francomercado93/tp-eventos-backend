@@ -13,8 +13,13 @@ import com.fasterxml.jackson.annotation.JsonProperty
 class EventoCerrado extends Evento {
 
 	@JsonIgnore Set<Usuario> invitadosConfirmados = new HashSet<Usuario>
-	Integer capacidadMaxima
+	@JsonIgnore Integer capacidadMaxima
 	@JsonIgnore Set<Usuario> usuariosConInvitacionesRechazadas = new HashSet<Usuario>
+
+	new() {
+		super()
+		capacidadMaxima = 0
+	}
 
 	override getRechazados() {
 		usuariosConInvitacionesRechazadas.size

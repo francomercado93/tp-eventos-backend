@@ -65,7 +65,7 @@ class Usuario extends Entity implements Cloneable {
 	@JsonIgnore int cantidadEntradasCompradas
 	@JsonIgnore int cantidadInvitacionesConfirmadas
 	@JsonIgnore AceptacionMasiva aceptacionMasiva 
-	@JsonIgnore List<Entrada> Entradas = new ArrayList<Entrada>
+	@JsonIgnore List<Entrada> entradasCompradas = new ArrayList<Entrada>
 	
 	new(){
 		id = -1
@@ -175,7 +175,7 @@ class Usuario extends Entity implements Cloneable {
 	}
 	@JsonIgnore
 	def getEventoDeInvitacion(EventoCerrado unEvento ){
-		invitaciones.findFirst(invitacion | invitacion.evento == unEvento)//obtengo la invitacion con el evento
+		invitaciones.findFirst(invitacion|invitacion.evento == unEvento) //obtengo la invitacion con el evento
 	}
 	
 	def crearEvento(Evento unEvento){		
@@ -231,6 +231,7 @@ class Usuario extends Entity implements Cloneable {
 			throw new BusinessException("Error: no se puede comprar entrada")
 		}
 		this.pagarConTarjeta(unEvento)
+		this.entradasCompradas.add(new Entrada(this, unEvento))
 		unEvento.agregarUsuarioListaAsistentes(this)
 		
 	}
@@ -244,7 +245,12 @@ class Usuario extends Entity implements Cloneable {
 	}
 	
 	def devolverEntrada(EventoAbierto unEvento) {
+		entradasCompradas.remove(this.eventoDeEntrada(unEvento))
 		unEvento.usuarioDevuelveEntrada(this)
+	}
+	
+	def eventoDeEntrada(EventoAbierto unEvento) {
+		entradasCompradas.findFirst(entrada | entrada.evento == unEvento)
 	}
 	
 	def aceptarInvitacionesPendientes() {
@@ -351,7 +357,8 @@ class Usuario extends Entity implements Cloneable {
 	def getTiposPosibles(){
 		#[new Free, new Amateur,new Profesional]
 	}
-		def cantidadActividad() {
+	
+	def cantidadActividad() {
 		this.cantidadTotalEventosOrganizados + cantidadEntradasCompradas +cantidadInvitacionesConfirmadas
 	}
 	

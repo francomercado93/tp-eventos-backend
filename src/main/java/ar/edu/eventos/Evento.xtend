@@ -19,13 +19,13 @@ import java.time.format.DateTimeFormatter
 @Accessors
 @Observable
 abstract class Evento {
-//	hh:mm
-	static String DATE_PATTERN = "dd/MM/yyyy HH:mm"
+
+	static String DATE_PATTERN = "yyyy/MM/dd HH:mm"
 	@JsonIgnore Usuario organizador // doble referencia, asociacion
 	String nombreEvento
 	@JsonIgnore LocalDateTime inicioEvento
 	@JsonIgnore LocalDateTime finEvento
-	@JsonIgnore Locacion locacion
+	Locacion locacion
 	@JsonIgnore LocalDateTime fechaMaximaConfirmacion
 	@JsonIgnore LocalDateTime fechaCreacion
 	@JsonIgnore boolean estaCancelado = false
@@ -38,18 +38,14 @@ abstract class Evento {
 		initialize()
 	}
 
-	@JsonProperty("locacion")
-	def getDescripcionLocacion() {
-		locacion.descripcion
-	}
-
 	new(String nombreEvento, Locacion locacion, LocalDateTime inicio, LocalDateTime fin,
-		LocalDateTime maximaConfirmacion) {
+		LocalDateTime maximaConfirmacion, LocalDateTime creacion) {
 		initialize()
 		this.locacion = locacion
 		this.inicioEvento = inicio
 		this.finEvento = fin
 		this.fechaMaximaConfirmacion = maximaConfirmacion
+		this.fechaCreacion = creacion
 	}
 
 	def initialize() {
@@ -57,15 +53,20 @@ abstract class Evento {
 		this.inicioEvento = LocalDateTime.now
 		this.finEvento = LocalDateTime.now
 		this.fechaMaximaConfirmacion = LocalDateTime.now
+		this.fechaCreacion = LocalDateTime.now
 	}
 
-
-	def asignarFechas(String fechaConfirmacion, String fechaInicio, String fechaFin) {
+	def asignarFechas(String fechaConfirmacion, String fechaInicio, String fechaFin, String fechaCreacion) {
 		this.inicioEvento = LocalDateTime.parse(fechaInicio, formatter)
 		this.finEvento = LocalDateTime.parse(fechaFin, formatter)
-		this.fechaMaximaConfirmacion= LocalDateTime.parse(fechaConfirmacion, formatter)
+		this.fechaMaximaConfirmacion = LocalDateTime.parse(fechaConfirmacion, formatter)
+		this.fechaCreacion = LocalDateTime.parse(fechaCreacion, formatter)
 	}
 
+//	@JsonProperty("locacion")
+//	def getDescripcionLocacion() {
+//		locacion.descripcion
+//	}
 	@JsonProperty("organizadorEvento")
 	def getNombreUsuarioOrganizador() {
 		organizador.nombreUsuario
@@ -73,6 +74,11 @@ abstract class Evento {
 
 	@JsonProperty("rechazados")
 	def Integer getRechazados()
+
+	@JsonProperty("fechaCreacion")
+	def getFechaCreacionAsString() {
+		formatter.format(this.fechaCreacion)
+	}
 
 	@JsonProperty("fechaMaximaConfirmacion")
 	def getFechaMaximaConfirmacionAsString() {
@@ -147,6 +153,7 @@ abstract class Evento {
 		}
 	}
 
+	@JsonProperty("capacidadMaxima")
 	def double capacidadMaxima()
 
 	def boolean esExitoso()
