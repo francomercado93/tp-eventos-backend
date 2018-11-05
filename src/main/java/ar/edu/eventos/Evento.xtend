@@ -21,6 +21,7 @@ import java.time.format.DateTimeFormatter
 abstract class Evento {
 
 	static String DATE_PATTERN = "yyyy/MM/dd HH:mm"
+	static String DATE_PATTERNBACKEND = "dd/MM/yyyy HH:mm"
 	@JsonIgnore Usuario organizador // doble referencia, asociacion
 	String nombreEvento
 	@JsonIgnore LocalDateTime inicioEvento
@@ -38,10 +39,10 @@ abstract class Evento {
 		initialize()
 	}
 
-	new(String nombreEvento, Locacion locacion, LocalDateTime inicio, LocalDateTime fin,
-		LocalDateTime maximaConfirmacion, LocalDateTime creacion) {
+	new(String nombreEvento, LocalDateTime inicio, LocalDateTime fin, LocalDateTime maximaConfirmacion,
+		LocalDateTime creacion) {
 		initialize()
-		this.locacion = locacion
+//		this.locacion = locacion
 		this.inicioEvento = inicio
 		this.finEvento = fin
 		this.fechaMaximaConfirmacion = maximaConfirmacion
@@ -57,10 +58,10 @@ abstract class Evento {
 	}
 
 	def asignarFechas(String fechaConfirmacion, String fechaInicio, String fechaFin, String fechaCreacion) {
-		this.inicioEvento = LocalDateTime.parse(fechaInicio, formatter)
-		this.finEvento = LocalDateTime.parse(fechaFin, formatter)
-		this.fechaMaximaConfirmacion = LocalDateTime.parse(fechaConfirmacion, formatter)
-		this.fechaCreacion = LocalDateTime.parse(fechaCreacion, formatter)
+		this.inicioEvento = LocalDateTime.parse(fechaInicio, formatterBackEnd)
+		this.finEvento = LocalDateTime.parse(fechaFin, formatterBackEnd)
+		this.fechaMaximaConfirmacion = LocalDateTime.parse(fechaConfirmacion, formatterBackEnd)
+		this.fechaCreacion = LocalDateTime.parse(fechaCreacion, formatterBackEnd)
 	}
 
 //	@JsonProperty("locacion")
@@ -97,6 +98,10 @@ abstract class Evento {
 
 	def formatter() {
 		DateTimeFormatter.ofPattern(DATE_PATTERN)
+	}
+
+	def formatterBackEnd() {
+		DateTimeFormatter.ofPattern(DATE_PATTERNBACKEND)
 	}
 
 	def double porcentajeExito() {

@@ -15,6 +15,7 @@ class Invitacion {
 	@JsonIgnore Integer cantidadAcompaniantesConfirmados = 0
 	Boolean estaConfirmado
 	Boolean estaRechazado
+	Boolean estaPendiente
 
 //
 //	new(int cantidadAcompaniantesMaxima) {
@@ -28,6 +29,7 @@ class Invitacion {
 		this.evento = unEvento
 		this.estaConfirmado = false
 		this.estaRechazado = false
+		this.estaPendiente = true
 	}
 
 //	@JsonProperty("idInvitado")
@@ -38,6 +40,7 @@ class Invitacion {
 		cantidadAcompaniantesConfirmados = cantidadAcompaniantesInvitado // guardo la cantidad en una variable de invitacion
 		if (cantidadAcompaniantesConfirmados <= cantidadAcompaniantesMaxima) {
 			estaConfirmado = true
+			estaPendiente = false
 			evento.confirmarUsuario(invitado)
 		} else
 			throw new BusinessException("La cantidad de acompaniantes supera la maxima permitida en la invitacion")
@@ -45,6 +48,7 @@ class Invitacion {
 
 	def void rechazar() {
 		estaRechazado = true
+		estaPendiente = false
 		evento.usuarioRechazaInvitacion(invitado)
 	}
 

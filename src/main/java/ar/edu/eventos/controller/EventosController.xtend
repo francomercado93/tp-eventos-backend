@@ -84,7 +84,7 @@ class EventosController {
 		nuevoEvento.asignarFechas(body.getPropertyValue("inicioEvento"), body.getPropertyValue("finEvento"),
 			body.getPropertyValue("fechaMaximaConfirmacion"), body.getPropertyValue("fechaCreacion"))
 		val usrActualizado = RepoUsuariosAngular.instance.searchById(Integer.parseInt(idusr))
-		usrActualizado.fechaHoraActual = LocalDateTime.now // Obtiene fecha "actual"
+		usrActualizado.fechaHoraActual = LocalDateTime.of(2018, 06, 05, 12, 35) // Obtiene fecha "actual"
 		usrActualizado.crearEvento(nuevoEvento)
 		usrActualizado
 	}

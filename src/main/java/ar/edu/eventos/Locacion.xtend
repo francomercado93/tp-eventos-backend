@@ -18,6 +18,13 @@ class Locacion {
 	@JsonIgnore double superficie
 	@JsonIgnore double capacidad
 
+	new() {
+	}
+
+	new(String desc) {
+		descripcion = desc
+	}
+
 	def double distancia(Point unPunto) {
 		puntoGeografico.distance(unPunto)
 	}
