@@ -22,7 +22,9 @@ class Invitacion {
 //		this.cantidadAcompaniantesMaxima = cantidadAcompaniantesMaxima
 //
 //	}
-//	
+	new() {
+	}
+
 	new(Usuario invitado, EventoCerrado unEvento, Integer unaCantidadAcompaniantesMaxima) {
 		this.invitado = invitado
 		this.cantidadAcompaniantesMaxima = unaCantidadAcompaniantesMaxima
@@ -32,10 +34,11 @@ class Invitacion {
 		this.estaPendiente = true
 	}
 
-//	@JsonProperty("idInvitado")
-//	def getIdInvitado(){
-//		invitado.id
-//	}
+	@JsonProperty("idInvitado")
+	def getIdInvitado() {
+		invitado.id
+	}
+
 	def void confirmar(Integer cantidadAcompaniantesInvitado) {
 		cantidadAcompaniantesConfirmados = cantidadAcompaniantesInvitado // guardo la cantidad en una variable de invitacion
 		if (cantidadAcompaniantesConfirmados <= cantidadAcompaniantesMaxima) {
