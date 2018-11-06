@@ -1,14 +1,14 @@
 package ar.edu.eventos.controller
 
+import ar.edu.invitaciones.Invitacion
 import ar.edu.repositorios.RepoUsuariosAngular
 import org.uqbar.commons.model.exceptions.UserException
 import org.uqbar.xtrest.api.Result
+import org.uqbar.xtrest.api.annotation.Body
 import org.uqbar.xtrest.api.annotation.Controller
+import org.uqbar.xtrest.api.annotation.Delete
 import org.uqbar.xtrest.api.annotation.Get
 import org.uqbar.xtrest.json.JSONUtils
-import org.uqbar.xtrest.api.annotation.Put
-import org.uqbar.xtrest.api.annotation.Body
-import ar.edu.invitaciones.Invitacion
 import org.uqbar.xtrest.api.annotation.Post
 
 @Controller
@@ -30,20 +30,10 @@ class InvitacionesController {
 	@Post('/usuarios/:idUsr/invitacion')
 	def Result rechazarInvitacion(@Body String body) {
 		try {
-//			if (true) throw new RuntimeException("ACHALAY")
-//			println(body)
-			println(body.getPropertyValue("evento"))
+			println(body)
 //			val invitacionActualizada = body.fromJson(Invitacion)
-////			println(invitacionActualizada)
 //			val usr = RepoUsuariosAngular.instance.searchById(Integer.parseInt(idUsr))
-//			invitacionActualizada.invitado = usr
-//			val nuevoEvento = body.getPropertyValue("evento")
-//			println(nuevoEvento)
-//			nuevoEvento.locacion = RepoLocacionesAngular.instance.search(body.getPropertyValue("locacion")).get(0)
-//		nuevoEvento.asignarFechas(body.getPropertyValue("inicioEvento"), body.getPropertyValue("finEvento"),
-//			body.getPropertyValue("fechaMaximaConfirmacion"), body.getPropertyValue("fechaCreacion"))
-//			usr.rechazarInvitacion(invitacionActualizada.evento)
-
+//			usr.invitaciones.remove(usr.invitaciones.findFirst[inv | inv.evento.nombreEvento == invitacionActualizada.evento.nombreEvento])
 			ok('{ "status" : "OK" }');
 		} catch (Exception e) {
 			badRequest(e.message)

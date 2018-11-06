@@ -48,6 +48,19 @@ class EventosController {
 		}
 	}
 
+	@Get('/usuarios/:id/eventosdeinvitaciones')
+	def Result eventosDeInvitaciones() {
+		val iId = Integer.valueOf(id)
+		try {
+			val usr = RepoUsuariosAngular.instance.searchById(iId)
+			val eventosInvitaciones = new ArrayList<Evento>
+			eventosInvitaciones.addAll(usr.invitaciones.map(invitacion|invitacion.evento))
+			ok(eventosInvitaciones.toJson) // .map(invitacion|invitacion.evento)
+		} catch (UserException e) {
+			notFound("No existe el usuario con id " + id + "")
+		}
+	}
+
 	@Put('/usuarios/:idusr/nuevoeventocerrado')
 	def Result nuevoEventoCerrado(@Body String body) {
 		try {

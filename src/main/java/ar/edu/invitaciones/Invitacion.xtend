@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 @Accessors
 class Invitacion {
-	EventoCerrado evento
+	@JsonIgnore EventoCerrado evento
 	@JsonIgnore Usuario invitado
 	Integer cantidadAcompaniantesMaxima = 0
 	@JsonIgnore Integer cantidadAcompaniantesConfirmados = 0
@@ -32,6 +32,11 @@ class Invitacion {
 		this.estaConfirmado = false
 		this.estaRechazado = false
 		this.estaPendiente = true
+	}
+
+	@JsonProperty("nombreEvento")
+	def getEventoInvitacion() {
+		evento.nombreEvento
 	}
 
 	@JsonProperty("idInvitado")
