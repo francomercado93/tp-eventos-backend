@@ -66,6 +66,7 @@ class Usuario extends Entity implements Cloneable {
 	@JsonIgnore int cantidadInvitacionesConfirmadas
 	@JsonIgnore AceptacionMasiva aceptacionMasiva 
 	@JsonIgnore List<Entrada> entradasCompradas = new ArrayList<Entrada>
+	List<Evento>eventosAsistir=new ArrayList<Evento>()
 	
 	new(){
 		id = -1

@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 @Accessors
 class Invitacion {
-	@JsonIgnore EventoCerrado evento
+	EventoCerrado evento
 	@JsonIgnore Usuario invitado
 	Integer cantidadAcompaniantesMaxima = 0
 	@JsonIgnore Integer cantidadAcompaniantesConfirmados = 0

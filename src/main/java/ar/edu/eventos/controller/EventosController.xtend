@@ -92,6 +92,22 @@ class EventosController {
 		}
 	}
 
+	@Put('/usuarios/:idUsr/confirmarEvento')
+	def Result AnadirEvento(@Body String body) {
+		try {
+
+			val usr = RepoUsuariosAngular.instance.searchById(Integer.parseInt(idUsr))
+			val invitacionEvento = usr.invitaciones.findFirst(invit|invit.evento.nombreEvento == body)
+			val evento = invitacionEvento.evento
+			usr.eventosAsistir.add(evento)
+
+			ok('{ "status" : "OK" }');
+		} catch (Exception e) {
+			println(e.message)
+			badRequest(e.message)
+		}
+	}
+
 	def Usuario actualizarEvento(Evento nuevoEvento, String body, String idusr) {
 		nuevoEvento.locacion = RepoLocacionesAngular.instance.search(body.getPropertyValue("locacion")).get(0)
 		nuevoEvento.asignarFechas(body.getPropertyValue("inicioEvento"), body.getPropertyValue("finEvento"),
