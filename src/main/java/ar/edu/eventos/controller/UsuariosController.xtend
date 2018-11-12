@@ -23,10 +23,6 @@ class UsuariosController {
 		}
 	}
 
-//	@Get('/usuario/:nombre')
-//	def Result buscar( /*String descripcion*/ ) {
-//		ok(RepoUsuariosAngular.instance.search(nombre).toJson)
-//	}
 	@Get('/usuarios/:id')
 	def Result usuario() {
 		val iId = Integer.valueOf(id)
@@ -37,8 +33,8 @@ class UsuariosController {
 			notFound("No existe el usuario con id " + id + "")
 		}
 	}
-	
-	//????
+
+	// ????
 	@Get('/usuarios/:id/amigos')
 	def Result searchAmigos() {
 		val iId = Integer.valueOf(id)
@@ -50,6 +46,7 @@ class UsuariosController {
 			notFound("No existe el usuario con id " + id + "")
 		}
 	}
+
 //	@Get('/usuario/:id/amigos/:idAmigo')
 //	def Result searchAmigos() {
 //		val iId = Integer.valueOf(id)
@@ -63,7 +60,6 @@ class UsuariosController {
 //			notFound("No existe el usuario con id " + id + "")
 //		}
 //	}
-
 	@Put('/usuarios/:idUsr/amigos/:idAmigo')
 	def Result actualizar() {
 		try {

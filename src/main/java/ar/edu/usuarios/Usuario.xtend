@@ -46,9 +46,9 @@ class Usuario extends Entity implements Cloneable {
 	@JsonIgnore Direccion direccion
 	@JsonIgnore TipoPersonalidad tipoPersonalidad
 	@JsonIgnore double radioCercania
-	Set<Usuario> amigos = new HashSet<Usuario>()
+	@JsonIgnore Set<Usuario> amigos = new HashSet<Usuario>()
 	@JsonIgnore LocalDateTime fechaHoraActual
-	@JsonIgnore TipoUsuario tipoUsuario
+	TipoUsuario tipoUsuario
 	@JsonIgnore double saldoAFavor = 0
 	@JsonIgnore List<Evento> eventosOrganizados = new ArrayList<Evento>()
 	@JsonIgnore Set<Invitacion> invitaciones = new HashSet<Invitacion>()
@@ -66,7 +66,7 @@ class Usuario extends Entity implements Cloneable {
 	@JsonIgnore int cantidadInvitacionesConfirmadas
 	@JsonIgnore AceptacionMasiva aceptacionMasiva 
 	@JsonIgnore List<Entrada> entradasCompradas = new ArrayList<Entrada>
-	List<Evento>eventosAsistir=new ArrayList<Evento>()
+	@JsonIgnore List<Evento>eventosAsistir=new ArrayList<Evento>()
 	
 	new(){
 		id = -1
@@ -78,10 +78,10 @@ class Usuario extends Entity implements Cloneable {
 //		amigos.map[amigo | amigo.nombreUsuario].toList
 //	}
 	
-	@JsonProperty("tipoUsuario")
-	def getTipoUsuario(){
-		tipoUsuario.descripcion
-	}
+//	@JsonProperty("tipoUsuario")
+//	def getTipoUsuario(){
+//		tipoUsuario.descripcion
+//	}
 	
 	def Boolean tieneTipo(){
 		tipoUsuario !== null
