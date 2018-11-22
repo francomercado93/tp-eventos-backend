@@ -8,6 +8,7 @@ import ar.edu.eventos.controller.LocacionesController
 
 class EventosApp {
 	def static void main(String[] args) {
-		XTRest.start(9000 , UsuariosController, InvitacionesController, EventosController, LocacionesController)
+		XTRest.start(9000, UsuariosController, InvitacionesController, EventosController, LocacionesController)
 	}
 }
+//React 
