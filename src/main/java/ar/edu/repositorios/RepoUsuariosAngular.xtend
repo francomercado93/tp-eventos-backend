@@ -1,18 +1,21 @@
 package ar.edu.repositorios
 
+import ar.edu.eventos.Artista
 import ar.edu.eventos.EventoAbierto
 import ar.edu.eventos.EventoCerrado
 import ar.edu.usuarios.Amateur
+import ar.edu.usuarios.Direccion
 import ar.edu.usuarios.Free
 import ar.edu.usuarios.Profesional
 import ar.edu.usuarios.Usuario
 import java.time.LocalDate
 import java.time.LocalDateTime
+import org.uqbar.ccService.CCResponse
 import org.uqbar.ccService.CreditCard
 import org.uqbar.ccService.CreditCardService
+import org.uqbar.geodds.Point
 
 import static org.mockito.Mockito.*
-import org.uqbar.ccService.CCResponse
 
 class RepoUsuariosAngular extends RepositorioUsuarios {
 	/* Singleton */
@@ -125,44 +128,17 @@ class RepoUsuariosAngular extends RepositorioUsuarios {
 			mail = "agustinKpo@gmail.com"
 			tipoUsuario = new Profesional()
 			fechaNacimiento = LocalDate.of(2000, 01, 02)
-
+			radioCercania = 10
+			direccion = new Direccion("Calle falsa", 123, "Springlfield", "Buenos Aires",
+				new Point(-34.503636, -58.516818))
 		]
 
-//		val salonFiesta = new Locacion() => [
-//			descripcion = "Salon de Fiesta"
-//			puntoGeografico = new Point(-34.603695, -58.410973)
-//			superficie = 10d
-//		]
-//
-//		val casaMaxi = new Locacion() => [
-//			descripcion = "Casa de Maxi"
-//			puntoGeografico = new Point(-34.93695, -59.410973)
-//			superficie = 10d
-//		]
-//		val tecnopolis = new Locacion() => [
-//			descripcion = "Tecnopolis"
-//			puntoGeografico = new Point(-34.559276, -58.505377)
-//			superficie = 6d
-//		]
-//
-//		val hipodromo = new Locacion() => [
-//			descripcion = "hipodromo San Isidro"
-//			puntoGeografico = new Point(-34.480860, -58.518295)
-//			superficie = 4.8d
-//		]
-//
-//		val saloncito = new Locacion() => [
-//			descripcion = "Saloncito"
-//			puntoGeografico = new Point(-34.480860, -58.518295)
-//			superficie = 4.8d
-//		]
-//		
 		val salonFiesta = RepoLocacionesAngular.instance.search("Salon de Fiesta").get(0)
 		val casaMaxi = RepoLocacionesAngular.instance.search("Casa de Maxi").get(0)
 		val tecnopolis = RepoLocacionesAngular.instance.search("Tecnopolis").get(0)
 		val hipodromo = RepoLocacionesAngular.instance.search("Hipodromo San Isidro").get(0)
-		val saloncito = RepoLocacionesAngular.instance.search("Saloncito").get(0)
-
+		val geba = RepoLocacionesAngular.instance.search("GEBA").get(0)
+		val directvArena = RepoLocacionesAngular.instance.search("Directv Arena").get(0)
 		val cumpleJulian = new EventoCerrado() => [
 			nombreEvento = "Cumple Julian"
 			inicioEvento = LocalDateTime.of(2018, 6, 7, 18, 30)
@@ -189,8 +165,21 @@ class RepoUsuariosAngular extends RepositorioUsuarios {
 			locacion = casaMaxi
 			capacidadMaxima = 15
 		]
+		val tincho = new Usuario() => [
+			nombreUsuario = "Tincho"
+			nombre = "Martin"
+			apellido = "Tomba"
+			mail = "tinchotomba@gmail.com"
+			tipoUsuario = new Profesional()
+			fechaNacimiento = LocalDate.of(1988, 06, 08)
+			radioCercania = 14
+			saldoAFavor = 300
+			direccion = new Direccion("Calle falsa", 123, "Springlfield", "Buenos Aires",
+				new Point(-34.503636, -58.516818))
+		]
 
 		this.create(agustin)
+		this.create(tincho)
 		this.create(agustina)
 		this.create(beatriz)
 		this.create(gaby)
@@ -225,7 +214,7 @@ class RepoUsuariosAngular extends RepositorioUsuarios {
 		juan.invitarUsuario(miriam, cumpleMaxi, 2)
 		// eventos organizados por mi
 		// EVENTOS ABIERTOS
-		val soundhearts = new EventoAbierto() => [
+		val soundhearts = new EventoAbierto(0) => [
 			nombreEvento = "Soundhearts"
 			inicioEvento = LocalDateTime.of(2019, 04, 14, 18, 00)
 			finEvento = LocalDateTime.of(2019, 04, 14, 23, 30)
@@ -236,7 +225,7 @@ class RepoUsuariosAngular extends RepositorioUsuarios {
 
 		]
 
-		val lollapalooza = new EventoAbierto() => [
+		val lollapalooza = new EventoAbierto(1) => [
 			nombreEvento = "lollapalooza"
 			inicioEvento = LocalDateTime.of(2018, 06, 27, 18, 00)
 			finEvento = LocalDateTime.of(2018, 06, 28, 01, 00)
@@ -259,14 +248,119 @@ class RepoUsuariosAngular extends RepositorioUsuarios {
 			inicioEvento = LocalDateTime.of(2018, 06, 29, 10, 30)
 			finEvento = LocalDateTime.of(2018, 06, 29, 12, 00)
 			fechaMaximaConfirmacion = LocalDateTime.of(2018, 06, 16, 10, 30)
-			locacion = saloncito
+			locacion = salonFiesta
 			capacidadMaxima = 15
 		]
+
+		val venomParty = new EventoAbierto(2) => [
+			nombreEvento = "Venom Party"
+			inicioEvento = LocalDateTime.of(2018, 08, 03, 18, 00)
+			finEvento = LocalDateTime.of(2018, 08, 03, 23, 50)
+			locacion = geba
+			fechaMaximaConfirmacion = LocalDateTime.of(2018, 08, 02, 18, 00)
+			edadMinima = 18
+			valorEntrada = 1500
+//			id = 2
+		]
+
+		val personalFest = new EventoAbierto(3) => [
+			nombreEvento = "Personal Fest"
+			inicioEvento = LocalDateTime.of(2018, 11, 10, 15, 00)
+			finEvento = LocalDateTime.of(2018, 11, 11, 01, 00)
+			locacion = geba
+			fechaMaximaConfirmacion = LocalDateTime.of(2018, 08, 02, 18, 00)
+			edadMinima = 18
+			valorEntrada = 3500
+		]
+
+		val pepsiMusic = new EventoAbierto(4) => [
+			nombreEvento = "Pepsi Music"
+			inicioEvento = LocalDateTime.of(2018, 12, 12, 13, 00)
+			finEvento = LocalDateTime.of(2018, 12, 12, 23, 00)
+			locacion = directvArena
+			fechaMaximaConfirmacion = LocalDateTime.of(2018, 12, 12, 12, 00)
+			edadMinima = 18
+			valorEntrada = 1540
+		]
+
+		val pepsiMusic2 = new EventoAbierto(5) => [
+			nombreEvento = "Pepsi Music Dia 2"
+			inicioEvento = LocalDateTime.of(2018, 12, 13, 13, 00)
+			finEvento = LocalDateTime.of(2018, 12, 13, 23, 00)
+			locacion = directvArena
+			fechaMaximaConfirmacion = LocalDateTime.of(2018, 12, 13, 12, 00)
+			edadMinima = 18
+			valorEntrada = 1540
+		]
+
+		// entradas, artistas, radio de cercania
+		val rhcp = new Artista("Red Hot Chili Peppers")
+		val royalBlood = new Artista("Royal Blood")
+		val theKillers = new Artista("The Killers")
+		val lanaDelRey = new Artista("Lana del Rey")
+		val pearlJam = new Artista("Pearl Jam")
+		val camilaCabello = new Artista("Camila Cabello")
+		val damasGratis = new Artista("Damas Gratis")
+		val marilinaBertoldi = new Artista("Marilina Bertoldi")
+		val metallica = new Artista("Metallica")
+		val arcticMonkeys = new Artista("Arctic Monkeys")
+		val coldplay = new Artista("Coldplay")
+
+		lollapalooza.agregarArtista(rhcp)
+		lollapalooza.agregarArtista(royalBlood)
+		lollapalooza.agregarArtista(theKillers)
+
+		soundhearts.agregarArtista(camilaCabello)
+		soundhearts.agregarArtista(damasGratis)
+
+		personalFest.agregarArtista(rhcp)
+		personalFest.agregarArtista(coldplay)
+		// POR RADIO CERCANIA
+		venomParty.agregarArtista(pearlJam)
+		venomParty.agregarArtista(marilinaBertoldi)
+		venomParty.agregarArtista(arcticMonkeys)
+
+		// asiste un amigo
+		pepsiMusic.agregarArtista(damasGratis)
+		pepsiMusic2.agregarArtista(damasGratis)
+
+		agustin.fechaHoraActual = LocalDateTime.of(2018, 09, 10, 15, 00)
+		agustin.crearEvento(personalFest)
+
+		agustin.fechaHoraActual = LocalDateTime.of(2018, 06, 02, 18, 00)
+		agustin.crearEvento(venomParty)
+
+		agustin.fechaHoraActual = LocalDateTime.of(2018, 10, 12, 12, 00)
+		agustin.crearEvento(pepsiMusic)
+
+		agustin.fechaHoraActual = LocalDateTime.of(2018, 10, 12, 12, 00)
+		agustin.crearEvento(pepsiMusic2)
+
+		tincho.fechaHoraActual = LocalDateTime.of(2018, 12, 12, 10, 00)
+		tincho.miTarjeta = new CreditCard
+		tincho.servicioTarjeta = mockearCreditCardServicePagoExitoso(tincho.miTarjeta, pepsiMusic.valorEntrada)
+		tincho.comprarCantidadEntradas(pepsiMusic, 1)
+
+		tincho.fechaHoraActual = LocalDateTime.of(2018, 12, 12, 10, 00)
+		tincho.miTarjeta = new CreditCard
+		tincho.servicioTarjeta = mockearCreditCardServicePagoExitoso(tincho.miTarjeta, pepsiMusic.valorEntrada)
+		tincho.comprarCantidadEntradas(pepsiMusic2, 2)
+
+		tincho.agregarAmigo(agustina)
+		tincho.agregarAmigo(beatriz)
+		tincho.agregarAmigo(juan)
+		tincho.agregarAmigo(tomas)
+
+		tincho.agregarArtistaFavorito(rhcp)
+		tincho.agregarArtistaFavorito(royalBlood)
+		tincho.agregarArtistaFavorito(metallica)
+		tincho.agregarArtistaFavorito(coldplay)
+		tincho.agregarArtistaFavorito(lanaDelRey)
 
 		agustin.fechaHoraActual = LocalDateTime.of(2018, 04, 14, 18, 00)
 		agustin.crearEvento(soundhearts)
 
-		agustin.fechaHoraActual = LocalDateTime.of(2018, 06, 27, 18, 00)
+		agustin.fechaHoraActual = LocalDateTime.of(2018, 08, 02, 18, 00)
 		agustin.crearEvento(lollapalooza)
 
 		agustin.fechaHoraActual = LocalDateTime.of(2018, 06, 06, 19, 30)
@@ -280,7 +374,7 @@ class RepoUsuariosAngular extends RepositorioUsuarios {
 		agustin.invitarUsuario(beatriz, bautismo, 2)
 		agustin.invitarUsuario(gaby, bautismo, 3)
 		gaby.fechaHoraActual = LocalDateTime.of(2018, 06, 15, 10, 30)
-		gaby.confirmarInvitacion(bautismo,3 )
+		gaby.confirmarInvitacion(bautismo, 3)
 		beatriz.rechazarInvitacion(bautismo)
 
 		beatriz.fechaHoraActual = LocalDateTime.of(2019, 04, 13, 10, 00)

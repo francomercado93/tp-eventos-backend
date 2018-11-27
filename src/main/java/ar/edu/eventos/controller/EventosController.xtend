@@ -1,11 +1,14 @@
 package ar.edu.eventos.controller
 
 import ar.edu.eventos.Evento
+import ar.edu.eventos.EventoAbierto
 import ar.edu.eventos.EventoCerrado
 import ar.edu.repositorios.RepoLocacionesAngular
 import ar.edu.repositorios.RepoUsuariosAngular
 import ar.edu.usuarios.Usuario
 import java.time.LocalDateTime
+import java.util.ArrayList
+import java.util.List
 import org.uqbar.commons.model.exceptions.UserException
 import org.uqbar.xtrest.api.Result
 import org.uqbar.xtrest.api.annotation.Body
@@ -13,8 +16,6 @@ import org.uqbar.xtrest.api.annotation.Controller
 import org.uqbar.xtrest.api.annotation.Get
 import org.uqbar.xtrest.api.annotation.Put
 import org.uqbar.xtrest.json.JSONUtils
-import ar.edu.eventos.EventoAbierto
-import java.util.ArrayList
 
 @Controller
 class EventosController {
@@ -119,5 +120,37 @@ class EventosController {
 		usrActualizado.fechaHoraActual = LocalDateTime.of(2018, 06, 05, 12, 35) // Obtiene fecha "actual"
 		usrActualizado.crearEvento(nuevoEvento)
 		usrActualizado
+	}
+
+	@Get('/usuarios/:id/eventos-interesantes')
+	def Result eventosInteresantes() {
+		val iId = Integer.valueOf(id)
+		try {
+			val usr = RepoUsuariosAngular.instance.searchById(iId)
+			val eventos = eventosOrganizadosUsrsRepo()
+			val eventosInteresantes = new ArrayList<Evento>
+			eventosInteresantes.addAll(this.eventosConArtistasFavoritoUsr(eventos, usr))
+			eventosInteresantes.addAll(this.eventosConAmigosUsr(eventos, usr))
+			eventosInteresantes.addAll(this.eventosRadioCercaniaUsr(eventos, usr))
+			ok(eventosInteresantes.toSet().toJson)
+		} catch (UserException e) {
+			notFound("No existe el usuario con id " + id + "")
+		}
+	}
+
+	def List<Evento> eventosOrganizadosUsrsRepo() {
+		return RepoUsuariosAngular.instance.usrsRepo.map(usuario|usuario.eventosOrganizados).flatten().toList()
+	}
+
+	def eventosConArtistasFavoritoUsr(List<Evento> eventos, Usuario usr) {
+		eventos.filter(evento|evento.artistas.exists(artista|usr.artistasFavoritos.contains(artista))).toSet()
+	}
+
+	def eventosConAmigosUsr(List<Evento> eventos, Usuario usr) {
+		eventos.filter(evento|evento.asistentes.exists(asistente|asistente.esAmigo(usr))).toSet()
+	}
+
+	def eventosRadioCercaniaUsr(List<Evento> eventos, Usuario usr) {
+		eventos.filter(evento|usr.eventoEstaCerca(evento)).toSet()
 	}
 }

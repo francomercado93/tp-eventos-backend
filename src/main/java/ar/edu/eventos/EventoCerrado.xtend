@@ -21,9 +21,9 @@ class EventoCerrado extends Evento {
 		capacidadMaxima = 0
 	}
 
-	override getRechazados() {
-		usuariosConInvitacionesRechazadas.size
-	}
+//	override getRechazados() {
+//		usuariosConInvitacionesRechazadas.size
+//	}
 
 	override porcentajeExito() {
 		0.8

@@ -1,5 +1,3 @@
-
-
 package ar.edu.usuarios
 
 import ar.edu.eventos.Artista
@@ -8,9 +6,11 @@ import ar.edu.eventos.EventoAbierto
 import ar.edu.eventos.EventoCerrado
 import ar.edu.eventos.exceptions.BusinessException
 import ar.edu.invitaciones.AceptacionMasiva
+import ar.edu.invitaciones.Entrada
 import ar.edu.invitaciones.Invitacion
 import ar.edu.main.ServicioInvitacionesAsincronico
 import ar.edu.notificaciones.Notificacion
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -22,15 +22,13 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.ccService.CCResponse
 import org.uqbar.ccService.CreditCard
 import org.uqbar.ccService.CreditCardService
+import org.uqbar.commons.model.Entity
 import org.uqbar.commons.model.annotations.TransactionalAndObservable
 import org.uqbar.commons.model.exceptions.UserException
 import org.uqbar.geodds.Point
 import org.uqbar.mailService.Mail
 import org.uqbar.mailService.MailService
-import org.uqbar.commons.model.Entity
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
-import ar.edu.invitaciones.Entrada
 
 @Accessors
 @TransactionalAndObservable
@@ -49,7 +47,7 @@ class Usuario extends Entity implements Cloneable {
 	@JsonIgnore Set<Usuario> amigos = new HashSet<Usuario>()
 	@JsonIgnore LocalDateTime fechaHoraActual
 	TipoUsuario tipoUsuario
-	@JsonIgnore double saldoAFavor = 0
+	double saldoAFavor = 0
 	@JsonIgnore List<Evento> eventosOrganizados = new ArrayList<Evento>()
 	@JsonIgnore Set<Invitacion> invitaciones = new HashSet<Invitacion>()
 	@JsonIgnore CreditCard miTarjeta
@@ -117,8 +115,9 @@ class Usuario extends Entity implements Cloneable {
 	def setDireccion(String calle, int numero, String localidad, String provincia, Point punto){
 		direccion = new Direccion(calle, numero, localidad, provincia, punto)
 	}
-	@JsonIgnore
-	def getEdad(){		
+	
+	@JsonProperty("edad")
+	def getEdadUsuario(){		
 		Duration.between(LocalDateTime.of(fechaNacimiento, fechaHoraActual.toLocalTime), fechaHoraActual).getSeconds() / 31536000
 	}
 	
@@ -232,9 +231,17 @@ class Usuario extends Entity implements Cloneable {
 			throw new BusinessException("Error: no se puede comprar entrada")
 		}
 		this.pagarConTarjeta(unEvento)
-		this.entradasCompradas.add(new Entrada(this, unEvento))
+		this.entradasCompradas.add(new Entrada(unEvento, entradasCompradas.size) )
 		unEvento.agregarUsuarioListaAsistentes(this)
-		
+	}
+	
+	def comprarCantidadEntradas(EventoAbierto evento, int cantidad){
+		if(!evento.cumpleCondiciones(this)){
+			throw new BusinessException("Error: no se puede comprar entrada")
+		}
+		this.pagarConTarjeta(evento)
+		this.entradasCompradas.add(new Entrada(cantidad, evento, entradasCompradas.size) )
+		evento.agregarUsuarioListaAsistentes(this)
 	}
 	
 	def String pagarConTarjeta(EventoAbierto unEvento) {
@@ -246,8 +253,8 @@ class Usuario extends Entity implements Cloneable {
 	}
 	
 	def devolverEntrada(EventoAbierto unEvento) {
-		entradasCompradas.remove(this.eventoDeEntrada(unEvento))
 		unEvento.usuarioDevuelveEntrada(this)
+		entradasCompradas.remove(this.eventoDeEntrada(unEvento))
 	}
 	
 	def eventoDeEntrada(EventoAbierto unEvento) {
@@ -377,6 +384,12 @@ class Usuario extends Entity implements Cloneable {
 	
 	def esAmigo(Usuario usuario) {
 		amigos.contains(usuario)
+	}
+	
+	def devolverCantidadEntradas(Entrada entrada) {
+		saldoAFavor +=  entrada.evento.valorEntrada * entrada.cantidad
+		entradasCompradas.remove(entrada)
+//		* entrada.evento.porcentajeADevolver(this) 
 	}
 	
 }

@@ -2,16 +2,15 @@ package ar.edu.eventos
 
 import ar.edu.eventos.exceptions.BusinessException
 import ar.edu.usuarios.Usuario
-import org.eclipse.xtend.lib.annotations.Accessors
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonProperty
+import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors
 class EventoAbierto extends Evento {
 	static final double ESPACIONECESARIOPERSONA = 0.8
 
-	@JsonIgnore int edadMinima
-	@JsonIgnore double valorEntrada
+	int edadMinima
+	double valorEntrada
 	@JsonIgnore int entradasDevueltas
 
 	new() {
@@ -19,9 +18,12 @@ class EventoAbierto extends Evento {
 		entradasDevueltas = 0
 	}
 
-	override getRechazados() {
-		entradasDevueltas
+	new(int id){
+		super(id)
 	}
+//	override getRechazados() {
+//		entradasDevueltas
+//	}
 
 	override capacidadMaxima() {
 		locacion.calcularCapacidad(ESPACIONECESARIOPERSONA)
@@ -37,7 +39,7 @@ class EventoAbierto extends Evento {
 	}
 
 	def boolean superaEdadMin(Usuario unUsuario) {
-		unUsuario.edad >= this.edadMinima
+		unUsuario.edadUsuario >= this.edadMinima
 	}
 
 	override boolean esExitoso() {

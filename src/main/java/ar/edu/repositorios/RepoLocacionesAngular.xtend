@@ -41,14 +41,27 @@ class RepoLocacionesAngular extends RepositorioLocacion {
 			puntoGeografico = new Point(-34.480860, -58.518295)
 			superficie = 4.8d
 		]
+		val geba = new Locacion() => [
+			descripcion = "GEBA"
+			puntoGeografico = new Point(-34.568134, -58.418342)
+			superficie = 6d
+		]
+		val directvArena = new Locacion() => [
+			descripcion = "Directv Arena"
+			puntoGeografico = new Point(-34.461990, -58.717383)
+			superficie = 2d
+		]
+
 		this.create(casaMaxi)
 		this.create(hipodromo)
 		this.create(saloncito)
 		this.create(salonFiesta)
 		this.create(tecnopolis)
+		this.create(geba)
+		this.create(directvArena)
 	}
-	
-	def getLocaciones(){
+
+	def getLocaciones() {
 		lista
 	}
 

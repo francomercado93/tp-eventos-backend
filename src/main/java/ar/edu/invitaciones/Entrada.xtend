@@ -1,17 +1,26 @@
 package ar.edu.invitaciones
 
 import ar.edu.eventos.EventoAbierto
-import ar.edu.usuarios.Usuario
-import com.fasterxml.jackson.annotation.JsonIgnore
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.uqbar.commons.model.Entity
 
 @Accessors
-class Entrada {
+class Entrada extends Entity {
 	EventoAbierto evento
-	@JsonIgnore Usuario asistente
+	int cantidad
 
-	new(Usuario asistente, EventoAbierto unEvento) {
-		this.asistente = asistente
+	new(int cantidad, EventoAbierto unEvento, int id) {
+		this.cantidad = cantidad
 		this.evento = unEvento
+		this.id = id
+	}
+
+	new(EventoAbierto unEvento, int id) {
+		this.evento = unEvento
+		this.id = id
+	}
+	new() {
+		this.evento = new EventoAbierto()
+		this.id = 0
 	}
 }

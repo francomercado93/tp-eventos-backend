@@ -3,10 +3,12 @@ package ar.edu.eventos.controller
 import ar.edu.repositorios.RepoUsuariosAngular
 import org.uqbar.commons.model.exceptions.UserException
 import org.uqbar.xtrest.api.Result
+import org.uqbar.xtrest.api.annotation.Body
 import org.uqbar.xtrest.api.annotation.Controller
 import org.uqbar.xtrest.api.annotation.Get
 import org.uqbar.xtrest.api.annotation.Put
 import org.uqbar.xtrest.json.JSONUtils
+import ar.edu.invitaciones.Entrada
 
 @Controller
 class UsuariosController {
@@ -76,4 +78,21 @@ class UsuariosController {
 			badRequest(e.message)
 		}
 	}
+
+	@Put('/usuarios/:id')
+	def Result actualizarUsuario(@Body String body) {
+		try {
+			val usrActualizado = RepoUsuariosAngular.instance.searchById(Integer.parseInt(id))
+			val entradaActualizar = body.fromJson(Entrada)
+//			usrActualizado.devolverEntrada(entradaActualizar.evento)
+			usrActualizado.devolverCantidadEntradas(entradaActualizar)
+			if (Integer.parseInt(id) != usrActualizado.id) {
+				return badRequest('{ "error" : "Id en URL distinto del cuerpo" }')
+			}
+			ok('{ "status" : "OK" }');
+		} catch (Exception e) {
+			badRequest(e.message)
+		}
+	}
+
 }

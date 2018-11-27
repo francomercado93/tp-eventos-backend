@@ -3,22 +3,23 @@ package ar.edu.eventos
 import ar.edu.eventos.exceptions.BusinessException
 import ar.edu.servicios.Servicio
 import ar.edu.usuarios.Usuario
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.Duration
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.ArrayList
 import java.util.HashSet
 import java.util.List
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.uqbar.commons.model.Entity
 import org.uqbar.commons.model.annotations.Observable
 import org.uqbar.geodds.Point
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonProperty
-import java.time.format.DateTimeFormatter
 
 @Accessors
 @Observable
-abstract class Evento {
+abstract class Evento extends Entity {
 
 	static String DATE_PATTERN = "yyyy/MM/dd HH:mm"
 	static String DATE_PATTERNBACKEND = "dd/MM/yyyy HH:mm"
@@ -26,7 +27,7 @@ abstract class Evento {
 	String nombreEvento
 	@JsonIgnore LocalDateTime inicioEvento
 	@JsonIgnore LocalDateTime finEvento
-	Locacion locacion
+	@JsonIgnore Locacion locacion
 	@JsonIgnore LocalDateTime fechaMaximaConfirmacion
 	@JsonIgnore LocalDateTime fechaCreacion
 	@JsonIgnore boolean estaCancelado = false
@@ -37,6 +38,10 @@ abstract class Evento {
 
 	new() {
 		initialize()
+	}
+
+	new(int id) {
+		this.id = id
 	}
 
 	new(String nombreEvento, LocalDateTime inicio, LocalDateTime fin, LocalDateTime maximaConfirmacion,
@@ -64,23 +69,22 @@ abstract class Evento {
 		this.fechaCreacion = LocalDateTime.parse(fechaCreacion, formatterBackEnd)
 	}
 
-//	@JsonProperty("locacion")
-//	def getDescripcionLocacion() {
-//		locacion.descripcion
-//	}
+	@JsonProperty("locacion")
+	def getDescripcionLocacion() {
+		locacion.descripcion
+	}
+
 	@JsonProperty("organizadorEvento")
 	def getNombreUsuarioOrganizador() {
 		organizador.nombreUsuario
 	}
 
-	@JsonProperty("rechazados")
-	def Integer getRechazados()
-
-	@JsonProperty("fechaCreacion")
-	def getFechaCreacionAsString() {
-		formatter.format(this.fechaCreacion)
-	}
-
+//	@JsonProperty("rechazados")
+//	def Integer getRechazados()
+//	@JsonProperty("fechaCreacion")
+//	def getFechaCreacionAsString() {
+//		formatter.format(this.fechaCreacion)
+//	}
 	@JsonProperty("fechaMaximaConfirmacion")
 	def getFechaMaximaConfirmacionAsString() {
 		formatter.format(this.fechaMaximaConfirmacion)
