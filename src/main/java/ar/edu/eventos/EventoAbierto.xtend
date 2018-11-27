@@ -18,13 +18,13 @@ class EventoAbierto extends Evento {
 		entradasDevueltas = 0
 	}
 
-	new(int id){
+	new(int id) {
 		super(id)
 	}
+
 //	override getRechazados() {
 //		entradasDevueltas
 //	}
-
 	override capacidadMaxima() {
 		locacion.calcularCapacidad(ESPACIONECESARIOPERSONA)
 		locacion.capacidad

@@ -176,7 +176,8 @@ abstract class Evento extends Entity {
 	def diasfechaMaximaConfirmacion(Usuario unUsuario) {
 		(Duration.between(unUsuario.fechaHoraActual, this.fechaMaximaConfirmacion)).getSeconds() / 86400
 	}
-
+	
+	@JsonProperty("cantidadDisponibles")
 	def cantidadDisponibles() { // Eventos abiertos => entradas, cerrados => invitaciones
 		Math.round(this.capacidadMaxima() - this.cantidadAsistentesPosibles)
 	}

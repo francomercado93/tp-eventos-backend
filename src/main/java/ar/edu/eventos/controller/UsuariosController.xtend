@@ -9,6 +9,10 @@ import org.uqbar.xtrest.api.annotation.Get
 import org.uqbar.xtrest.api.annotation.Put
 import org.uqbar.xtrest.json.JSONUtils
 import ar.edu.invitaciones.Entrada
+import java.time.LocalDateTime
+import ar.edu.eventos.Evento
+import java.util.List
+import ar.edu.eventos.EventoAbierto
 
 @Controller
 class UsuariosController {
@@ -84,7 +88,6 @@ class UsuariosController {
 		try {
 			val usrActualizado = RepoUsuariosAngular.instance.searchById(Integer.parseInt(id))
 			val entradaActualizar = body.fromJson(Entrada)
-//			usrActualizado.devolverEntrada(entradaActualizar.evento)
 			usrActualizado.devolverCantidadEntradas(entradaActualizar)
 			if (Integer.parseInt(id) != usrActualizado.id) {
 				return badRequest('{ "error" : "Id en URL distinto del cuerpo" }')
@@ -95,4 +98,27 @@ class UsuariosController {
 		}
 	}
 
+	@Put('/usuarios/:id/compra-entradas')
+	def Result usuarioCompraEntrada(@Body String body) {
+		try {
+			val usrActualizado = RepoUsuariosAngular.instance.searchById(Integer.parseInt(id))
+			val nuevaEntrada = body.fromJson(Entrada)
+			val eventos = eventosOrganizadosUsrsRepo()
+			val eventoEntrada = eventos.findFirst(evento|evento.nombreEvento == nuevaEntrada.evento.nombreEvento)
+			nuevaEntrada.evento.locacion = eventoEntrada.locacion
+			nuevaEntrada.evento.organizador= eventoEntrada.organizador
+			usrActualizado.fechaHoraActual = LocalDateTime.of(2018, 2, 2, 13, 30)
+			usrActualizado.comprarCantidadEntradas(nuevaEntrada.evento, nuevaEntrada.cantidad)
+			if (Integer.parseInt(id) != usrActualizado.id) {
+				return badRequest('{ "error" : "Id en URL distinto del cuerpo" }')
+			}
+			ok('{ "status" : "OK" }');
+		} catch (Exception e) {
+			badRequest(e.message)
+		}
+	}
+
+	def List<Evento> eventosOrganizadosUsrsRepo() {
+		return RepoUsuariosAngular.instance.usrsRepo.map(usuario|usuario.eventosOrganizados).flatten().toList()
+	}
 }

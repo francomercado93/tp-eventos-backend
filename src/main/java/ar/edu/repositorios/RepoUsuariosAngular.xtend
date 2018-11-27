@@ -174,6 +174,7 @@ class RepoUsuariosAngular extends RepositorioUsuarios {
 			fechaNacimiento = LocalDate.of(1988, 06, 08)
 			radioCercania = 14
 			saldoAFavor = 300
+			miTarjeta = new CreditCard
 			direccion = new Direccion("Calle falsa", 123, "Springlfield", "Buenos Aires",
 				new Point(-34.503636, -58.516818))
 		]
@@ -337,13 +338,11 @@ class RepoUsuariosAngular extends RepositorioUsuarios {
 		agustin.crearEvento(pepsiMusic2)
 
 		tincho.fechaHoraActual = LocalDateTime.of(2018, 12, 12, 10, 00)
-		tincho.miTarjeta = new CreditCard
 		tincho.servicioTarjeta = mockearCreditCardServicePagoExitoso(tincho.miTarjeta, pepsiMusic.valorEntrada)
 		tincho.comprarCantidadEntradas(pepsiMusic, 1)
 
 		tincho.fechaHoraActual = LocalDateTime.of(2018, 12, 12, 10, 00)
-		tincho.miTarjeta = new CreditCard
-		tincho.servicioTarjeta = mockearCreditCardServicePagoExitoso(tincho.miTarjeta, pepsiMusic.valorEntrada)
+		tincho.servicioTarjeta = mockearCreditCardServicePagoExitoso(tincho.miTarjeta, pepsiMusic2.valorEntrada)
 		tincho.comprarCantidadEntradas(pepsiMusic2, 2)
 
 		tincho.agregarAmigo(agustina)

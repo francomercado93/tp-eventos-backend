@@ -20,4 +20,5 @@ class EntradasController {
 			notFound("No existe el usuario con id " + id + "")
 		}
 	}
+
 }

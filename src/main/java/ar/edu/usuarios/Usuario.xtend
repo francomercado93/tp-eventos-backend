@@ -236,12 +236,14 @@ class Usuario extends Entity implements Cloneable {
 	}
 	
 	def comprarCantidadEntradas(EventoAbierto evento, int cantidad){
-		if(!evento.cumpleCondiciones(this)){
-			throw new BusinessException("Error: no se puede comprar entrada")
-		}
-		this.pagarConTarjeta(evento)
+//		if(!evento.cumpleCondiciones(this)){
+//			throw new BusinessException("Error: no se puede comprar entrada")
+//		}
+//		this.pagarConTarjeta(evento)
+//		println("test3")
 		this.entradasCompradas.add(new Entrada(cantidad, evento, entradasCompradas.size) )
-		evento.agregarUsuarioListaAsistentes(this)
+//		println("test4")
+//		evento.agregarUsuarioListaAsistentes(this)
 	}
 	
 	def String pagarConTarjeta(EventoAbierto unEvento) {
