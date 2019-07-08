@@ -1,6 +1,10 @@
 package ar.edu.eventos.controller
 
+import ar.edu.eventos.Evento
+import ar.edu.invitaciones.Entrada
 import ar.edu.repositorios.RepoUsuariosAngular
+import java.time.LocalDateTime
+import java.util.List
 import org.uqbar.commons.model.exceptions.UserException
 import org.uqbar.xtrest.api.Result
 import org.uqbar.xtrest.api.annotation.Body
@@ -8,11 +12,6 @@ import org.uqbar.xtrest.api.annotation.Controller
 import org.uqbar.xtrest.api.annotation.Get
 import org.uqbar.xtrest.api.annotation.Put
 import org.uqbar.xtrest.json.JSONUtils
-import ar.edu.invitaciones.Entrada
-import java.time.LocalDateTime
-import ar.edu.eventos.Evento
-import java.util.List
-import ar.edu.eventos.EventoAbierto
 
 @Controller
 class UsuariosController {
