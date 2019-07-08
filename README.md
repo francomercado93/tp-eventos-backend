@@ -1,4 +1,5 @@
-# tp-eventos-backend
+# Tp-eventos-backend
+Cuenta con varios branchs donde cada uno es el backend de las distintas aplicaciones realizadas con los frameworks Arena, Angular y React.
 
 Cómo levantar el servidor REST
 Las opciones para probarlo (ya sea con POSTMAN o una aplicación cliente) son las siguientes:
