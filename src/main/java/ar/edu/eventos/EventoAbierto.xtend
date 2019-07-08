@@ -2,9 +2,8 @@ package ar.edu.eventos
 
 import ar.edu.eventos.exceptions.BusinessException
 import ar.edu.usuarios.Usuario
-import org.eclipse.xtend.lib.annotations.Accessors
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonProperty
+import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors
 class EventoAbierto extends Evento {

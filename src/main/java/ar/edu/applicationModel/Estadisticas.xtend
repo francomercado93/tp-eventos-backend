@@ -12,15 +12,9 @@ import org.uqbar.commons.model.annotations.Observable
 @Observable
 class Estadisticas {
 
-//	List<Usuario> usuarios
-	
 	def RepositorioUsuarios getRepoUsuarios() {
 		ApplicationContext.instance.getSingleton(typeof(Usuario))
 	}
-
-//	def getUsuarios() {
-//		repoUsuarios.lista
-//	}
 
 	def getCantidadTotalEventosOrganizados() {
 		this.eventosOrganizados.size
@@ -46,13 +40,9 @@ class Estadisticas {
 		repoUsuarios.lista.fold(0d, [acum, usr|acum + usr.cantidadInvitaciones()])
 	}
 
-	
 	def getUsuariosMasActivos() {
 		val usrActivos = repoUsuarios.lista
-	//	ObservableUtils.firePropertyChanged(this, "repoUsuarios")
 		usrActivos
-//		usuarios.sortBy[usr|usr.cantidadActividad].take(5).toList
-		//repoUsuarios.lista.take(2).toList
 	}
 
 	def getLocacionesMasPopulares() {
