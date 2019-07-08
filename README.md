@@ -1,5 +1,12 @@
 # Tp-eventos-backend
+
 Realizado en Xtend que es un dialecto flexible y expresivo de Java, que se compila en un código fuente compatible con Java 8 legible. 
+Pasos para instalar xtend:
+
+https://github.com/uqbar-project/algo2-docs/blob/master/software/entornoXtend.md
+
+### Aplicacion
+
 El branch masters es la version inicial del proyecto, la aplicación sirve para la organización y seguimiento de eventos sociales. La misma será abierta al público, es decir, cualquier persona podrá registrarse y utilizarla. Entre otras cosas la aplicación permitirá, crear eventos, invitar a otros usuarios (quienes podrán confirmar o rechazar la invitación), planificar el evento, etc.
 Enunciados del tp:
 
